@@ -1,0 +1,47 @@
+推薦服務 有提到丟入的資料
+	過去的購買紀錄
+	停留時間
+	點開商品次數
+	地區
+	
+	可以推薦的東西
+		最多人買的、看的
+		類似的人一樣買的、看的
+		為您推薦
+		
+NLP 相關
+	NLP 三大步驟
+		取得關鍵字
+		記憶
+		生成 回復的句子
+	常用 model
+		GPT-3 ?? (還有很多 在NLP使用的模型.PNG)
+	amazon 的 NLP 處理過程
+		看 NLP服務過程.PNG
+		
+
+可以去試用一下 amazon的服務 看輸出是什麼 ??
+	amazon comprehand
+	amazon texttract
+	amazon 也有提供類似 colab 的功能，但跟intel 的 openvino 一樣 主要是給你測試哪種機子適合你這個專案
+	
+		
+他們曾經遇到的困難、問題 與解決方法
+	少量 vs 大量 資料 -> 會導致太敏感
+		使用"資料增量" ??
+	
+	人臉不會清晰的出現
+		不能使用身形
+		"transfer learning" ?? (有聽過但沒研究過)
+			先訓練成可以辨識人臉
+			在訓練成辨識員工人臉
+			
+zalando 有使用 amazon sageMaker 的大概教學
+
+沒聽過的專有名詞
+	ETL，是英文Extract-Transform-Load
+
+這次主要是講遞送的AI優化...
+	準確的遞送時間
+
+
