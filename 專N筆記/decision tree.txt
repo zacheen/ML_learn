@@ -1,0 +1,16 @@
+decision tree 相關的
+
+decision tree 決策樹
+    通過判斷某個條件 歸類這個東西是屬於什麼東西
+    
+Random forest 隨機森林
+    使用很多的 decision tree 的結果 以多數決的方式決定最終結果
+
+Information gain
+    用 var X 對某個 dataset 做判斷所獲得的資訊量
+    用來判斷應該要先判斷什麼資料 (目的應該是為了要 balance tree 的深度)
+    
+圖片特徵量化
+    HOG: Histogram of Oriented Gradients
+    SIFT: Scale Invariant Feature Transform
+    SURF: Speeded-Up Robust Feature
