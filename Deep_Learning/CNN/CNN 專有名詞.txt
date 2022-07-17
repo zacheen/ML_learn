@@ -1,0 +1,31 @@
+3D 相關
+	polyhedra == polyhedron 多面體 (N)
+	axial direction 就是指 Z 軸方向
+	Fibonacci lattice 或 Fibonacci grid 
+		是一種方法 可以均勻地在球面上排列許多點
+	anisotropy
+		應該是指 各個方向的 vector ??
+
+annotation 標記數據的過程
+	邊界框標註（Bounding Box Annotation）
+	多邊形標註（Polygonal Annotation）
+	landmark或關鍵點標註（Landmark or Key-point Annotation）
+	線標註（Line Annotation）
+	長方體標註（Cuboid Annotation）
+	語義分割（Semantic Segmentation）
+	
+regions of interest (ROIs)
+	可以想成有幾個結果
+    
+IOU (intersection over union)
+    預測與 ground truth 相交的面積大小
+	
+downsampling 
+	降低資料大小
+	但當然也不希望失去特徵
+	EX: max pooling、降維
+upsampling 
+	提高資料解析度
+	EX: 插值
+	
+	
