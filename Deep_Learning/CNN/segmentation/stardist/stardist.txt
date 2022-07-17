@@ -1,0 +1,88 @@
+stardist討論串
+https://forum.image.sc/t/neubias-academy-home-webinar-introduction-to-nuclei-segmentation-with-stardist-questions-answers/38274
+
+安裝
+	pip install "stardist[tf1]"
+		額外安裝的東西
+		csbdeep-0.7.2 keras-2.3.1 stardist-0.8.3
+專N 
+	訊號雜訊比（英語：Signal-to-noise ratio，縮寫為SNR或S/N）
+
+data
+	可以讀取任何圖片大小
+		好像 resize 也不會出事 (應該是說為了調整成NN看得懂的細胞大小 可以resize)
+	csbdeep.normalize()
+		轉成 float (盡量讓值在 0~1 之間)
+			如果 開 clip 就會強制在 0~1 之間
+		原理 :
+			找出數據每個軸的 1%百分位數(mi) 以及 99.8%百分位數(mx) 
+				看起來是為了要去除極端值
+			再計算 (x - mi) / ( ma - mi + eps )
+				eps 是一個很小的值
+
+training 設定相關
+	找 rays 應該要設定幾條
+		1_data 裡面的 n_rays = [2**i for i in range(2,8)]
+		https://youtu.be/Amn_eHRGX5M?t=2862
+	loss 如何計算
+		IOU Matched Prediction
+		https://youtu.be/Amn_eHRGX5M?t=1237 
+	可以看看未來的 picture 透過下面影片 使用對應的 pretrain model
+		https://youtu.be/Amn_eHRGX5M?t=2209
+	model 參數大概講解
+		https://youtu.be/Amn_eHRGX5M?t=2968
+	
+	
+prediction
+	models\base.py def predict_instances(self, *args, **kwargs):
+		self._predict_instances_generator(*args, **kwargs):
+	def _predict_instances_generator
+		n_tiles : iterable or None
+            Out of memory (OOM) errors can occur if the input image is too large.
+            To avoid this problem, the input image is broken up into (overlapping) tiles
+            that are processed independently and re-assembled.
+            This parameter denotes a tuple of the number of tiles for every image axis (see ``axes``).
+            ``None`` denotes that no tiling should be used.
+
+資料後處理
+	polygon selection + Non-maximum Suppression
+		看這個點比較接近哪一個點 如果兩個圖形重疊太多那就合併(Suppression)此兩個圖形
+		有一個前提是這些圖形必須是 star-convex (中心到任何邊界中間不會跨過任何邊界)
+
+
+已解決
+	是不是 Fiji 可以框圖 -> 我就使用他的圖片格式就好
+		影片中有說怎麼標記圖片 https://youtu.be/Amn_eHRGX5M?t=2534
+	Radial Distances
+		從中心點放射狀的線 但目前不知道原理
+		先假設 這些放射狀的線 代表細胞的邊界 (愈多條 圖形就愈複雜 但相對的也愈準)
+			可能 output 會是 某一條線的長度應該是多少
+
+目前還沒找到這些解釋
+	polygon selection
+		先假設是某個點最接近哪個多邊形
+	tiled prediction 機器學習
+
+coding 關鍵紀錄
+	model = StarDist3D.from_pretrained('3D_demo')
+		StarDist3D(stardist) 繼承 StarDistBase(stardist) 繼承 BaseModel(csbdeep)
+		from_pretrained
+		get_model_instance
+		
+	model = StarDist3D.from_pretrained('3D_demo')
+		這個是直接呼叫底層的 所以model架構也在裡面 沒有經過 _build_resnet 等用code初始化 model 的過程
+	model 架構 可以看 _build_resnet
+	
+	都存在 model.config 裡面
+	
+	
+	_predict_sparse_generator 這個裡面是 model 在辨識 (GPU 使用率很高)
+	
+	
+	_instances_from_prediction 這個裡面 NMS (CPU 使用率很高)
+	non_maximum_suppression_3d_sparse (裡面有用到 nms_thresh)
+	non_maximum_suppression_3d_inds
+	c_non_max_suppression_inds
+		from .lib.stardist3d import c_non_max_suppression_inds
+	
+	

@@ -1,0 +1,19 @@
+https://arxiv.org/pdf/1908.03636.pdf
+看起來也是 stardist 的應用
+	應該說優化 stardist 在 3D 使用方面 (看起來應該是效率方面)
+	
+遇到的問題
+	1) 容易錯誤地融合接觸核
+	2) 可能無法識別與邊界框近似的對象
+	
+predict output
+	論文中寫的 : 各個 pixel 是細胞核的機率，radis 的距離 (尚未驗證)
+		每一個 pixel 都會去訓練 對應 N 條 radis 的長度
+	redis 是 96 條	
+
+如果有什麼不懂可能要先看一下 [21] 好像做了很多優化
+
+優化的點
+	To save computation and memory we predict at a grid of lower spatial resolution than the input image, since a dense (i.e., per input pixel) output is often not necessary (this is similar to the concept of bounding box anchors in object detection approache
+		為了節省計算和內存，我們在空間分辨率低於輸入圖像的網格上進行預測，因為通常不需要密集（即每個輸入像素）輸出（這類似於對象檢測方法中邊界框錨點的概念）
+	用 Fibonacci lattice 的效果比 equidistant (polar/azimuthal) distributed ray 好

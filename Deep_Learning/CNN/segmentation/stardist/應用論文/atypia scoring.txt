@@ -1,0 +1,78 @@
+https://www.nature.com/articles/s41598-021-04395-1
+這是一開始給我看的論文
+
+atypia scoring
+	這個是使用 stardist 找出細胞
+	再轉換成數值
+	再用這些數值去做 atypia scoring
+		Furthermore, they are entirely derived from the 3D geometry of the detection of StarDist and do not use direct information from the original 3D image.
+		我不懂為什麼是 Furthermore ?? 直接用 3D image 不好嗎 ??
+
+前提
+	3D LC-OCT : capable of accurately assessing the amount of atypia in keratinocyte cancers.
+	
+data
+	可以看到 figure 1 (d) 可以看到 他們的圖片 跟我們一樣 細胞核是黑色的 
+	他們把原始的圖片 (300 × 400 × 1200) 拆成 (60 × 128 × 128) 大約 5*3*9 = 135 個 data 進行訓練
+	怎麼合併 
+		如果兩邊的邊界 都判斷說有一個細胞核 要怎麼決定 (我猜 就是IOU)
+
+stardist 內的設定
+	200 epochs 
+	batch size of 2
+	an exponential learning rate decay of 0.8 every 10 epochs, 
+	validation set 20% 
+	post-processing - NMS (NMS threshold was set to 0.05) 算很低
+		0.05 算很低 (但 細胞本來就不應該重疊)
+		但是要確定 NMS 應該不是用長方形邊界計算吧 ?? (尚未驗證)
+	rays 條數為 96 條
+	
+辨識結果轉數據
+	stardist 的結果要怎麼轉成 圖5 中的這13個數值
+		先轉成 Voronoi graph 
+		再從 Voronoi graph 計算這 13 個數據
+	
+驗證的方法
+	5-fold stratified cross-validation
+	
+主要使用的訓練方法
+	非監督
+		使用 Isolation Forest algorithm (based on a Random Forest and the number of splits required to predict an instance)
+			結果看起來只比 XGBoost 差
+		不知道有沒有留 code 也想看一下 unsupervised 到底怎麼做
+		    沒有
+	
+	weakly-supervised approach
+		only uses a simple prior assumption: atypia must be significantly more frequent within pathological skin than healthy skin.
+		In this setting, nuclei from pathological images are all considered as atypia while nuclei from healthy images are considered healthy.
+			有問題吧 ??
+		
+		方法1
+			Logistic regression
+				看起來是把各種特徵 轉換成數值 再做regression
+					p=σ(β0+β1x1+...+βnxn)  X就是各種特徵的數值
+				通常細胞間距應該會有特定的大小 如果過大或過小 應該都不是正常的 (但這種情況regression就不能正常運作了)
+				
+他們用scipy
+	correlation between the scores of the different methods
+	means of two independent samples of scores (To compare metrics between the healthy and pathological skins)
+
+問題
+	圖5 這些特徵不知道是怎麼找出來的 (應該是他們自己決定的)
+		Moreover, we can use the fitted parameters of the logistic regression to understand what atypia means for the trained model. 
+			這個我也不知道是怎麼做到的
+			擬和 ?? 
+	
+	不知道 XGBoost 是怎麼找出相關性的  (因為 NN 是互相之間相乘 是怎麼給出某個單一數值 的關聯性的)
+		Despite the complexity of the model, it is interpretable thanks to shapley values as shown in Fig. 5c. This graph allows a similar interpretation as a logistic regression, although more sophisticated. We can see that cytoplasm ratio, volumes and standard deviations of neighbours are positively correlated to atypia score while distance to neighbours, compactness and number of neighbours are negatively correlated to atypia score.
+	
+	
+結論
+	重點是她參考了那些數值
+	這些數值可以辨別什麼東西
+	這些數值要如何導出結果 使用不同方法
+	
+專N
+	Line-feld Confocal Optical Coherence Tomography (LC-OCT)
+	Optical Coherence Tomography (OCT) 
+	Refectance Confocal Microscopy (RCM)
