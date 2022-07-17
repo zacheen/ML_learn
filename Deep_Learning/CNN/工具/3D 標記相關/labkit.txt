@@ -1,0 +1,34 @@
+labkit 
+	https://www.biorxiv.org/content/10.1101/2021.10.14.464362v1.full.pdf
+	
+abstest
+difftest
+
+我應該要去看各個 random forest 的 decision tree 裡面 node 是用什麼方法去 decision 
+
+LABKIT
+    software
+        ImgLib2 - 為了處理很大的資料
+        BigDataViewer - UI
+    decision node
+        Weka (Waikato Environment for Knowledge Analysis)
+            好像是用 weka 找出各種特徵 
+            而這些特徵就是 decision tree 決定的東西
+                不確定是有沒有 還是數量 數值
+        shallow random forest classifier
+        
+        a core feature of LABKIT is a random forest based pixel classification (17) based on Weka (30, 31), newly implemented and optimized for speed.
+            所以其實只是舊的技術 只是提高計算能力
+    3D
+        是從2D的各個方向去拓展到3D
+        
+homogeneous 意思
+    所以同質(相似)的東西可以辨識出來
+    但比較例外的不行
+heterogeneous 
+
+residual errors 殘差
+
+有機會可以研究一下 各個特徵的數值如何計算
+
+既然是 random forest 為什麼每個點出來的結果是機率 (是各個 decision tree 是結果的比例嗎?)

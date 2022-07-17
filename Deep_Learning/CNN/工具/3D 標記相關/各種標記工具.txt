@@ -1,0 +1,42 @@
+https://docs.google.com/spreadsheets/d/e/2PACX-1vRaQA_38IZj9Ovsy7d59P-ia4AL77vBdOOv6cLnZk9-4ZQeZ5qK3c5CMRQb-4fUXSTIJCg9uTbqRVnk/pubhtml
+
+ilastick  
+	也是用 random forest
+	而且各層的結果分開
+		有可能同一個細胞核 各層的 label 不同
+	
+Microscopy Image Browser
+	lasso 效果沒有 ITK-snap 的 snake 好 
+			
+QuPath
+	可以設定閾值 移除某個範圍的面積大小的label
+	split annotation
+	邊框邊訓練
+		https://www.youtube.com/watch?v=9dTfUwnL6zY
+	
+	缺點 :
+		2D 效果很好 但是 3D 完全不行
+
+以上沒有 3D 顯示視窗 
+=================================================
+以上有 3D 顯示視窗 
+
+Paintera
+	學習成本高 且 資料格式獨特
+	好處是可以用任意方向看 2D 切面圖片
+	
+3D slicer
+	半自動標記的結果不好 
+		Threshold 無法調整至完整斷開
+			過小: 有些地方沒有框到
+			過大: 導致細胞核擴張到其他細胞核
+		Grow from seeds
+			菱菱角角
+			中間有洞
+	但有很多功能 且 可以吃code
+	
+ITK-snap (目前最常使用的)
+	snake 很好用 
+	可惜只能讀取 16 bit 的檔案
+
+	

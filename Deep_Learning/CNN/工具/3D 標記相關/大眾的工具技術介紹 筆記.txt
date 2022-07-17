@@ -1,0 +1,5 @@
+大眾的工具技術介紹 筆記
+	可以辨識 3D 圖片的架構
+		ten can handle 3D nuclei: CDeep3M (Haberl et al., 2018), DeepSynth (Dunn et al., 2019), 3D U-Net (Cicek et al., 2016), QCANet (Tokuoka et al., 2020), Retina U-Net (Jaeger et al., 2020), NuSeT (Yang et al., 2020), StarDist (Weigert et al., 2020), nnU-Net (Isensee et al., 2021), DeepCell (Van Valen et al., 2016), and Cellpose (Stringer et al., 2021). However, only five provide a trained model: DeepSynth, QCANet, NuSeT, DeepCell and Cellpose.
+		
+		The best annotation tools for segmentation we have tested are Ilastik (Berg et al., 2019) and Weka (Arganda-Carreras et al., 2017); both integrate ML algorithms (Random Forest) to quickly label a large number of large 3D images.
