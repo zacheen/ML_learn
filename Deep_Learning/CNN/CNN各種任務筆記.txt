@@ -1,0 +1,28 @@
+Computer Vision (CV) 重要任務應用
+    Image Classification (影像分類)
+    Object Detection (物件偵測)
+    Image Segmentation (圖像分割)
+        https://medium.com/ching-i/影像分割-image-segmentation-語義分割-semantic-segmentation-1-53a1dde9ed92
+            這個網址還有提到比較常用的網路架構
+        Semantic segmentation (意義分割)
+            是指將圖像中的所有像素點進行分類
+            因此給圖片中某個位置 我可以知道這個位置是屬於什麼東西
+            相較 Instance Segmentation 簡單
+                可以想成我用 CNN 跑這個區塊的結果是什麼 
+                但 Instance Segmentation 還要找到彼此的界線
+        Instance Segmentation (語意分割) (實例分割)
+            每個物件都有自己的框框 (就算是同個label的物件 我們也看成兩個物件 只是對應的label相同)
+            主要有兩大方法
+                Bottom Up 
+                    先區分出 前景(就是細胞)跟背景 
+                    再畫出各個細胞的邊界
+                    EX: https://github.com/stardist/stardist 所使用的方法
+                Top down
+                    先找出各個細胞的位置(上下左右邊界)
+                    再繼續找具體的位置
+                    EX: Mask-RCNN
+            其他方法
+                Affinity based methods , wolf Pape
+                Embedding based methods , Neven 
+        Panoramic Segmentation 
+            更複雜還要考慮背景
