@@ -1,0 +1,31 @@
+NMS 系列
+    https://towardsdatascience.com/non-maximum-suppression-nms-93ce178e177c
+    Non-maximum Suppression (NMS) (其實就是使用 IOU 排除相似答案)
+        原因:
+            原本的 anchor + sliding window 方法重複度太高 且會產生很多候選結果 因為隔幾格又掃一次 通常結果是相似的
+        目的:
+            Input: A list of Proposal boxes B, corresponding confidence scores S and overlap threshold N.
+            Output: A list of filtered proposals D.
+        原理:
+            主要是判斷 IOU 有沒有超過閾值
+            (這個方法跟我自己實作的autoTest數字辨識概念相同)
+        缺點
+            但有可能兩個相鄰的物件重疊在一起 其中一個會被蓋掉
+                工作人員戴著帽子(帽子完全被工作人員覆蓋)
+    Soft-NMS:
+        原因: 
+            解決 NMS
+        原理:
+            不是設定單純的閾值
+            而是看 confidence 給相對應的閾值
+                EX : confidence 0.9 可接受的閾值為 0.8, confidence 0.7 可接受的閾值為 0.5
+        缺點:
+            我覺得這個設定很麻煩
+            應該要看output結果 去覺得這兩個數值對應的關係
+    Weighted Boxes Fusion :	
+        https://medium.com/analytics-vidhya/weighted-boxes-fusion-86fad2c6be16
+        原理:
+            不會捨棄任何的候選 而是把他們合併
+            
+Fibonacci Lattice
+    這是 3D 的 NMS
