@@ -4,6 +4,3 @@
     AP (Average Precision)
     mAP (mean Average Precision)
     
-面積相關的
-    IOU (intersection over union)
-        預測與 ground truth 相交的面積大小
