@@ -1,0 +1,16 @@
+C:\Users\Amo\anaconda3\Lib\site-packages\cellpose\utils.py
+	原本 :
+			if min_size > 0 and npix < min_size:
+			
+	修改 :
+			# add by thomas
+            #--------------
+            contact_edge = False
+            if 0 in [each_slc.start for each_slc in slc] :
+                contact_edge = True
+            else :
+                end_pos = msk.shape
+                if slc[0].stop == end_pos[0] or slc[1].stop == end_pos[1] or slc[2].stop == end_pos[2] :
+                    contact_edge = True
+            if not contact_edge and min_size > 0 and npix < min_size:
+            #--------------

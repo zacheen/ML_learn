@@ -1,0 +1,162 @@
+Cellpose 筆記
+
+專有名詞
+	cytoplasm 細胞質
+	fluorescent cells 熒光細胞
+	membranelabelled cells 膜標記細胞
+	
+是用 pytorch (下面這些都在 cellpose 裡面)
+	self.cp 
+		Cellpose.CellposeModel (繼承自 UnetModel) 
+		UnetModel.net 是 resnet_torch.CPnet
+	
+C:\Users\Amo\anaconda3\Lib\site-packages\cellpose\models.py
+也許會需要調整的參數
+	boundary_threshold : 應該是 IOU threshold
+	invert : 反轉顏色 (因為我們的細胞核是黑色)
+	diameter : 3D 不會自動調整大小，所以我們要自己給
+	net_avg : 集成結果
+	flow_threshold: float (optional, default 0.4)
+		調整 segmentation 的區域範圍
+		flow error threshold (all cells with errors below threshold are kept) (not used for 3D)
+		
+
+	cellprob_threshold: float (optional, default 0.0)
+		調整 那些 cell 要顯示出來
+		all pixels with value above threshold kept for masks, decrease to find more and larger masks
+
+	min_size: int (optional, default 15)
+		minimum number of pixels per mask, can turn off with -1
+
+	stitch_threshold: float (optional, default 0.0)
+		if stitch_threshold>0.0 and not do_3D and equal image sizes, masks are stitched in 3D to return volume segmentation
+
+	code 問題
+		flow_threshold 看起來在3D真的無效，如果真的想要調整怎麼辦
+			mask = remove_bad_flow_masks(mask, dP, threshold=flow_threshold, use_gpu=use_gpu, device=device)
+			看起來是用來刪除不好的結果
+		- 那是過哪個標準才會加入結果中
+			只要過 cell prob 就會加入結果中
+			
+		OK min_size 不知道 3D 裡面是怎麼定義的
+			但是設太大 邊邊的又會被去除掉
+			fill_holes_and_remove_small_masks
+				看起來是填洞前 mask 的 pixel 總數
+			
+		compute_masks 
+		cellprob_threshold 就算設很低 有些cell看起來有flow 也沒有被辨識出來
+			設負的也不會改善 cellprob_threshold = -0.5 
+			原因 
+				flow 是有偵測到 但是 cell 的偵測沒有
+				沒有中心 有 flow 也沒有用
+			不過 prob 的訓練也有點奇怪 怎麼過0就算有
+			
+		目前還是不知道 cell center, cellprob 怎麼產生的
+	
+	重要 function 紀錄
+		compute_masks 
+		
+data
+	We also demonstrate a 3D extension of Cellpose which reuses the 2D model and does not require 3D-labelled data.
+	
+model 
+	The neural network that predicts the spatial flows was based on the general U-net architecture, which downsamples the convolutional maps several times before upsampling in a mirror-symmetric fashion. (就是敘述 1d)
+	
+	對 model 的優化 (目前也沒看懂)
+		we opted for direct summation in order to reduce the number of parameters. 
+		replaced the standard building blocks of a U-net with residual blocks (result : perform better)
+		doubled the depth of the network as typically done for residual networks
+		we used global average pooling on the smallest convolutional maps to obtain a representation of the ”style” of the image (for similar definitions of style see [18, 21, 22]).
+		We also use several test time enhancements to further increase the predictive power of the model: test time resizing, ROI quality estimation, model ensembling, image tiling and image augmentation (see Methods).
+	
+prediction
+	A neural network was then trained to predict 
+	(1) the horizontal gradients of the topological maps, 
+	(2) the vertical gradients
+	(3) a probability map which indicates if a given pixel is part of any cells (Figure 1c,d).
+	
+	horizontal and vertical gradients, which form vector fields or "paths".  By following these paths, all pixels belonging to a given cell should be routed to its center.
+	
+	code :
+		masks, styles, dP, cellprob, p = self._run_cp(x, 
+		yf, styles = self._run_3D(img,
+			yf: array [Lz x Ly x Lx x 3]
+				y[...,0] is Y flow; y[...,1] is X flow; y[...,2] is cell probability
+
+			style: array [64]
+				1D array summarizing the style of the image,
+				if tiled it is averaged over tiles
+				
+			cellprob = yf[0][-1] + yf[1][-1] + yf[2][-1]
+			dP = np.stack((yf[1][0] + yf[2][0], yf[0][0] + yf[2][1], yf[0][1] + yf[1][1]),
+                          axis=0) # (dZ, dY, dX)
+						  
+			if do_3D:
+                masks, p = dynamics.compute_masks(	
+			def compute_masks(dP, cellprob,
+				p, inds = follow_flows(
+				mask = get_masks(p, iscell=cp_mask)
+				
+			def follow_flows(dP,
+				
+			
+	
+2D to 3D
+	We designed a new method for extending Cellpose to 3D
+	
+	We average over the two estimates of each flow at each pixel
+	
+	沒看到這部分的 code 
+	第 11 頁 右下角開始
+	We average over the two estimates of
+each flow at each pixel (Figure 5d). From each slice we
+also predict the cell probability, and we average across
+these three estimates for each pixel. We threshold
+the cell probability at 0.5 and multiply it by the flows.
+We then use these flows to run the dynamics to create
+the mask estimates (Figure 5e). Objects smaller than
+10% of the median cell volume (2000 voxels) were discarded (Figure 5f,g). The default median diameter was
+used (30 pixels).
+
+	
+儲存 model 
+	train_data 底下的資料夾 看起來是寫死了
+		file_path = os.path.join(save_path, 'models/')
+	
+	self.net.save_model(file_name)
+
+缺點
+	we do not expect Cellpose to work well on images where different objects have different shapes and textures or when occlusions require highly overlapping masks
+	
+問題
+	model 怎麼有兩種 ?
+		Mask R-CNN 是比較的基準
+	"follow the flow" 是什麼意思
+	
+	我知道 最後結果是 vector 但一開始 label 怎麼轉成 vector ??
+	
+	我不懂 6 個 dimention 怎麼變成一個 volume 的
+	
+	所以是不是像 https://arxiv.org/pdf/1812.08008.pdf 一樣有預測 細胞核的位置 再看vector去找邊界
+	
+	資料集中有 fruits, rocks and jellyfish (n = 98) 可以使 model 更 generalize
+		不懂原因
+			是不是類似 平移 放大 縮小 可以更好的 辨識
+			
+
+2.0 paper
+https://www.biorxiv.org/content/10.1101/2022.04.01.486764v1.full.pdf
+	
+Recent studies have
+suggested novel architectures, new training protocols and image simulation methods for attaining highperformance segmentation with limited training data
+[12–15].
+
+各個 model 的分類來源
+	We took the style vectors for all images and clustered them into nine different classes using the Leiden algorithm
+
+	fluorescent cell images (CP, TN1, TN2, TN3)
+	phase contrast images (LC1, LC2, LC3, LC4) 
+	
+不懂為什麼一開始 LR 要等於 0
+The learning rate increased linearly from 0 to 0.1 over the first 10 epochs, then decreased by factors of 2 every 5 epochs after the 250th
+epoch.
