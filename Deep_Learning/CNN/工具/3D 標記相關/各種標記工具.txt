@@ -10,10 +10,10 @@ Microscopy Image Browser
 			
 QuPath
 	可以設定閾值 移除某個範圍的面積大小的label
-	split annotation
+	split annotation (可以分割兩個相連的 object 成兩個不同的label
+)
 	邊框邊訓練
 		https://www.youtube.com/watch?v=9dTfUwnL6zY
-	
 	缺點 :
 		2D 效果很好 但是 3D 完全不行
 

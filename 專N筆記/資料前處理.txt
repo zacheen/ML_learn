@@ -1,0 +1,13 @@
+資料前處理 (資料預處理)
+
+Standardization (標準化)
+    rescales a dataset to have a mean of 0 and a standard deviation of 1. 
+    xnew = (xi – x) / s
+        xi : The sample mean
+        s : The sample standard deviation
+
+Normalization (正規化) (有時候有人會講成標準化 要注意)
+    rescales a dataset so that each value falls between 0 and 1. 
+    xnew = (xi – xmin) / (xmax – xmin)
+        xmin: The minimum value in the dataset
+        xmax: The maximum value in the dataset
