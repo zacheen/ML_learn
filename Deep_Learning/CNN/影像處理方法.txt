@@ -1,5 +1,0 @@
-影像處理方法
-
-auto brightness
-
-contrast enhancement

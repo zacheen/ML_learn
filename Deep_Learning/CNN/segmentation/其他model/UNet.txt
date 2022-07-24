@@ -1,5 +1,10 @@
+Unet 系列
+    https://blog.csdn.net/qq_44055705/article/details/115874502
+
+#############################################################
 UNet
-	https://arxiv.org/pdf/1505.04597.pdf
+	paper：
+        https://arxiv.org/pdf/1505.04597.pdf
 	https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/ (最後有影片結果)
 用處
 	專門用來做 Semantic segmentation
@@ -26,3 +31,16 @@ up-convolution
 	作用與 max pooling 相反
 	是為了增加特徵大小的
 	
+#############################################################
+UNet++
+    改進 UNet 架構
+    https://ieeexplore.ieee.org/document/8932614 
+    https://arxiv.org/abs/1807.10165
+    https://arxiv.org/abs/1912.05074
+#############################################################
+3D-UNet
+    https://link.springer.com/chapter/10.1007/978-3-319-46723-8_49
+    https://arxiv.org/abs/1606.06650
+    其實就是 2D conv 改 3D conv
+    
+#############################################################
