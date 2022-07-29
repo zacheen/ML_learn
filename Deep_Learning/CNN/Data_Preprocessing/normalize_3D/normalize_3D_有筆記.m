@@ -185,7 +185,7 @@ for TTT=1:length(file_list)
         Image_3rd=Image_3rd_Backup.^Exp_3;
         Image_3rd=Image_3rd./max(Image_3rd(:)).*max(Image_3rd_Backup(:));
 
-        Image_Rec=Image_3rd.*Image_2nd+Image_1st;%.*Image_Map_1st;
+        Image_Rec=Image_3rd.*Image_2nd+Image_1st; %.*Image_Map_1st;
    
 
 

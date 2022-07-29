@@ -1,3 +1,6 @@
+Snake 使用影片
+    https://drive.google.com/file/d/1xcTHhB8hwRl3algbMRd3GtN7yJcctvmG/view?usp=sharing
+
 學習方式
 	1. 先看影片操作一次
 	2. 再看官網的TUTORIAL文字介紹 理解各個功能的的定義

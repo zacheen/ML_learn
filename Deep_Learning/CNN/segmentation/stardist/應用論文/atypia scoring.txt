@@ -71,6 +71,7 @@ stardist 內的設定
 	重點是她參考了那些數值
 	這些數值可以辨別什麼東西
 	這些數值要如何導出結果 使用不同方法
+	所需時間 : 3 minutes
 	
 專N
 	Line-feld Confocal Optical Coherence Tomography (LC-OCT)

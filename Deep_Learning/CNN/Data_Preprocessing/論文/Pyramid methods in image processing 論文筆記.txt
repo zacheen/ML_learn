@@ -1,0 +1,63 @@
+Pyramid methods in image processing 論文筆記
+	主要多了一個特徵 "scale"
+		有論文證明人類在看東西也有在看這個特徵
+	在有很多不同解析度(不同scale)的圖片，當然希望每張圖都掃過一次，但不可能因為要很久	
+	
+	此論文是用縮小來產生 scale 的特徵，
+		縮小算是 lowpass
+			lowpass 為什麼會有 scale 的特徵嗎
+				因為看起來變模糊了 所以只能看到輪廓
+			每次縮小成1/2 == lowpass 1/2F 的效果
+			
+高斯縮小 跟 高斯放大 目前還是不知道原理 ??
+
+拉普拉斯金字塔
+	就是把各個高斯金字塔相減 ( Gi - G(i+1) ) i從0開始
+	效果等同 Bandpass 
+	把 拉普拉斯金字塔 的結果相加 會等於 G0 的影像(要注意不是原始影像)
+	Fig.4a 牙齒的部分還是很白 這有點奇怪 ??
+	第36頁中間 講解了很多 拉普拉斯金字塔 的好處
+		The Laplacian pyramid serves both of these objectives. As a bandpass filter, pyramid construction tends to enhance image features, such as "edges"
+	
+我創造了很多個圖像 要怎麼一起 conv ??
+
+Image analysis 有點看不懂
+	three-stage
+	
+	or the product of corresponding samples in two images used in forming correlation measures for motion analysis.
+		這個應該是為什麼要相乘
+	intensity 強度
+		
+Image enhancement (重點!!) (38頁中間下面開始)
+	1. 拉普拉斯金字塔
+	2. 把拉普拉斯金字塔每層結果 1% 的極端值 推到最大與最小值 中間等比例放大
+		可以想成 bandpass ?
+	3. 再相加結果
+		
+	
+
+
+integration 積分
+facilitate 促進
+degradations 退化
+manipulation 操縱
+comprise 包括
+regular 固定的
+Octave 
+	在電子學的領域代表頻率加倍或是減半
+	因為音樂中的octave（八度）表示頻率加倍或是除以2
+	
+	
+
+問題
+	為什麼要是非線性的轉換
+	為什麼要相減
+		這次 LL 的方法
+		可以找出物體的輪廓
+	
+	所以最後的結果是三張圖片加起來嗎?
+	
+	我們的目的只是需要找輪廓而已 有需要這麼複雜嗎 
+		應該是有 因為這個方法到時候也會用在ML裡面 所以有更多的特徵當然是好的
+	
+	
