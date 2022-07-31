@@ -2,10 +2,10 @@ Unet 系列
     https://blog.csdn.net/qq_44055705/article/details/115874502
 
 #############################################################
-UNet
-	paper：
-        https://arxiv.org/pdf/1505.04597.pdf
-	https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/ (最後有影片結果)
+201505 UNet
+    U-Net: Convolutional Networks for Biomedical Image Segmentation
+        https://doi.org/10.48550/arXiv.1505.04597
+    https://lmb.informatik.uni-freiburg.de/people/ronneber/u-net/ (最後有影片結果)
 用處
 	專門用來做 Semantic segmentation
 	也可以推論成 Instance Segmentation
@@ -30,7 +30,7 @@ copy and crop (拼接) (有點像 ResNet 的 Skip connect)
 up-convolution	
 	作用與 max pooling 相反
 	是為了增加特徵大小的
-	
+
 #############################################################
 UNet++
     改進 UNet 架構

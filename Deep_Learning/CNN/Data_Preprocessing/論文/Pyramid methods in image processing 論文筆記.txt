@@ -1,4 +1,6 @@
-Pyramid methods in image processing 論文筆記
+1984 Pyramid methods in image processing
+    http://persci.mit.edu/pub_pdfs/RCA84.pdf
+    
 	主要多了一個特徵 "scale"
 		有論文證明人類在看東西也有在看這個特徵
 	在有很多不同解析度(不同scale)的圖片，當然希望每張圖都掃過一次，但不可能因為要很久	

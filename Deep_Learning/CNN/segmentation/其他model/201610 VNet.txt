@@ -1,7 +1,9 @@
-VNet
-    UNet 的一種變形
-    paper：https://ieeexplore.ieee.org/document/7785132
+201610 VNet
+    V-Net: Fully Convolutional Neural Networks for Volumetric Medical Image Segmentation
+        https://doi.org/10.1109/3DV.2016.79 (我好像沒有權限看) (但是我有下載 PDF)
     code：https://github.com/faustomilletari/VNet （caffe）
+    
+    UNet 的一種變形
 
 Vnet is a model proposed for 3D images.
 

@@ -1,5 +1,10 @@
-FCN (Fully Convolutional Networks for Semantic Segmentation)
-	全卷積層
+201411 FCN 
+    Fully Convolutional Networks for Semantic Segmentation (2014)
+        https://doi.org/10.48550/arXiv.1411.4038
+    Fully Convolutional Networks for Semantic Segmentation (2016 內容差不多但有修改)
+        https://doi.org/10.48550/arXiv.1605.06211
+    
+    全卷積層
 	CNN 通常最後面會接 全連接層 才會有是什麼 class 的 Output
 	但是 FCN 沒有 後面接的是 upsampling 的 捲基層 所以其實可以不固定大小 (但是有最小的圖片大小限制)
 		(只是中間可能會變得很肥大)
