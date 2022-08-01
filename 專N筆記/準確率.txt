@@ -2,5 +2,7 @@
 
 都是準確率的計算方法 反正愈大愈好
     AP (Average Precision)
+    AR (Average Recall)
+        IOU 的準確率
     mAP (mean Average Precision)
     

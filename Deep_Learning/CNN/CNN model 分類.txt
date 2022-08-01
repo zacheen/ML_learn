@@ -1,5 +1,0 @@
-UNETR: Transformers for 3D Medical Image Segmentation
-	https://arxiv.org/pdf/2103.10504v3.pdf
-	https://paperswithcode.com/paper/unetr-transformers-for-3d-medical-image
-	是 Semantic segmentation
-	

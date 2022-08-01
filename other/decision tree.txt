@@ -11,6 +11,10 @@ Information gain
     用來判斷應該要先判斷什麼資料 (目的應該是為了要 balance tree 的深度)
     
 圖片特徵量化
-    HOG: Histogram of Oriented Gradients
     SIFT: Scale Invariant Feature Transform
+        Distinctive image features from scale-invariant keypoints. 2004
+        extracted at scale-space extrema(尺度空間極值) and used for feature point matching
+    HOG: Histogram of Oriented Gradients
+        Histograms of oriented gradients for human detection. 2005
+        (跟 SIFT 的目的差不多)extracted at scale-space extrema(尺度空間極值) and used for feature point matching
     SURF: Speeded-Up Robust Feature

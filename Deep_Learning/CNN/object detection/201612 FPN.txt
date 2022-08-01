@@ -1,0 +1,22 @@
+201612 FPN (Feature Pyramid Networks)
+    Feature Pyramid Networks for Object Detection
+        https://doi.org/10.48550/arXiv.1612.03144
+
+    這一篇提到了很多各種架構 有沒有用到 scale
+        也可以用這一篇去認識各種架構
+    
+    COCO detection benchmark
+        算是想要優化 COCO
+    可以 entend 成 instance segmentation
+
+    pyramid representations 計算量很大
+    Single Shot Detector (SSD) 是第一個嘗試使用 ConvNet’s pyramidal feature hierarchy
+        (不是對每個金字塔做CONV 而是一起做 減少計算量)
+        像是 VGG 的架構
+        但是這樣對小的 object 很難偵測到
+            因為 higher-resolution 的特徵會遺失
+
+    這個時候已經有 Unet 了
+        跟 Unet 的差別是，不是最後一個 level 才 predict，中間的 level 也有 predict
+
+    

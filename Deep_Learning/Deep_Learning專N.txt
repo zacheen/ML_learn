@@ -2,6 +2,11 @@
 	tunable 可調的
 	arbitrary 隨意的
 	prune 修剪
+    state-of-the-art 最先進的
+    without bells and whistles 沒有花里胡哨
+    Hand-engineered features 手工設計的功能
+    
+    Region Proposal Network, RPN
 
 繼續訓練
 	https://medium.com/ai-blog-tw/deep-learning-使用pre-training的方法與時機-b0ef14e777e9

@@ -1,0 +1,30 @@
+CNN 歷史
+
+ConvNet ??
+
+OverFeat 某一種經典的 CNN 架構
+    OverFeat adopted a strategy similar to early neural network face detectors by applying a ConvNet as a "sliding window detector" on an image pyramid.
+R-CNN
+    R-CNN adopted a "region proposal-based" strategy in which each proposal was scale-normalized before classifying with a ConvNet
+SPPnet
+    應該是想要取代 R-CNN
+    優點好像是比 R-CNN 更快
+Fast R-CNN
+Faster R-CNN
+    advocate using features computed from a single scale, because it offers a good trade-off between accuracy and speed
+    但是 Multi-scale detection, however, still performs better, especially for small objects.
+2014 COCO
+    Microsoft COCO: Common objects in context.
+
+2015 VGG
+    Very deep convolutional networks for large-scale image recognition.
+
+201510 ResNets
+    Deep Residual Learning for Image Recognition
+        https://doi.org/10.48550/arXiv.1512.03385
+
+    Using FPN in a basic Faster R-CNN system, 
+    our method achieves 最先進的 single model results on the COCO detection benchmark 
+
+2015 ImageNet
+    ImageNet Large Scale Visual Recognition Challenge.
