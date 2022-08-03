@@ -1,4 +1,7 @@
-Data Preprocessing == 資料前處理
+Data Preprocessing 資料處理
+    (大概率是指資料前處理的部分)
+pre-processing  前處理
+post-processing 後處理
 
 auto brightness
 

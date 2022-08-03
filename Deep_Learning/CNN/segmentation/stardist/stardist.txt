@@ -20,7 +20,17 @@ data
 			再計算 (x - mi) / ( ma - mi + eps )
 				eps 是一個很小的值
 
+label 轉換成可以丟進去 training 的資料
+	1. fill_label_holes 在 2_training 裡面
+	2. star_dist3D 把 label 轉成 prob 跟 label
+			return _cpp_star_dist3D(lbl, rays, grid=grid)
+		def _cpp_star_dist3D(lbl, rays, grid=(1,1,1)):
+			return c_star_dist3d(
+		from ..lib.stardist3d import c_star_dist3d
+		打包在 C:\Users\Amo\anaconda3\Lib\site-packages\stardist\lib\stardist3d.cp37-win_amd64.pyd 
+		
 training 設定相關
+	設定相關的變數都存在 model.config 裡面
 	找 rays 應該要設定幾條
 		1_data 裡面的 n_rays = [2**i for i in range(2,8)]
 		https://youtu.be/Amn_eHRGX5M?t=2862
@@ -48,7 +58,24 @@ prediction
 	polygon selection + Non-maximum Suppression
 		看這個點比較接近哪一個點 如果兩個圖形重疊太多那就合併(Suppression)此兩個圖形
 		有一個前提是這些圖形必須是 star-convex (中心到任何邊界中間不會跨過任何邊界)
-
+		
+	_predict_sparse_generator 這個裡面是 model 在辨識 (GPU 使用率很高)
+	_instances_from_prediction 這個裡面 NMS (CPU 使用率很高)
+		non_maximum_suppression_3d_sparse (裡面有用到 nms_thresh)
+		non_maximum_suppression_3d_inds
+		c_non_max_suppression_inds
+			from .lib.stardist3d import c_non_max_suppression_inds
+				打包在 C:\Users\Amo\anaconda3\Lib\site-packages\stardist\lib\stardist3d.cp37-win_amd64.pyd
+	
+coding 關鍵紀錄
+	model = StarDist3D.from_pretrained('3D_demo')
+		這個是直接呼叫底層的 所以model架構也在裡面 沒有經過 _build_resnet 等用code初始化 model 的過程
+		model 架構 可以看 _build_resnet
+		StarDist3D(stardist) 繼承 StarDistBase(stardist) 繼承 BaseModel(csbdeep)
+		from_pretrained
+		get_model_instance
+		
+	
 
 已解決
 	是不是 Fiji 可以框圖 -> 我就使用他的圖片格式就好
@@ -58,31 +85,9 @@ prediction
 		先假設 這些放射狀的線 代表細胞的邊界 (愈多條 圖形就愈複雜 但相對的也愈準)
 			可能 output 會是 某一條線的長度應該是多少
 
-目前還沒找到這些解釋
-	polygon selection
-		先假設是某個點最接近哪個多邊形
-	tiled prediction 機器學習
 
-coding 關鍵紀錄
-	model = StarDist3D.from_pretrained('3D_demo')
-		StarDist3D(stardist) 繼承 StarDistBase(stardist) 繼承 BaseModel(csbdeep)
-		from_pretrained
-		get_model_instance
-		
-	model = StarDist3D.from_pretrained('3D_demo')
-		這個是直接呼叫底層的 所以model架構也在裡面 沒有經過 _build_resnet 等用code初始化 model 的過程
-	model 架構 可以看 _build_resnet
-	
-	都存在 model.config 裡面
 	
 	
-	_predict_sparse_generator 這個裡面是 model 在辨識 (GPU 使用率很高)
 	
-	
-	_instances_from_prediction 這個裡面 NMS (CPU 使用率很高)
-	non_maximum_suppression_3d_sparse (裡面有用到 nms_thresh)
-	non_maximum_suppression_3d_inds
-	c_non_max_suppression_inds
-		from .lib.stardist3d import c_non_max_suppression_inds
 	
 	

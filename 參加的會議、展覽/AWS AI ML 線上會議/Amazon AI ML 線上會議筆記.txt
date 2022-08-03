@@ -33,7 +33,7 @@ NLP 相關
 	
 	人臉不會清晰的出現
 		不能使用身形
-		"transfer learning" ?? (有聽過但沒研究過)
+		transfer learning
 			先訓練成可以辨識人臉
 			在訓練成辨識員工人臉
 			

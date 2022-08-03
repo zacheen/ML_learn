@@ -1,7 +1,7 @@
 Computer Vision (CV) 重要任務應用
     Image Classification (影像分類)
     Object Detection (物件偵測)
-    Image Segmentation (圖像分割)
+    Image Segmentation (圖像分割) (任務分類在 dense prediction task)
         https://medium.com/ching-i/影像分割-image-segmentation-語義分割-semantic-segmentation-1-53a1dde9ed92
             這個網址還有提到比較常用的網路架構
         Semantic segmentation (意義分割)
@@ -26,3 +26,8 @@ Computer Vision (CV) 重要任務應用
                 Embedding based methods , Neven 
         Panoramic Segmentation 
             更複雜還要考慮背景
+
+delineation 界定(某一條線)
+demarcation 劃界(把兩個object的界線分開來)
+
+
