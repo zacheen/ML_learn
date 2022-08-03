@@ -1,0 +1,59 @@
+supervised learning (SL) 監督式學習
+none-supervised learning 無監督式學習
+    self-supervised learning (SSL) 自監督學習
+        是 無監督學習 的一種分支
+        主要分為兩大類 :
+            Generative Learning 生成式
+                輸入一張圖片，通過 Encoder Decoder 還原輸入圖片資訊
+                EX: GAN、VAE、ELMo、BERT、GPT (MIM分類的應該也算)
+            Contrastive Learning 判別式
+                輸入兩張圖片，通過 Encoder，判斷兩張圖是否相似 0 or 1
+                EX: MoCo、SimCLR、DINO、EsViT
+
+visual-language models (== image-text alignment) (目前還不知道是什麼分類 ??)
+    2021 CLIP 
+        Learning transferable visual models from natural language supervision
+image classification methods
+    DeiT
+
+representation learning
+    機器學習算是一種 representation learning
+    可以想成我們是希望機器可以學會某件事情的表達方式
+    一張狗的圖片 跟 我們跟別人說"狗" 在 詢問物種的情況下 資訊量是一樣的
+    因此我們希望機器能夠學會如何表達它所發現或學習到的特徵
+
+Zero-Shot Learning 零樣本學習
+    以概念的形式去做類推
+        我們看過白貓黑貓 沒看過橘貓 但是我們知道貓咪耳朵尾巴的形狀 所以可以推論橘貓也是貓咪的一種
+    演算法
+        https://biic.ee.nthu.edu.tw/blog-detail.php?id=12
+        Domain Adaptation
+        Semantic Space
+        Data Selection
+        Feature Normalization
+Vision Transformer, ViT
+Swin Transformer
+
+
+    
+2021 Masked image modeling (MIM) 遮蓋圖像建模
+    自監督訓練
+    視覺預訓練方法
+        通過借鑒預訓練語言模型BERT採用的自掩碼預訓練機制
+        遮蓋圖像建模對需要進行預訓練的圖像輸入進行隨機的部分遮蓋，要求網絡對原始的圖像進行重建，從而實現對於圖像數據的預訓練
+    典型的相關方法
+        Bidirectional Encoder representation from Image Transformers (BEiT)
+            https://arxiv.org/abs/2106.08254
+            https://github.com/microsoft/unilm/tree/master/beit
+        Masked Autoencoders (MAE)
+            https://arxiv.org/abs/2111.06377
+            https://github.com/facebookresearch/mae
+            相比於 BEiT，簡化了整體訓練邏輯
+            利用隨機掩碼處理輸入的圖像塊，以及直接重建掩碼圖像塊來進行訓練
+
+
+
+
+
+
+

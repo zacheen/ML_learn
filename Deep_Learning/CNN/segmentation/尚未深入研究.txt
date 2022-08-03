@@ -1,0 +1,23 @@
+designed to be efficient
+    2016 ENet 
+        ENet: A Deep Neural Network Architecture for Real-Time Semantic Segmentation
+    2018 ESPNet
+        ESPNet: Efficient Spatial Pyramid of Dilated Convolutions for Semantic Segmentation
+    2017 SegNet
+        Segnet: A deep convolutional encoder-decoder architecture for image segmentation
+    如果要看以上3個 model 的 比較
+        https://sci-hub.se/10.1109/avss.2018.8639077
+
+202205 FD-SwinV2-G202205 
+    Contrastive Learning Rivals Masked Image Modeling in Fine-tuning via Feature Distillation
+        https://doi.org/10.48550/arXiv.2205.14141
+    https://github.com/SwinTransformer/Feature-Distillation
+
+    feature distillation (FD) 可以取代 MIM 的效果
+        那為什麼不用 MIM 就好 ??
+
+    他們研究的結論
+        MIM 是因為 optimization friendly representations 結果才比較好
+            optimization friendly representations are the reasons behind the superior fine-tuning performance of masked image modeling methods.
+        然後 FD 也可以獲取 optimization friendly representations 的特徵
+            

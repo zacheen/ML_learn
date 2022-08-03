@@ -1,5 +1,8 @@
 CNN 歷史
 
+整理不錯的網站
+	https://medium.com/ching-i/卷積神經網絡-cnn-經典模型-googlelenet-resnet-densenet-with-pytorch-code-1688015808d9
+
 ConvNet ??
 
 OverFeat 某一種經典的 CNN 架構
@@ -26,5 +29,14 @@ Faster R-CNN
     Using FPN in a basic Faster R-CNN system, 
     our method achieves 最先進的 single model results on the COCO detection benchmark 
 
+201611 ResNeXt 
+	Aggregated Residual Transformations for Deep Neural Networks
+        https://doi.org/10.48550/arXiv.1611.05431
+    ResNet 結合了 Inception 的結構
+	https://medium.com/ching-i/resnext-論文閱讀-7898b1281ef3
+
 2015 ImageNet
     ImageNet Large Scale Visual Recognition Challenge.
+
+
+multiscale context aggregation convolutional neural network (MCACNN) 

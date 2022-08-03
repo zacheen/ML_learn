@@ -1,0 +1,7 @@
+有 object dection 歷史
+    https://downloads.hindawi.com/journals/jat/2021/5808206.pdf
+    而且分的很細 
+        backbone 
+        one stage 
+        two stage
+        
