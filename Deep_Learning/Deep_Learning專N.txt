@@ -1,30 +1,33 @@
 論文可能會看到的英文單字
 	tunable 可調的
+    prune 修剪
 	arbitrary 隨意的
-	prune 修剪
-    state-of-the-art 最先進的
+    desirable 適當的
+    aggregately 整合
+	paradigm 範例
+    diagnostic 診斷
+    delineation 界定
+    demarcation 劃界
+    contour 輪廓(通常指的是比較大的東西)
+	
+    state-of-the-art (SOTA) 最先進的
     without bells and whistles 沒有花里胡哨
     Hand-engineered features 手工設計的功能
     
     Region Proposal Network, RPN
+    
+    satellite imagery (SAR images) 衛星影像
 
-繼續訓練
-	https://medium.com/ai-blog-tw/deep-learning-使用pre-training的方法與時機-b0ef14e777e9
-	1.train from scratch 從頭訓練
-	2.pretrain 預訓練(fine-tune 之前 先用其他資料訓練)
-		雖然目的是要辨識"數字" 但先用動物的圖片進行訓練 (使用的 dataset 跟目標不一樣)
-		優點:
-			減少訓練時間
-			減少target資料所需的數量
-		缺點:
-			也許其實根本不需要 沒有差 只是多花了時間
-		但不管怎樣 如果已經有 pretrain model 一定比較好
-	3.fine-tune (讓網路認識我們的資料的過程)
-		在目標任務下訓練
-	
+
 驗證方法
 	x-fold cross-validation 把data拆成x組 每次會把其中一組當作 test data 進行訓練
 	
-我不懂ㄟ
-	transfer train 不就是  讀取model然後使用自己的data繼續訓練嗎?
-	
+Attention : 主要在看的區域
+    計算的方法
+        average attention distances
+            An image is worth 16x16 words: Transformers for image recognition at scale. In International Conference on Learning Representations. (2021)
+        average attention maps
+        attention similarities between heads
+            Deepvit: Towards deeper vision transformer. arXiv preprint arXiv:2103.11886.
+        normalized loss landscape 
+            Visualizing the loss landscape of neural nets. (2017)

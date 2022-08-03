@@ -1,0 +1,24 @@
+各種訓練方式
+	https://medium.com/ai-blog-tw/deep-learning-使用pre-training的方法與時機-b0ef14e777e9
+	train from scratch 從頭訓練
+	pretrain 預訓練
+		雖然目的是要辨識"數字" 但先用動物的圖片進行訓練 (使用的 dataset 跟目標不一樣)
+		優點:
+			減少訓練時間
+			減少target資料所需的數量
+		缺點:
+			也許其實根本不需要 沒有差 只是多花了時間
+		但不管怎樣 如果已經有 pretrain model 一定比較好
+		EX: fine-tune與transfer learning 之前 一定會先用其他資料進行預訓練
+	fine-tune (微調）
+		讓網路認識目標的資料的過程
+			在目標任務下使用 pretrain完的model 繼續訓練
+	transfer learning (遷移學習)
+		與 fine-tune 理念類似，但是 transfer learning 建立了一個新的 model架構
+		理念 : 訓練了一個模型來識別狗，該模型學習到的特徵可能對識別一隻貓是很有用的
+		步驟：
+			從已經訓練的模型中提取所需的layers 
+			凍結（freeze）這些層，防止在後面的訓練中破壞他們中包含的信息 
+			在凍結層的頂部添加一些新的、可訓練的層。這些層用來將學習如何將舊的特性轉化為對新數據集的預測
+			在新數據集上面進行訓練
+			(可不做) 對模型進行微調（fine-tune），解凍之前獲取的整個模型或在部分模型，然後在新數據集上以非常小的學習率重新訓練，使預訓練的特徵適應新的數據集
