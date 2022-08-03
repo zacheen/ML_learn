@@ -1,6 +1,0 @@
-202110 UNETR
-    UNETR: Transformers for 3D Medical Image Segmentation
-        https://doi.org/10.48550/arXiv.2103.10504
-    https://paperswithcode.com/paper/unetr-transformers-for-3d-medical-image
-    
-    從 UNet 變形而來

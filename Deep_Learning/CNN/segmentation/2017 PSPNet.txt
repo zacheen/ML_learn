@@ -1,0 +1,16 @@
+201707 PSPNet
+    Pyramid scene parsing network
+        https://www.doi.org/10.1109/CVPR.2017.660 (沒有權限)
+        https://openaccess.thecvf.com/content_cvpr_2017/papers/Zhao_Pyramid_Scene_Parsing_CVPR_2017_paper.pdf
+    https://github.com/hszhao/PSPNet
+    
+    有 scale 的特徵
+    
+    不過結果看起來還是蠻慘的
+    
+    不知道為什麼沒有跟 Unet 比較 ?
+
+PSPNet++
+    Pyramid Scene Parsing Network (V2)
+        https://doi.org/10.48550/arXiv.1612.01105
+    

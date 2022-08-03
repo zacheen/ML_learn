@@ -1,0 +1,20 @@
+201411 FCN 
+    Fully Convolutional Networks for Semantic Segmentation (2014)
+        https://doi.org/10.48550/arXiv.1411.4038
+    Fully Convolutional Networks for Semantic Segmentation (2016 內容差不多但有修改)
+        https://doi.org/10.48550/arXiv.1605.06211
+    
+    全卷積層
+	CNN 通常最後面會接 全連接層 才會有是什麼 class 的 Output
+	但是 FCN 沒有 後面接的是 upsampling 的 捲基層 所以其實可以不固定大小 (但是有最小的圖片大小限制)
+		(只是中間可能會變得很肥大)
+		500 * 500 到中間可能只會變成 16*16
+		但是 1000*1000 到中間可能還有 32*32 (這樣會不會有問題 ?)
+		
+照理來說 應該輸入的大小應該不會影響某個區域的結果
+	結論 : 沒有人反駁
+	假設 做了2次 conv (padding same 3*3) 跟 一次pooling(2*2) 不考慮 channel(因為channel不會因為Input有變化)
+	16 * 16 -> 8*8*channel -> 4 * 4
+	8 * 8 -> 4*4*channel -> 8 * 8
+	就中間獲得的特徵資訊 第一格看到的範圍 應該都是一樣的
+		就是 ((1+2)*2+2)

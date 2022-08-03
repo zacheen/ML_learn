@@ -1,0 +1,13 @@
+202205 ViT-Adapter-L
+    Vision Transformer Adapter for Dense Predictions
+        https://doi.org/10.48550/arXiv.2205.08534
+    https://github.com/czczup/vit-adapter
+
+    adapter
+
+    Vision Transformer (ViT) 的解釋
+        https://ppfocus.com/0/di260e7e4.html
+
+        ViT 通常在大數據集上預訓練，然後再使用目標數據集微調
+
+        

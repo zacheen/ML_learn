@@ -1,0 +1,38 @@
+https://zhuanlan.zhihu.com/p/113734249
+https://blog.csdn.net/qq_27825451/article/details/105505033
+下一篇 https://blog.csdn.net/qq_27825451/article/details/105819752
+
+load_model 跟 load_weights 差別
+	load_model : 讀取整個 model (包含網路架構 以及 權重)
+	load_weights : 僅讀取權重
+	因此 load_model 中 包含 load_weights
+	
+各種輸出檔
+	ckpt (checkpoint)
+		架構 :
+			events.out.tfevents.1583930869.prod-cloudserver-gpu169 
+				# tensorboad 可視化所需文件，可以直觀看出模型的結構
+				
+			# model.ckpt-13000 表示前綴，代表第13000 global steps時的保存結果，
+			# 因此指定checkpoint加載時，只需要說明前綴即可。
+			model.ckpt-13000.index # 代表了參數名
+			model.ckpt-13000.data-00000-of-00001 # 代表了參數值
+			model.ckpt-13000.meta # 代表了網絡結構
+	HDF5
+		有可能單純只有權重 也有可能裡面有包含model架構
+		是 Keras(TF 1.0) 主要的儲存方式
+		副檔名是 .h5
+	SavedModel
+		是 Keras(TF 2.0) 主要的儲存方式
+		副檔名也有可能是 .h5
+	TFLite 
+		model 原本是用 float32 儲存 改成使用 int8 儲存
+		
+儲存
+	# 存整個 model
+	# 默认1.0 是HDF5，但是2.0中，是SavedModel，所以需要显性地指定`.h5`后缀
+	model.save('my_model.h5') 
+	
+	# 只存 weight
+	# keras 1.0
+	model.save_weights('my_model_weights.h5')

@@ -1,0 +1,15 @@
+201610 VNet
+    V-Net: Fully Convolutional Neural Networks for Volumetric Medical Image Segmentation
+        https://doi.org/10.1109/3DV.2016.79 (我好像沒有權限看) (但是我有下載 PDF)
+    code：https://github.com/faustomilletari/VNet （caffe）
+        https://github.com/Hsuxu/Magic-VNet (pytorch)
+    
+    UNet 的一種變形
+
+Vnet is a model proposed for 3D images.
+
+Innovation:
+    Introduce residuals, and the horizontal residual connection adopts "element-wise"
+    (重點)The convolutional layer replaces the up-sampling and down-sampling pooling layer.
+    在每個stage中，Vnet採用了ResNet的短路連接方式(灰色路線)，相當於在Unet中引入ResBlock
+    採用了醫學圖像常用的 "Dice loss"

@@ -1,0 +1,30 @@
+202105 E-FCN
+    Evidential fully convolutional network for semantic segmentation
+        https://doi.org/10.48550/arXiv.2103.13544
+    
+    https://github.com/tongzheng1992/E-FCN
+    
+    在交界的結果可以同時是 beach 和 sea 兩個 label
+    
+    replacing its softmax layer by a distance-based DS layer and a utility layer
+        把 softmax layer 換成 DS layer 就可以有不確定性的答案
+        
+    =================================================================================================
+    
+    目前 FCN 的問題
+        novelty detection : 未知的東西應該要標成 "unknown" 的 Label，但是FCN會找一個最接近的答案
+        不確定的範圍 還是要標label 
+            例如在邊界 其實我們也不確定到底是屬於哪一種 但我們標記的時候還是要給出答案
+            這個結果可能會導致結果不好
+        應該要有能力知道自己給的答案對不對，而不僅僅是提高正確率
+            
+    Dempster-Shafer (DS) theory 可以解決上述問題
+        原理我先不看
+        
+
+
+
+
+
+
+
