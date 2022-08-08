@@ -1,4 +1,6 @@
 準確率相關
+ML 計算 Loss 的方法 也寫在這裡
+    因為概念是相同的 都是用來計算答案與 ground truth 的距離
 
 都是準確率的計算方法 反正愈大愈好
     AP (Average Precision)
@@ -6,3 +8,16 @@
         IOU 的準確率
     mAP (mean Average Precision)
     
+median error ??
+
+平均絕對值誤差(Mean absolute error, MAE)
+    abs(預測答案 - 正確答案) 
+    nn.MSELoss()
+均方差(Mean square error, MSE)
+    (預測答案 - 正確答案)^2
+交叉熵(Cross-entropy) 
+
+
+Dice Loss
+    醫學圖像常用
+        https://blog.csdn.net/JMU_Ma/article/details/97533768 (未看)
