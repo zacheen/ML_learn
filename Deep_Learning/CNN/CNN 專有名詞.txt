@@ -14,7 +14,7 @@ annotation 標記數據的過程
 	長方體標註（Cuboid Annotation）
 	語義分割（Semantic Segmentation）
 	
-regions of interest (ROIs)
+regions of interest (ROIs) (有可能聽錯成 RY)
 	可以想成有幾個結果
     
 IOU (intersection over union)

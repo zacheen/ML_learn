@@ -1,10 +1,14 @@
 數據集從小到大排列爲 
     ImageNet、ImageNet-21k、JFT-300M
 
-ImageNet (這個不是網路 是資料集)
+ImageNet (這個不是網路 是資料集) 2015
     ImageNet專案是一個大型視覺資料庫,用於視覺目標辨識軟體研究。
     該專案已手動注釋了1400多萬張圖像,以指出圖片中的物件
     並在至少100萬張圖像中提供了邊框
     ImageNet包含2萬多個典型類別,例如「氣球」或「草莓」,每一類包含數百張圖像。
 
-    
+CIFAR
+    32×32 colored natural images
+
+SVHN
+    32×32 colored digit images
