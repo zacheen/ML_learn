@@ -35,8 +35,27 @@ Faster R-CNN
     ResNet 結合了 Inception 的結構
 	https://medium.com/ching-i/resnext-論文閱讀-7898b1281ef3
 
-2015 ImageNet
-    ImageNet Large Scale Visual Recognition Challenge.
+2017 DenseNet 
+    Densely Connected Convolutional Networks
+        https://doi.org/10.48550/arXiv.1608.06993
+    更複雜化 ResNet 的 shorter connections
+        ResNet只是在block的最頂端拉一條線出來，DenseNet是直接讓每一層的輸出傳遞到之後的每一層
+            從低階特徵到高階特徵都會被直連到最後一層卷積層，這讓下一層接受到更全面的圖像資訊。
+        比起 GoogLeNet 加寬又加深，DenseNet 變成增加 channel
+    
+    效果 
+        更加減緩梯度消失問題
+        上面提到的 可以看到低階到高階的特徵
+        減少參數量!
+            那是因為對於舊的特徵圖(feature-map)是不需要再去重新學習的，
+            而且因為growth-rate不用設很大，所以減少許多參數。
+            這並不對應計算量與使用空間會縮小 ! 
+                因為最後一層要計算 每一層加起來的特徵 所以其實計算量跟記憶體是需要很大的
+
+
+參數名稱
+    Growth-rate
+        卷積層中卷積核的數量(k)
 
 
 multiscale context aggregation convolutional neural network (MCACNN) 
