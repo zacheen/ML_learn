@@ -1,0 +1,26 @@
+Recursive Cortical Networks (RCNs)
+
+Recurrent Unit 有3種
+    GRU
+    RNN
+    LSTM
+
+Long-term recurrent convolutional networks for visual recognition and description
+    RNN 在 影像裡面的應用
+    
+full-sequence RCN, and partial-sequence RCN
+    這兩個又差在哪裡...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
