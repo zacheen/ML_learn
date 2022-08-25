@@ -1,0 +1,12 @@
+auto brightness
+contrast enhancement
+
+直方圖均衡化方法
+    rescale_intensity
+    equalize_hist
+    equalize_adapthist
+
+講了很多種讓特徵比較明顯的方法
+    http://home.ee.ntu.edu.tw/classnotes/bme2/2007/4_02_07.pdf
+
+
