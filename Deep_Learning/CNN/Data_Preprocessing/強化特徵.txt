@@ -9,4 +9,10 @@ contrast enhancement
 講了很多種讓特徵比較明顯的方法
     http://home.ee.ntu.edu.tw/classnotes/bme2/2007/4_02_07.pdf
 
-
+各種調整亮度的方法
+    https://cloud.tencent.com/developer/article/1632433
+    對數 (log)
+        可以把低灰度的值增大間距 但是會高灰度的值會被壓縮
+        s = c*log(1+r);
+    冪律變換（伽馬變換）
+        s = c*a^n

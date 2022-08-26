@@ -1,5 +1,5 @@
 模糊方法
-    高斯模糊
+    Gaussian 高斯模糊
     MedianFilter 中值濾波
         將 Mask 遮到的數據先做由小到大的排序，找到中位數(Median)取代此格的數值
 

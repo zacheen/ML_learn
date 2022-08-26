@@ -1,3 +1,11 @@
+LoG (Laplacian-of-Gaussian) (LoG邊緣檢測算子 LoG算子 Marr & Hildreth算子)
+	對圖像做高斯濾波，然後再求其拉普拉斯（Laplacian）二階導數
+	https://zhuanlan.zhihu.com/p/301680661
+DOG 
+	二元連續高斯函數對方差 σ 求導
+	跟 LoG 的結果很像，但是計算速度比較快
+=================================================
+這裡面都是這篇論文的筆記
 1984 Pyramid methods in image processing
     http://persci.mit.edu/pub_pdfs/RCA84.pdf
     
@@ -35,8 +43,6 @@ Image enhancement (重點!!) (38頁中間下面開始)
 	2. 把拉普拉斯金字塔每層結果 1% 的極端值 推到最大與最小值 中間等比例放大
 		可以想成 bandpass ?
 	3. 再相加結果
-		
-	
 
 
 integration 積分
@@ -48,8 +54,6 @@ regular 固定的
 Octave 
 	在電子學的領域代表頻率加倍或是減半
 	因為音樂中的octave（八度）表示頻率加倍或是除以2
-	
-	
 
 問題
 	為什麼要是非線性的轉換
@@ -62,4 +66,6 @@ Octave
 	我們的目的只是需要找輪廓而已 有需要這麼複雜嗎 
 		應該是有 因為這個方法到時候也會用在ML裡面 所以有更多的特徵當然是好的
 	
-	
+======================================================	
+
+
