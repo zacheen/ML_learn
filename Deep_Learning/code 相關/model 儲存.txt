@@ -2,6 +2,9 @@ https://zhuanlan.zhihu.com/p/113734249
 https://blog.csdn.net/qq_27825451/article/details/105505033
 下一篇 https://blog.csdn.net/qq_27825451/article/details/105819752
 
+要記得model大小不一定跟計算量和所需ram大小成正比
+    但還是會有相對應的趨勢
+
 load_model 跟 load_weights 差別
 	load_model : 讀取整個 model (包含網路架構 以及 權重)
 	load_weights : 僅讀取權重
