@@ -1,0 +1,15 @@
+微分(Differential of a function)與偏微分(Partial derivative)的差別
+    https://zh.wikipedia.org/zh-tw/偏导数
+    因為曲面上的每一點都有無窮多條切線，描述這種函數的導數相當困難。
+    偏微分就是選擇其中一條切線，並求出它的斜率。
+    通常，最感興趣的是垂直於y軸（平行於xOz平面）的切線，以及垂直於x軸（平行於yOz平面）的切線。
+
+    微分符號 : d
+    偏微分符號 : ∂
+
+導數 與 微分的差別 ??
+
+Hessian2D (Hessian matrix)
+    包含了全部 f(x) 的 二階偏導數(second partial derivative)
+    其實就是從導數中選擇兩個做偏微分然後組成矩陣
+    可以看 Hessian_matrix_example.png 和 Hessian_matrix.png  
