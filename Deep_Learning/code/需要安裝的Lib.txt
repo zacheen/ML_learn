@@ -1,0 +1,13 @@
+pytorch 
+    https://pytorch.org/get-started/locally/
+        pip3 install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu113
+        (預設是還會安裝 torchaudio)
+            pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cu113
+    解除安裝
+        pip uninstall torch
+    
+ONNX
+    pip install onnx==1.9.0
+
+onnx2torch(失敗)
+    pip install onnx2torch
