@@ -1,5 +1,8 @@
 工作筆記/*
 
+# model 太大了 用 *.onnx_tem 替換
+*.onnx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

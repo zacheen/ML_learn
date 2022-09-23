@@ -1,0 +1,23 @@
+為什麼 有 ONNX 跟 tf2onnx 
+    這兩個 lib 差在哪裡
+    TensorFlow官方不支援ONNX 所以才有tf2onnx
+    所以其實我不需要安裝 ONNX 因為也沒辦法用
+    
+onnxruntime 讓用戶可以非常便利的用其運行一個onnx模型
+    
+ONNX 有可能不支援新架構
+    應該說有些function還沒有完成 不是架構的問題
+
+https://blogs.nvidia.com.tw/2022/01/04/speeding-up-deep-learning-inference-using-tensorflow-onnx-and-tensorrt/
+
+tensorRT 
+    目前看起來是 python
+    https://blogs.nvidia.com.tw/2022/01/04/speeding-up-deep-learning-inference-using-tensorflow-onnx-and-tensorrt/
+
+ONNX 好像也可以直接吃 tensorflow 儲存的格式
+     一个是模型权重参数文件，另一个是定义有模型配置的protobuf文件。权重参数文件的后缀为 .pd，也就是protobuf文件，存储有所有预训练的网络参数。
+
+Blob 是Binary Large Object 
+    blob is another name of tensor or multi-dimensional array
+
+我猜 forward 可能是 predict
