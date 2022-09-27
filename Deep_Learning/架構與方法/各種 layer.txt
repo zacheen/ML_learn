@@ -1,0 +1,27 @@
+有功能的
+    Fully Connected Layer (全連接層)
+        pytorch : Linear Layer
+        
+    global average pooling
+        功能 : 
+            最後有幾個 feature map，把各個 feature map 各自平均，就是output
+            28*28*10 -> 10(經過 flatten)
+        global average pooling 是用來取代 Fully Connected Layer 的
+            https://www.plob.org/article/22160.html
+        
+        pytorch : AdaptiveAvgPool2d / AvgPool2d (不知道是不是有改名)
+        Keras   : GlobalAveragePooling2D
+            
+    
+    捲積層
+        
+
+激發函數
+    ReLU
+
+正規化
+    BatchNorm2d
+
+
+
+

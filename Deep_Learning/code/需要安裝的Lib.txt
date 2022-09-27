@@ -6,8 +6,24 @@ pytorch
     解除安裝
         pip uninstall torch
     
+from dataset import CaptchaData
+    https://pypi.org/project/datasets/
+    pip install datasets
+
 ONNX
     pip install onnx==1.9.0
 
-onnx2torch(失敗)
+onnx2torch(從 tensorflow 讀取會失敗)
     pip install onnx2torch
+    
+公司電腦建立 pytorch CPU 環境
+    建立環境
+        conda create --name pytorch_cpu python=3.7
+        conda activate pytorch_cpu
+        conda install pytorch torchvision cpuonly -c pytorch (一樣沒有安裝 torchaudio)
+    
+    如果已經 activate 環境了 要再進入
+        可以從 anaconda navigator 進入
+    
+    關閉
+        conda deactivate
