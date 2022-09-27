@@ -21,6 +21,10 @@ onnx2torch(從 tensorflow 讀取會失敗)
         conda create --name pytorch_cpu python=3.7
         conda activate pytorch_cpu
         conda install pytorch torchvision cpuonly -c pytorch (一樣沒有安裝 torchaudio)
+        pip install pillow Cython matplotlib pandas opencv-python
+        
+        ipynb 必備
+            conda install -n pytorch_cpu ipykernel --update-deps --force-reinstall
     
     如果已經 activate 環境了 要再進入
         可以從 anaconda navigator 進入
