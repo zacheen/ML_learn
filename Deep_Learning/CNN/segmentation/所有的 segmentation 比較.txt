@@ -1,0 +1,24 @@
+segmentation 歷史 :
+    (到 2017 年) https://www.meetshah.dev/semantic-segmentation/deep-learning/pytorch/visdom/2017/06/01/semantic-segmentation-over-the-years.html
+
+201505 UNet
+    U-Net: Convolutional Networks for Biomedical Image Segmentation
+        https://doi.org/10.48550/arXiv.1505.04597
+
+201610 VNet
+    V-Net: Fully Convolutional Neural Networks for Volumetric Medical Image Segmentation
+
+201611
+    The One Hundred Layers Tiramisu: Fully Convolutional DenseNets for Semantic Segmentation
+        https://doi.org/10.48550/arXiv.1611.09326
+        https://researchcode.com/code/2210267144/the-one-hundred-layers-tiramisu-fully-convolutional-densenets-for-semantic-segmentation/
+        code : https://github.com/SimJeg/FC-DenseNet (不過它是用自己的 lib 實作的)
+            torch : https://github.com/bfortuner/pytorch_tiramisu
+            keras : https://github.com/bfortuner/pytorch_tiramisu , https://github.com/gavinpatient/tiramisu , https://github.com/titu1994/Fully-Connected-DenseNets-Semantic-Segmentation
+    Multiscale Fully Convolutional DenseNet for Semantic Segmentation (2018)
+        https://hal.archives-ouvertes.fr/hal-01786688
+        跟上面的 paper 應該是差在 Multiscale
+
+
+https://zhuanlan.zhihu.com/p/246253366
+

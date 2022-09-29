@@ -35,7 +35,7 @@ Faster R-CNN
     ResNet 結合了 Inception 的結構
 	https://medium.com/ching-i/resnext-論文閱讀-7898b1281ef3
 
-2017 DenseNet 
+201608 DenseNet 
     Densely Connected Convolutional Networks
         https://doi.org/10.48550/arXiv.1608.06993
     更複雜化 ResNet 的 shorter connections
@@ -52,6 +52,8 @@ Faster R-CNN
             這並不對應計算量與使用空間會縮小 ! 
                 因為最後一層要計算 每一層加起來的特徵 所以其實計算量跟記憶體是需要很大的
 
+
+2019 EfficientNet
 
 參數名稱
     Growth-rate
