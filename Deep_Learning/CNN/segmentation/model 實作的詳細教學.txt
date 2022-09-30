@@ -1,0 +1,4 @@
+https://zhuanlan.zhihu.com/p/32506912
+    FCN 的简单实现
+https://zh.gluon.ai/chapter_computer-vision/fcn.html
+    全卷积网络（FCN）
