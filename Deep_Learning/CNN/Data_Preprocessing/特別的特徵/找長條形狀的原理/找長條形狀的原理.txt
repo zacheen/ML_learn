@@ -1,0 +1,41 @@
+找長條形狀的原理
+
+利用Hessian矩陣的濾波函數Frangi
+論文 : https://www.researchgate.net/publication/2388170_Multiscale_Vessel_Enhancement_Filtering
+還不錯的解釋 :
+    2. https://www.cnblogs.com/isYiming/p/11111087.html 
+        最接近我們現在使用方法的講解 且 有多種程式碼範例
+        (BetaOne 與 BetaTwo 講解) 
+    3. https://blog.csdn.net/piaoxuezhong/article/details/78428785
+        就公式比較詳細且是正確的
+    4. https://blog.csdn.net/dfdfdsfdfdfdf/article/details/81019927
+        前面 Hessian矩陣 + 高斯模糊 講解的很清楚
+1. 求Hessian矩陣      
+    為什麼是 2 階導數 
+        因為這樣可以找出邊緣 找object邊界
+    這又不是 function 我要怎麼取得 Hessian矩陣 ??
+        4. 裡面有提到 利用Hessian矩陣對圖片進行2階求導 通常是這樣做的
+            對 X 的矩陣
+            [   0   0   0
+                1   -2  1
+                0   0   0   ]
+        3. 裡面有提到
+            fxx(x,y) = f(x-1,y) - 2*f(x,y) + f(x+1,y) (我覺得4.的公式是寫錯的)
+        但是這種方法對躁點很敏感 所以通常會加入高斯模糊變成
+            <Hessian矩陣 + 高斯模糊.PNG> 這個公式
+2. 求Hessian矩陣的兩個特徵值(λ1跟λ2)
+    Hessian矩陣特徵值和對應的特徵向量分別代表該點處沿某一方向上圖形曲率大小和方向。
+    那麼λ1可以代表曲率較小的方向(灰度梯度變化小),λ2代表曲率較大的方向(灰度梯度變化大)。
+    K = (fxx + fyy)/2, Q = (fxx*fyy-fxyfyx)^(1/2)
+    λ1 = K + (K^2-Q^2)^(1/2)
+    λ2 = K - (K^2-Q^2)^(1/2)
+
+    所以就可以用這兩個值去判斷此點是不是一長條中的某個點
+    因為如果是一長條的某個點 λ1是小的值且λ2是大的值
+        (λ1就是會跟object本身相連所以梯度小 λ2就是與交界相連所以梯度大) 
+        (且相同的 object λ1 的值應該)
+3. 通常這樣計算出來的結果只會找出某個特定寬度的長條型
+    所以就要用不同的 kernel 大小去計算
+    找出我們想要的所有寬度
+    然後把全部的結果相加 就是所以寬度的長條形
+    
