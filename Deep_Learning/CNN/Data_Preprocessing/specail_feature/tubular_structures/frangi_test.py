@@ -83,9 +83,9 @@ def eig2image(Dxx,Dxy,Dyy):
     return Lambda1,Lambda2,Ix,Iy
 
 
-def FrangiFilter2D(I):
+def FrangiFilter2D(I, BlackWhite = True):
     I=np.array(I,dtype=float)
-    defaultoptions = {'FrangiScaleRange':(1,15), 'FrangiScaleRatio':2, 'FrangiBetaOne':0.5, 'FrangiBetaTwo':15, 'verbose':True,'BlackWhite':True};  
+    defaultoptions = {'FrangiScaleRange':(1,15), 'FrangiScaleRatio':2, 'FrangiBetaOne':0.5, 'FrangiBetaTwo':15, 'verbose':True,'BlackWhite':BlackWhite};  
     options=defaultoptions
 
 
@@ -202,13 +202,47 @@ def test_diff_bright_in_same_pic():
     bright_pic_2 = bright_pic_1.copy()
     bright_pic_2 = bright_pic_2 - reduce_dif
 
-    combine_bright = np.vstack((bright_pic_1[:70,:], bright_pic_2[70:,:]))
+    combine_bright = np.vstack((bright_pic_1[:140,:], bright_pic_2[140:,:]))
     cv2.imwrite(dir_name + r"\combine_bright_ori.png", combine_bright)
 
     outIm=FrangiFilter2D(combine_bright)
     outIm=outIm*(100)
     # 通常要用 ITK-snap 看各個 pixel 的像素質
     cv2.imwrite(dir_name + r"\combine_bright_result.png", outIm)
+
+def test_diff_bright_in_same_pic_white(): 
+    global test_pic
+
+    reduce_dif = 200
+    bright_pic_1 = test_pic.copy()
+    bright_pic_1 = np.where( bright_pic_1 == 0, reduce_dif, bright_pic_1)
+    bright_pic_2 = bright_pic_1.copy()
+    bright_pic_2 = bright_pic_2 - reduce_dif
+
+    combine_bright = np.vstack((bright_pic_1[:160,:], bright_pic_2[160:,:]))
+
+    # 調換黑白色
+    combine_bright_mid_white = combine_bright.copy()
+    temp_color = 123
+    switch_color_1 = 0
+    switch_color_2 = 55
+    combine_bright_mid_white = np.where( combine_bright_mid_white == switch_color_1, temp_color, combine_bright_mid_white)
+    combine_bright_mid_white = np.where( combine_bright_mid_white == switch_color_2, switch_color_1, combine_bright_mid_white)
+    combine_bright_mid_white = np.where( combine_bright_mid_white == temp_color, switch_color_2, combine_bright_mid_white)
+
+    switch_color_1 = 200
+    switch_color_2 = 255
+    combine_bright_mid_white = np.where( combine_bright_mid_white == switch_color_1, temp_color, combine_bright_mid_white)
+    combine_bright_mid_white = np.where( combine_bright_mid_white == switch_color_2, switch_color_1, combine_bright_mid_white)
+    combine_bright_mid_white = np.where( combine_bright_mid_white == temp_color, switch_color_2, combine_bright_mid_white)
+
+    cv2.imwrite(dir_name + r"\combine_bright_ori_white.png", combine_bright_mid_white)
+
+    outIm=FrangiFilter2D(combine_bright_mid_white, BlackWhite = False)
+    outIm=outIm*(100)
+    # 通常要用 ITK-snap 看各個 pixel 的像素質
+    cv2.imwrite(dir_name + r"\combine_bright_mid_white_result.png", outIm)
+
 
 def read_pic():
     imagename= dir_name + r"\for_frangi_test.png"
@@ -230,8 +264,9 @@ def read_pic():
 
 if __name__ == "__main__":
     dir_name = r"D:\git\ML_learn\Deep_Learning\CNN\Data_Preprocessing\specail_feature\tubular_structures"
-    test_pic , success= read_pic()
+    test_pic , success = read_pic()
     if success :
-        test_inclined_line()
-        test_diff_bright()
+        # test_inclined_line()
+        # test_diff_bright()
         test_diff_bright_in_same_pic()
+        test_diff_bright_in_same_pic_white()
