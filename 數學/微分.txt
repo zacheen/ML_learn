@@ -1,13 +1,22 @@
+可以用網站看圖形 : https://www.geogebra.org/3d?lang=en
+
 微分(Differential of a function)與偏微分(Partial derivative)的差別
     https://zh.wikipedia.org/zh-tw/偏导数
     因為曲面上的每一點都有無窮多條切線，描述這種函數的導數相當困難。
     偏微分就是選擇其中一條切線，並求出它的斜率。
-    通常，最感興趣的是垂直於y軸（平行於xOz平面）的切線，以及垂直於x軸（平行於yOz平面）的切線。
+    通常，最感興趣的是垂直於y軸（平行於xz平面）的切線，以及垂直於x軸（平行於yz平面）的切線。
 
     微分符號 : d
     偏微分符號 : ∂
-
-導數 與 微分的差別 ??
+        
+對X一次微分
+    X的變化量
+對X二次微分
+    X的變化量 的 變化量
+對X一次微分 再對Y一次微分
+    X的變化量 乘上 Y的變化量
+        (所以如果 再此點的變化量 = X的變化量 乘上 Y的變化量)
+        從 X = Y 的切面(X = -Y方向)看過去就會看到 X的方程式的圖形
 
 Hessian2D (Hessian matrix)
     包含了全部 f(x) 的 二階偏導數(second partial derivative)

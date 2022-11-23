@@ -1,0 +1,10 @@
+Taylor Expansion (Taylor Polynomial) 泰勒展開式
+    目的 : 使用多項式去逼近(取代 取近似值)一個平滑的函式
+        且誤差是有上界的
+    作法 : 對此函式做微分 取得各項X次方的係數
+    https://ch-hsieh.blogspot.com/2009/01/blog-post.html
+Taylor Series
+    若某個函式做微分是無窮無盡的，那此Taylor Expansion就稱為Taylor Series
+    且 Taylor Series 可以用來代表函式本身
+    
+
