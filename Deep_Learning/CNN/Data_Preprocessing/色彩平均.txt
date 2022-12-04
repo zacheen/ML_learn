@@ -1,0 +1,24 @@
+灰階分佈圖修改法 (histogram modification)
+    專N
+        probability density function (pdf)
+            可以想成是圖像的pixel值統計數量的直方圖
+            
+    
+    方法
+        HE 分佈圖均勻化法 (Histogram equalization) == 分佈圖線性化法 (histogram linearization)
+            轉換到 LAB 然後對 L 做均勻化再轉換回 RGB
+            
+        適應性灰階分佈圖均勻化 (contrast limited adaptive HE)==(CLAHE)
+            1.對分割的區域做 HE
+            2.限制過高的 pdf 區間
+
+Gamma correction
+    這是對影像做 log 的前處理方式
+    
+
+RGB
+    三原色
+LAB (L*a*b*) (CIE L*a*b*) (Lab 錯誤的叫法 通常是指 Hunter Lab)
+    L* 代表 luminance 亮度
+    「a*」和「b*」代表人類視覺的四種獨特顏色：紅色、綠色、藍色和黃色
+Hunter Lab (Lab)
