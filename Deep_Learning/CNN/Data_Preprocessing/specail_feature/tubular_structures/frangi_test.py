@@ -188,6 +188,7 @@ def test_diff_bright():
     # 通常要用 ITK-snap 看各個 pixel 的像素質
     cv2.imwrite(dir_name + r"\bright_result_2.png", outIm)
 
+# <比較> : 一樣的色差 但是在不同的亮度底下 計算出來的數值會不會有差異 (黑色線條)
 # 結果 1 : 會有差 暗的地方數值會比較高
 # 結果 2 : 0,255 100,255 的數值相同(都是100) 但 200,255不同(57)
     # 所以是不是有極值? 
@@ -203,13 +204,17 @@ def test_diff_bright_in_same_pic():
     bright_pic_2 = bright_pic_2 - reduce_dif
 
     combine_bright = np.vstack((bright_pic_1[:140,:], bright_pic_2[140:,:]))
-    cv2.imwrite(dir_name + r"\combine_bright_ori.png", combine_bright)
+    cv2.imwrite(dir_name + r"\combine_bright_ori_result.png", combine_bright)
 
     outIm=FrangiFilter2D(combine_bright)
     outIm=outIm*(100)
     # 通常要用 ITK-snap 看各個 pixel 的像素質
     cv2.imwrite(dir_name + r"\combine_bright_result.png", outIm)
 
+# <比較> : 一樣的色差 但是在不同的亮度底下 計算出來的數值會不會有差異 (白色線條)
+# 結論是 淺色的區域計算出來的數值較大
+    # 0 55    -> 82
+    # 200 255 -> 76
 def test_diff_bright_in_same_pic_white(): 
     global test_pic
 
@@ -236,7 +241,7 @@ def test_diff_bright_in_same_pic_white():
     combine_bright_mid_white = np.where( combine_bright_mid_white == switch_color_2, switch_color_1, combine_bright_mid_white)
     combine_bright_mid_white = np.where( combine_bright_mid_white == temp_color, switch_color_2, combine_bright_mid_white)
 
-    cv2.imwrite(dir_name + r"\combine_bright_ori_white.png", combine_bright_mid_white)
+    cv2.imwrite(dir_name + r"\combine_bright_ori_white_result.png", combine_bright_mid_white)
 
     outIm=FrangiFilter2D(combine_bright_mid_white, BlackWhite = False)
     outIm=outIm*(100)
