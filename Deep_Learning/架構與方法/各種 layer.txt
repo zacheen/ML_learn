@@ -13,8 +13,23 @@
         Keras   : GlobalAveragePooling2D
             
     
-    捲積層
+    捲積層 (Convolution Layer)
+
+    Dilated Convolutions Layer   
+        https://blog.csdn.net/dcrmg/article/details/81035711
+        kernel 中間不是實心的，是有空隙的
+
+    Depthwise Separable Convolution
+        https://zhuanlan.zhihu.com/p/80041030
+            有時間再看
         
+        是將一個完整的捲積運算分解為兩步進行
+        1. Depthwise Convolution
+        
+        2. Pointwise Convolution
+            有點像 縮減 channel 的方法
+
+
 
 激發函數
     ReLU

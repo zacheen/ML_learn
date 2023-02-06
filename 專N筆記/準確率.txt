@@ -17,6 +17,15 @@ median error ??
     (預測答案 - 正確答案)^2
 交叉熵(Cross-entropy) 
 
+
+ROC Curve and AUC scores
+    https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc
+ROC Curve
+    跟據 threshold 不同畫出來的 TP與FP 比例
+AUC(Area Under the Curve) scores
+    計算 ROC Curve 底下的面積
+        面積愈大愈好
+
 ==============================================================
 keras 有的 loss 函數
     https://keras.io/zh/losses/

@@ -1,0 +1,32 @@
+最終的結果 :
+    capable of accurately assessing the amount of atypia in keratinocyte cancers
+        能夠準確評估角質形成細胞癌中異型性的數量
+
+目的是要找出 keratinocyte (KC) nuclei 
+    全部的 nuclei 都是 keratinocyte 嗎??
+然後用這些結果去分析 這個是屬於什麼分類
+    兩類 : healthy skin with pathological skin
+    
+data 185
+    pathological skin :
+        35 patients from 4 hospitals
+            Hôpital Erasme (Belgium), Hospital Clinic Barcelona (Spain), University Hospital of Saint-Etienne (France), University of Siena (Italy)
+            包含病症 1.Actinic Keratosis (AK), 2.subclinical AK(SAK) 3.Bowen disease 
+                嚴重程度 : Bowen disease > AK > SAK
+    Healthy skin :
+        DAMAE Medical
+        
+    標記方法
+        A semi-automatic sofware developed by DAMAE Medical
+        50 筆健康的 跟 20 筆不健康的
+        
+    訓練結果
+        沒有，只有說明訓練參數
+        
+The predictions of the model have been reviewed and validated by "an expert" in LC-OCT image interpretation to
+ensure both good image quality and correct segmentation. More information about the training procedure and
+parameters can be found in the “Methods” section.
+    而且還只有一個人驗證全部資料的準確性
+
+數值部分的 ML 辨識
+    使用 Outlier Detection 測測這些數據是不是異常值 ( 離群值 ) 
