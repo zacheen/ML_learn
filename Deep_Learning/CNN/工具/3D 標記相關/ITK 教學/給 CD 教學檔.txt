@@ -1,0 +1,25 @@
+移動 放大縮小
+https://youtu.be/-tjVN5GwjKg?t=670
+
+如果看不清楚 可以去 linear contrast adjustment 調整設定
+https://youtu.be/-tjVN5GwjKg?t=719
+
+選擇 label 
+	active label 要修改的 label
+	Paint over 是會修改到的 label
+		如果現在做 label 時 覆蓋到其他的 label 要不要修改原本的label
+
+label editer
+	這個只是控制有什麼 label、對應的名稱、顏色 的地方
+	https://youtu.be/-tjVN5GwjKg?t=902
+	label 顏色過深 如果少畫容易發現 但是如果多畫就不容易發現
+		可以設定 Opacity(透明度) 不過預設是100(實心)
+		可以藉由開關 hide label in all windows 做比較(快速鍵 s)
+
+	
+好用的快速鍵
+	center on cursor (快速鍵 c)
+	關閉/開起 label 要不要顯示 (快速鍵 S)
+	Active tool (快速鍵 1-5)
+	切換 label (快速鍵 < 和 >)
+	平移 3D 圖 (shift + 滑鼠)
