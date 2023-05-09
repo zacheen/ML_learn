@@ -1,0 +1,8 @@
+Spatial Compounding Algorithm for Speckle Reduction of Dynamic Focus OCT Images
+    比較各種 "spatial" 的降噪方法，也有說明是怎麼做的
+        Averaging
+        Median Filtering (MF)
+        Random Weighted Averaging (RWA)
+        Random Pixel Selection (RPS)
+        Random Pixel Selection + Median Filtering (RPS+Median)
+        
