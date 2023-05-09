@@ -2,15 +2,24 @@
     專N
         probability density function (pdf)
             可以想成是圖像的pixel值統計數量的直方圖
+        Histogram (直方圖)
+            雖然翻譯是"直方圖"，不過在影像裡面通常都是指"亮度的直方圖"
+                因此可以看到影像中亮度的分布
+            轉換到 LAB 然後對 L 做數值的統計
+                L 指的是亮度
             
     
     方法
         HE 分佈圖均勻化法 (Histogram equalization) == 分佈圖線性化法 (histogram linearization)
             轉換到 LAB 然後對 L 做均勻化再轉換回 RGB
+                均勻化是指希望直方圖中不要有哪個亮度的數量特別多，要讓各個亮度的數量平均
+                (Histogram 請看 "Histogram" 的解釋)
             
         適應性灰階分佈圖均勻化 (contrast limited adaptive HE)==(CLAHE)
             1.對分割的區域做 HE
             2.限制過高的 pdf 區間
+            因此如果某個區域本來就很暗，那相對其他區域的結果也會比較暗
+            但是又能夠凸顯某個區域彼此的對比
 
 Gamma correction
     這是對影像做 log 的前處理方式
