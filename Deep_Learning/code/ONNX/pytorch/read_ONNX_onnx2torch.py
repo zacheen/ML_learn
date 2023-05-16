@@ -1,3 +1,7 @@
+# using onnx2torch to read a ONNX model and execute
+# TO DO :
+    # didn't execute, so not sure is correct
+
 import torch
 from onnx2torch import convert
 import time

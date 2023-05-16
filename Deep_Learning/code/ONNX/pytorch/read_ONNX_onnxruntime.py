@@ -1,3 +1,7 @@
+# using onnxruntime to read a ONNX model and execute
+# TO DO :
+    # make sure that this code uses torch, or it is just for ONNX to execute
+
 import os, sys
 sys.path.append(os.getcwd())
 import onnxruntime
