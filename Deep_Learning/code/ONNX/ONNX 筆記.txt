@@ -1,3 +1,23 @@
+========================================================================================================
+<好用的網站>
+看 ONNX 架構的網站
+    https://netron.app/
+    
+ONNX 安裝教學
+    https://onnxruntime.ai/docs/install/#python-installs
+    https://onnxruntime.ai/docs/api/python/api_summary.html#onnxruntime.RunOptions
+    https://github.com/onnx/tutorials
+    
+python 使用 ONNX
+    https://github.com/onnx/tensorflow-onnx (也就是 tf2onnx)
+    
+EmguCV 使用 read ONNX 
+    https://www.emgu.com/wiki/files/4.1.0/document/html/c219c69f-8d3d-43e5-2233-3b76040df11c.htm
+    
+之前存的一些教學網站
+    https://ithelp.ithome.com.tw/articles/10227365
+    https://ithelp.ithome.com.tw/articles/10210800
+========================================================================================================
 為什麼 有 ONNX 跟 tf2onnx 
     這兩個 lib 差在哪裡
     TensorFlow官方不支援ONNX 所以才有tf2onnx
@@ -6,7 +26,8 @@
 onnxruntime 讓用戶可以非常便利的用其運行一個onnx模型
     
 ONNX 有可能不支援新架構
-    應該說有些function還沒有完成 不是架構的問題
+    應該說有些 layer 或 function ONNX還沒有實作 不是原本model架構的問題
+    也有可能是 model layer之間的接法 ONNX 不支援
 
 https://blogs.nvidia.com.tw/2022/01/04/speeding-up-deep-learning-inference-using-tensorflow-onnx-and-tensorrt/
 

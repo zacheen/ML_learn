@@ -11,6 +11,9 @@
 		500 * 500 到中間可能只會變成 16*16
 		但是 1000*1000 到中間可能還有 32*32 (這樣會不會有問題 ?)
 		
+FCN 的演進 (只有到 2017)
+    https://www.meetshah.dev/semantic-segmentation/deep-learning/pytorch/visdom/2017/06/01/semantic-segmentation-over-the-years.html
+        
 照理來說 應該輸入的大小應該不會影響某個區域的結果
 	結論 : 沒有人反駁
 	假設 做了2次 conv (padding same 3*3) 跟 一次pooling(2*2) 不考慮 channel(因為channel不會因為Input有變化)

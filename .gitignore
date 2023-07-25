@@ -2,6 +2,7 @@
 
 # model 太大了 用 *.onnx_tem 替換
 *.onnx
+*.pb
 
 # 過程圖片
 *result.png

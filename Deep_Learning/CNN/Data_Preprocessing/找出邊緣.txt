@@ -1,6 +1,7 @@
 LoG (Laplacian-of-Gaussian) (LoG邊緣檢測算子 LoG算子 Marr & Hildreth算子)
 	對圖像做高斯濾波，然後再求其拉普拉斯（Laplacian）二階導數
 	https://zhuanlan.zhihu.com/p/301680661
+    https://blog.csdn.net/matrix_space/article/details/79121124 (有code)
 DOG 
 	二元連續高斯函數對方差 σ 求導
 	跟 LoG 的結果很像，但是計算速度比較快
