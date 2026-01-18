@@ -1,0 +1,36 @@
+資料矩陣
+    矩陣大小 : Row 數量 * Column 數量
+    item 位置 Anm : 第 n row(橫), 第 m cols(直) 
+        row 的數量 代表有幾筆 data
+        每個 row 是 各自的 data
+            data 數量通常用 n 表示
+        col 的數量 代表有幾個 feature
+        每個 column 代表相同的 feature
+權重矩陣
+    矩陣大小 : 特徵數量 * 1 (回歸), 特徵數量 * node 數量
+
+垂直
+    orthogonal
+    perpendicular
+
+矩陣乘法 AB (通常中間沒有符號)
+    公式 :
+        A23×B32 = R22
+
+內積(Dot Product) A.B
+    公式 :
+        |A||B|cosθ
+        ATB
+            ax*bx+ay*by+az*bz
+    運算結果：一個 純量(scalar)
+    用途：
+        判斷兩向量是否垂直 (內積為 0)
+        計算向量投影
+        計算角度
+外積(乘積)(Cross Product) A×B
+    公式 :
+        一個向量，長度為 |A||B|sinθ
+    用途：
+        計算面積（兩向量張成的平行四邊形）
+        找垂直於平面的向量
+        在物理中常用於力矩、角動量

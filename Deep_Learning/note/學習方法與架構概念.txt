@@ -1,5 +1,9 @@
 supervised learning (SL) 監督式學習
-none-supervised learning 無監督式學習
+none-supervised learning 無監督式學習 (unsupervised machine learning)
+    task
+        Clustering: 
+            used to determine labels by grouping similar information into label groups; 
+            like grouping measurements from birds into species.
     self-supervised learning (SSL) 自監督學習
         是 無監督學習 的一種分支
         主要分為兩大類 :
@@ -9,6 +13,8 @@ none-supervised learning 無監督式學習
             Contrastive Learning 判別式
                 輸入兩張圖片，通過 Encoder，判斷兩張圖是否相似 0 or 1
                 EX: MoCo、SimCLR、DINO、EsViT
+    self learning 跟 RL 最大的差異是
+        RL 我需要定義 reward 
 
 visual-language models (== image-text alignment) (目前還不知道是什麼分類 ??)
     2021 CLIP 

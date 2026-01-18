@@ -1,0 +1,96 @@
+imporet sklearn # Scikit-learn
+
+Confusion matrix (混淆矩陣)
+    from sklearn.metrics import confusion_matrix
+        可以直接印出 Confusion matrix
+    用來看準確率的
+        看主要錯誤原因是誤判(不應該判但判到)還是漏判(應該要判沒判到)
+    分類 : 
+        True Positive TP (真陽性) 實際為真，模型也預測為真 (預測正確)。
+        True Negative TN (真陰性) 實際為假，模型也預測為假 (預測正確)。
+        False Positive FP (偽陽性) 實際為假，模型卻預測為真 (型一錯誤 Type I Error)。
+        False Negative FN (偽陰性) 實際為真，模型卻預測為負 (型二錯誤 Type II Error)。
+    計算出來的準確率 :
+        Accuracy:  (TP+TN) / all 
+            The number of correct predictions (true positives + true negatives) divided by the total number of predictions.
+        Precision: TP/辨識結果為P(TP+FP)  (垃圾郵件過濾)
+            The number of the cases classified as positive that are actually positive: the number of true positives divided by (the number of true positives plus false positives).
+        Recall: TP/實際結果為P(TP+FN)     (醫療診斷 (避免漏診))
+            The fraction of positive cases correctly identified: the number of true positives divided by (the number of true positives plus false negatives).
+        F1 Score: 2*(Precision*Recall) / (Precision + Recall)
+            An overall metric that essentially combines precision and recall.
+    
+ROC Curve and AUC scores
+    https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc
+    ROC(receiver operating characteristic) Curve
+        跟據 threshold 不同畫出來的 TP與FP 比例
+        from sklearn.metrics import roc_curve
+    AUC(Area Under the Curve) scores
+        計算 ROC Curve 底下的面積
+            面積愈大愈好
+        from sklearn.metrics import roc_auc_score
+
+都是準確率的計算方法 反正愈大愈好
+    AP (Average Precision)
+    AR (Average Recall)
+        IOU 的準確率
+    mAP (mean Average Precision)
+
+-- <各種計算 Loss 的方法> ----------------------------------------------------------------------
+cost = loss == residuals(殘差) == errors
+    residuals = (ŷ - y)
+
+entropy : the measure of uncertainty of information
+    H(y) = -E[ log p(y) ] = -sum( p(y) log p(y) for each y )
+        過程
+            sum( log(1/p(y))*p(y) for each y)
+        預期驚訝程度
+            如果 0/1 出現的機率相同 (各自 出現機率 0.5)
+                -sum( (1/2) log2(1/2), (1/2) log2(1/2)) = 1
+            如果 0/1 出現的機率 各自是 0.1 跟 0.9
+                -sum( (0.1) log2(0.1), (0.9) log2(0.9)) = -(0.1*-3.32 + 0.9*-0.15) = 0.47
+cross entropy
+    用 q 去預測 p 時的 total cost
+    H(p, q) = -E[ log q(y) ]  = -sum( p(y) log q(y) for each y )
+        真實分布 p, 模型預測分布 q
+
+        
+
+表示方法 :
+    y - ŷ = diff or loss (真正的結果 - model 計算結果)
+
+cost funtion == loss function 
+    平均絕對值誤差(Mean absolute error, MAE)
+        sum(abs(預測答案 - 正確答案)) / 個數
+        nn.MSELoss()
+    均方差 (Mean square error, MSE)
+        sum((預測答案 - 正確答案)^2) / 個數 -> (平方 相加 開根號)
+        表示方法 : "L2 norm"
+            == arg min B (|y - y'|) L2 norm
+        EX:
+            如果是 linear regression
+                可以用 Ordinary Least Squares (OLS) 計算 MSE 的最佳擬合線的方法
+                (X^T X)^(-1) X^T y
+    (root mean squared error, RMSE)
+        (sum((預測答案 - 正確答案)^2) / 個數)^(1/2)
+    交叉熵(Cross-entropy) 
+
+-- < 驗證方法 > ----------------------------------------------------------------------
+    x-fold cross-validation 把data拆成x組 每次會把其中一組當作 test data 進行訓練
+
+-- < code > ----------------------------------------------------------------------
+keras 有的 loss 函數
+    https://keras.io/zh/losses/
+
+使用範例
+from keras import losses
+model.compile(loss=losses.mean_squared_error, optimizer='sgd')
+或直接用名稱
+model.compile(loss=loss = "categorical_crossentropy", optimizer='sgd')
+
+loss=losses.mean_squared_error
+==============================================================
+
+Dice Loss
+    醫學圖像常用
+        https://blog.csdn.net/JMU_Ma/article/details/97533768 (未看)

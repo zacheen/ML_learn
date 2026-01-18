@@ -1,0 +1,41 @@
+題目類型 
+    一定是 "找一個 function, 讓 某個loss function minimum"
+    但根據 function 的不同就有不同的名稱
+
+    Continuous 的結果
+        Linear regression : 
+            function 形式 : y = b0 + b1*x + b2*x^2 + ... + bn*x^n = X^T B(linear 的定義)
+                輸出 y 是一個數字 
+    Discrete 的結果 (classification)
+        Logistic regression : 
+            function 形式 : y = sigma(X^T B)
+                輸出落在 0 到 1 的機率，也就是為了要 classification
+            Logistic regression func can be expressed as the log odds
+                log( p(x) / (1-p(x)) ) = B0 + B1 X
+                p(x) = (1 / 1 + e^(-(B0 + B1 X)) ... which is sigmoid equation
+                    but there is no close solution, and this function is not convenx function
+                    so the only way to solve it is through MLE
+
+找解答的方法
+    Ordinary Least Squares (OLS)
+        如果是 linear regression
+        可以用 Ordinary Least Squares (OLS) 計算 MSE 的最佳擬合線的方法
+        (X^T X)^(-1) X^T y
+
+    Gradient Descent : 對每個 var 做偏微分
+        if it's a "convex function", then Gradient Descent is good enough
+            since the minimum is guaranteed to be the global minimum
+
+    Maximum likelihood estimation (MLE)
+        by maximizing the likelihood of observing a given set of data under the assumed statistical distribution
+        找到一組參數，讓這組參數下「產生出目前觀察到的數據」的機率（概似度）達到最大
+
+convex function 凸函數
+    f((a+b)/2) <= (f(a) + f(b))/2, for any point a,b
+    expand 
+        f(sum(λi*xi)) <= sum(λi*f(xi))
+            λi : 介於 0~1 之間對應 xi 的機率 且 總和為1
+但 close function 跟 convex function 沒有相互關係
+        
+
+

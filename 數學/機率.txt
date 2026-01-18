@@ -1,0 +1,96 @@
+< Probability >
+    Distribution 其實就是看 每個結果的 Probability
+P(x,y) : x,y 同時發生的機率          (Joint Probability)
+P(x|y) : 當 y 已經發生, x 發生的機率 (Conditional Probability)
+    Probability of x given that y
+    P(y) : Prior Distribution
+P(x,y | z) : 當 z 已經發生, x,y 同時發生的機率
+
+
+Sum Rule, Marginalization : 
+    P(x) = sum(P(x,y) for all y)
+    P(x|z) = sum(P(x,y|z) for all y)
+        規則 : 把某個變數的可能性加起來，就可以去掉那個變數
+
+    Sum Rule : emphasise - we what to cal P(x) by adding all possible y
+    Marginalization : emphasise - we don't care about y, so we try to remove y
+        這個 y 叫做 Nuisance Variable : 多餘變數、干擾變數
+
+Bayes' Rule
+    P(x|y) = P(y|x) * P(x) / P(y) = P(x,y) / P(y)
+        P(x) : Prior Distribution
+        P(y|x) : Likelihood
+        P(x|y) : Posterior Distribution
+            Prior 與 likelihood 結合 形成 posterior。
+Chain Rule (expand from Bayes' Rule)
+    P(x,y|z) = P(x|y,z) * P(y|z)
+
+
+< likelihood >
+L(y|x) = P(x|y)
+
+discriminative model VS generative model
+    Y is output(labels), X is input(feature)
+    discriminative model :
+        learning P(Y|X)
+            since model is learning the relationship between X and Y "directly"
+    generative model  
+        learning P(X,Y) 
+            usually learning P(X|Y) and P(Y), since P(X,Y) = P(X|Y)*P(Y)
+                P(Y) is Prior Distribution, represent the distribution of Y
+                P(X|Y) is Likelihood, represent if knowing the output is Y what should X looks like
+
+
+Naive Bayes??
+
+-- < 機率分布 > ----------------------------------------------------------
+Discrete distribution
+    Probability Mass Function (PMF)
+    對 PMF 相加 可以得出 CDF
+        
+continuous distribution
+    因為是 continuous 所以 我沒辦法說特定一個點 的機率是多少
+    但可以說某個數字以下(或某個區間)的機率是多少
+    Probability Density Function (PDF)
+        Gaussian distribution（高斯分佈）與 Normal distribution（常態分佈/正態分佈) 是相同的
+    對 PDF 做積分 可以得出 CDF
+
+Cumulative Distribution Function (CDF) 累積分佈函數
+
+特殊的 distribution 名稱
+Bernoulli distribution
+    在 1 次獨立試驗中，這一次只會出現 0/1 兩種結果
+        P(Y = 1) = p
+        P(Y = 0) = 1 − p
+Binomial distribution : 
+    在 n 次獨立試驗中，每一次只會出現 0/1 兩種結果
+    橫軸表示 再n次的試驗中總共成功x次 
+    縱軸表示 成功x次 的機率
+    (Binomial(n, p) 就是 n 次獨立的 Bernoulli 加起來)
+
+normal distribution (Gaussian distribution) : 常態分布
+    符號 : 𝒩(μ, σ²)
+        μ 是平均數 mean, 也就是中心位置
+    p(x) = (1/2πσ^2)*Gaussian function
+         = (1/2πσ^2)*e^(-(x-μ)² / (2σ²))
+            x-μ 可以替換成 error
+    Gaussian function 指的是一個函數形狀
+        f(x) = e^(-(x-μ)² / (2σ²))
+zero mean normal distribution
+    符號 : 𝒩(0, σ²)
+    代表 分布的中心在 0
+
+p(x)=2πσ2
+​1​exp(−2σ2(x−μ)2​)
+
+-- < odds 賠率 > ----------------------------------------------------------
+odds = p / (1-p)
+    會發生的機率 與 不發生的機率 的 比例
+
+log odds
+    假設某事件x發生的機率是 p, p 只能在 0 到 1 之間
+    當我對 odd 取 log 時
+        log( p(x) / (1-p(x)) )
+            p(x) > 0.5 時 log odds 為正
+            p(x) < 0.5 時 log odds 為負
+    因此可以 把這個比例轉成一個線性、可加、無界的尺度
