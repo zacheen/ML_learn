@@ -1,6 +1,7 @@
 imporet sklearn # Scikit-learn
 
-Confusion matrix (混淆矩陣)
+
+Confusion matrix (混淆矩陣) 
     from sklearn.metrics import confusion_matrix
         可以直接印出 Confusion matrix
     用來看準確率的
@@ -39,41 +40,55 @@ ROC Curve and AUC scores
 -- <各種計算 Loss 的方法> ----------------------------------------------------------------------
 cost = loss == residuals(殘差) == errors
     residuals = (ŷ - y)
-
-entropy : the measure of uncertainty of information
-    H(y) = -E[ log p(y) ] = -sum( p(y) log p(y) for each y )
-        過程
-            sum( log(1/p(y))*p(y) for each y)
-        預期驚訝程度
-            如果 0/1 出現的機率相同 (各自 出現機率 0.5)
-                -sum( (1/2) log2(1/2), (1/2) log2(1/2)) = 1
-            如果 0/1 出現的機率 各自是 0.1 跟 0.9
-                -sum( (0.1) log2(0.1), (0.9) log2(0.9)) = -(0.1*-3.32 + 0.9*-0.15) = 0.47
-cross entropy
-    用 q 去預測 p 時的 total cost
-    H(p, q) = -E[ log q(y) ]  = -sum( p(y) log q(y) for each y )
-        真實分布 p, 模型預測分布 q
-
-        
-
 表示方法 :
     y - ŷ = diff or loss (真正的結果 - model 計算結果)
 
 cost funtion == loss function 
-    平均絕對值誤差(Mean absolute error, MAE)
-        sum(abs(預測答案 - 正確答案)) / 個數
-        nn.MSELoss()
-    均方差 (Mean square error, MSE)
-        sum((預測答案 - 正確答案)^2) / 個數 -> (平方 相加 開根號)
-        表示方法 : "L2 norm"
-            == arg min B (|y - y'|) L2 norm
-        EX:
-            如果是 linear regression
-                可以用 Ordinary Least Squares (OLS) 計算 MSE 的最佳擬合線的方法
-                (X^T X)^(-1) X^T y
-    (root mean squared error, RMSE)
-        (sum((預測答案 - 正確答案)^2) / 個數)^(1/2)
-    交叉熵(Cross-entropy) 
+    L1 (Manhattan Norm) (不會開根號) 
+        Mean absolute error, MAE(平均絕對值誤差) (L1 loss)
+            sum(abs(預測答案 - 正確答案)) / 個數
+            nn.MSELoss()
+    L2 系列(其實都通用 也沒那麼嚴謹)
+    表示方法 : arg min B (|y - y'|) L2 norm
+        SSE (Sum of Squared Errors) 
+            sum((預測答案 - 正確答案)^2) -> (平方 相加 沒有平均)
+        L2 norm (Euclidean Norm)
+            L2 norm 是 SSE 開根號之後的結果 -> (平方 相加 開根號)
+            因為有開根號 所以幾何意義上是 距離
+        Mean square error, MSE (均方差) (L2 loss)
+            SSE / 個數 -> (平方 相加 "平均")
+            EX:
+                如果是 linear regression
+                    可以用 Ordinary Least Squares (OLS) 計算 MSE 的最佳擬合線的方法
+                    (X^T X)^(-1) X^T y
+        root mean squared error, RMSE
+            RMSE 是 MSE 開根號之後的結果
+
+
+
+loss 的 類別
+    aleatoric uncertainty 偶然不確定性 == 資料不確定性 (Data Uncertainty)
+        不能被縮小 是隨機發生的誤差
+        RL 可以控制 ??
+            不太懂??
+    epistemic uncertainty 認知不確定性 == 模型不確定性 (Model Uncertainty)
+        只能被縮到 aleatoric uncertainty 這麼大
+
+    residuals errors = aleatoric uncertainty + epistemic uncertainty
+                     = ( Y - fB*(x) )        + ( fB*(x) - fB̂*(x) )
+        fB*(x) is the best solution
+
+    error = Bias^2 + Variance + AU
+        but usually Bias and variance are inversely related, forming a trade-off
+        Bias：模型預測的平均值與真實值之間的差距
+            high bias model : bad on validation and training data (underfitting)
+                generalizing : should increase the model complexity or adding more features
+        Variance：模型預測隨不同訓練資料的變動程度
+            high variance model : bad on validation but good on training data (overfitting)
+                generalizing : should increase the data complexity
+    overfitting : 模型複雜度過高 + 資料不足 <-> underfitting
+        主要是model造成的，training過度只是加速或加劇 overfitting
+
 
 -- < 驗證方法 > ----------------------------------------------------------------------
     x-fold cross-validation 把data拆成x組 每次會把其中一組當作 test data 進行訓練

@@ -29,6 +29,19 @@ Chain Rule (expand from Bayes' Rule)
 < likelihood >
 L(y|x) = P(x|y)
 
+< odds >
+odds = p / (1-p)
+    會發生的機率 與 不發生的機率 的 比例
+
+log odds
+    假設某事件x發生的機率是 p, p 只能在 0 到 1 之間
+    當我對 odd 取 log 時
+        log( p(x) / (1-p(x)) )
+            p(x) > 0.5 時 log odds 為正
+            p(x) < 0.5 時 log odds 為負
+    因此可以 把這個比例轉成一個線性、可加、無界的尺度
+
+
 discriminative model VS generative model
     Y is output(labels), X is input(feature)
     discriminative model :
@@ -71,11 +84,16 @@ Binomial distribution :
 normal distribution (Gaussian distribution) : 常態分布
     符號 : 𝒩(μ, σ²)
         μ 是平均數 mean, 也就是中心位置
-    p(x) = (1/2πσ^2)*Gaussian function
-         = (1/2πσ^2)*e^(-(x-μ)² / (2σ²))
-            x-μ 可以替換成 error
-    Gaussian function 指的是一個函數形狀
+    Gaussian function (Gaussian Equation) 指的是一個函數形狀
         f(x) = e^(-(x-μ)² / (2σ²))
+    Gaussian distribution function <Gaussian distribution function.png>
+        加入 normalization term : (1/(2πσ^2)^(1/2))
+    p(x) = (1/(2πσ^2)^(1/2))*Gaussian function
+         = (1/(2πσ^2)^(1/2))*e^(-(x-μ)² / (2σ²))
+         另外一種形式 (把 σ 跟 1/2 提取到外面)
+         = (1/σ(2π)^(1/2)) * e^(1/2)*(-(x-μ)² / σ² )
+            x-μ 可以替換成 error
+    
 zero mean normal distribution
     符號 : 𝒩(0, σ²)
     代表 分布的中心在 0
@@ -83,14 +101,7 @@ zero mean normal distribution
 p(x)=2πσ2
 ​1​exp(−2σ2(x−μ)2​)
 
--- < odds 賠率 > ----------------------------------------------------------
-odds = p / (1-p)
-    會發生的機率 與 不發生的機率 的 比例
 
-log odds
-    假設某事件x發生的機率是 p, p 只能在 0 到 1 之間
-    當我對 odd 取 log 時
-        log( p(x) / (1-p(x)) )
-            p(x) > 0.5 時 log odds 為正
-            p(x) < 0.5 時 log odds 為負
-    因此可以 把這個比例轉成一個線性、可加、無界的尺度
+
+
+

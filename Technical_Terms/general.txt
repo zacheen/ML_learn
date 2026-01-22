@@ -1,0 +1,13 @@
+AGI : Artificial General Intelligence 
+ANI : Artificial Narrow Intelligence
+
+close func solution : the answer can be calculated within specific procedure
+
+duality
+    lead to the same outcome
+
+Regularization 正規化
+
+
+one shot 僅憑一次經驗
+

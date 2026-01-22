@@ -13,7 +13,7 @@
             Logistic regression func can be expressed as the log odds
                 log( p(x) / (1-p(x)) ) = B0 + B1 X
                 p(x) = (1 / 1 + e^(-(B0 + B1 X)) ... which is sigmoid equation
-                    but there is no close solution, and this function is not convenx function
+                    but there is no close solution, and this function is not convex function
                     so the only way to solve it is through MLE
 
 找解答的方法
@@ -30,11 +30,6 @@
         by maximizing the likelihood of observing a given set of data under the assumed statistical distribution
         找到一組參數，讓這組參數下「產生出目前觀察到的數據」的機率（概似度）達到最大
 
-convex function 凸函數
-    f((a+b)/2) <= (f(a) + f(b))/2, for any point a,b
-    expand 
-        f(sum(λi*xi)) <= sum(λi*f(xi))
-            λi : 介於 0~1 之間對應 xi 的機率 且 總和為1
 但 close function 跟 convex function 沒有相互關係
         
 

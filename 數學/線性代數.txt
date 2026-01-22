@@ -1,0 +1,55 @@
+binomial 二項式
+
+regression that can regularization
+    by adding limitation to B to prevent B explosion
+        限制 ||B||^1 or ||B||^2 是為了防止 B 太大，因為 linear regression 中 係數B的大小直接反映了模型對特徵的敏感度
+        (This problem actually only happen in linear models (include linear regression and logistic regression))
+    ridge regression 
+        Ridge 限制的是係數的平方和（L2 範數）
+        式子 : min(||y-xB||^2) s.t. ||B||^2 <= c^2
+        透過 Lagrange 轉換 : min(||y-xB||^2) + λ(c^2 - ||B||^2)
+            ||B||^2 其實也是 L2 norm : sum(B^2 for all B)
+    lasso regression (Least Absolute Shrinkage and Selection Operator)
+        Lasso 限制的是係數的絕對值之和（L1 範數）
+        式子 : min(||y-xB||^2) s.t. ||B||^1 <= c
+        透過 Lagrange 轉換 : min(||y-xB||^2) + λ(c - ||B||^1)
+            ||B||^1 其實也是 L1 norm : sum(|B| for all B)
+        在幾何圖上 這個 boundary 會有菱有角，這些頂點很容易是最佳解 : 所以才能達成「特徵選取」
+        這些最佳解會直接讓 某個沒有貢獻的特徵直接歸零
+    c 的影響
+        如果c太大，dominant 是 λ(c^2 - ||B||^2) : 無法抑制 B 變很大
+        如果c太小，dominant 是 min(||y-xB||^2)  : 那就跟原式子一樣，沒有 generalizing 的效果
+    combine ridge and lasso : Elastic Net
+        Lenet(B') = (||y-xB||^2)/2n + λ( ((1-a)/2)*||B||^2 + a*||B||^1)
+            這裡的 /2n, /2 都是為了方便 微分之後可以抵消
+        
+Lagrange multipliers : can make constraint into unconstraint problem
+    使用情況: maximize or minimize under some constraints
+    如何轉換:
+        原式: max/min Equation s.t. something <= const
+        轉換: Equation + λ(const - something)
+    好處 : 轉換之後變成 convex function，就可以做 Gradient Descent
+
+
+convex function 凸函數
+    f((a+b)/2) "<=" (f(a) + f(b))/2, for any point a,b 
+concave function 凹函數
+    f((a+b)/2) ">=" (f(a) + f(b))/2, for any point a,b
+Jensen's Inequality (expand the convex/concave function)
+    original
+        for all a,b f(a+b)/2 <= (f(a) + f(b))/2 for convex function
+    change (1/2) to λ
+        for all a,b f(a+b)/λ <= (λf(a) + (1-λ)f(b))/2 for convex function
+    expand it from 2 number to multiple numbers
+        f(sum(λi*xi)) <= sum(λi*f(xi))
+            λi : 介於 0~1 之間對應 xi 的機率 且 總和為1
+
+衡量兩個變數之間"線性關係"
+    Covariance 
+        Cov(X, Y) = 1/(n-1)*∑(Xi-X_mean)(Yi-Y_mean)
+        代表 x, y 之間 方向是否一致
+    Correlation
+        Corr(X, Y) = Cov(X, Y) / (Std(X) * Std(Y))
+        代表 x, y 之間 方向是否一致 + 資料點相對於一條直線的「集中程度」
+
+
