@@ -31,11 +31,12 @@ Lagrange multipliers : can make constraint into unconstraint problem
     好處 : 轉換之後變成 convex function，就可以做 Gradient Descent
 
 
-convex function 凸函數
+convex function 凸函數(像碗)   Ex: -log(x), x^2
     f((a+b)/2) "<=" (f(a) + f(b))/2, for any point a,b 
-concave function 凹函數
+concave function 凹函數(像山丘) Ex: log(x)
     f((a+b)/2) ">=" (f(a) + f(b))/2, for any point a,b
 Jensen's Inequality (expand the convex/concave function)
+    (這裡使用 Convex function 來舉例 , concave function 一樣的道理)
     original
         for all a,b f(a+b)/2 <= (f(a) + f(b))/2 for convex function
     change (1/2) to λ
@@ -43,13 +44,22 @@ Jensen's Inequality (expand the convex/concave function)
     expand it from 2 number to multiple numbers
         f(sum(λi*xi)) <= sum(λi*f(xi))
             λi : 介於 0~1 之間對應 xi 的機率 且 總和為1
+    轉成數學符號
+        f( E[X] ) <= E[ f(X) ]
 
 衡量兩個變數之間"線性關係"
-    Covariance 
-        Cov(X, Y) = 1/(n-1)*∑(Xi-X_mean)(Yi-Y_mean)
-        代表 x, y 之間 方向是否一致
+    Covariance 協方差
+        Cov(X, Y) = E[(X − μx)(Y − μy)]
+            = 1/(n-1)*∑(Xi-X_mean)(Yi-Y_mean)
+        代表 x, y 之間 方向是否一致 (正 或 負)
+        當我們把全部的點正規化(減去平均) 會變成很簡單的式子
+            = 1/(n-1)*∑(Xi)(Yi)
+        正規化(中心化)後的協方差矩陣
+            Σ = (1 / (n − 1)) XᵀX
+                X 是 data 矩陣
     Correlation
         Corr(X, Y) = Cov(X, Y) / (Std(X) * Std(Y))
-        代表 x, y 之間 方向是否一致 + 資料點相對於一條直線的「集中程度」
-
+            -1 ~ 1
+        代表 x, y 之間 方向是否一致 + 資料點相對於一條直線的「集中程度」(|Correlation數值|)
+     
 

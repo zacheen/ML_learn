@@ -1,0 +1,93 @@
+<< unsupervised learning >>
+K-means cluster (K means cluster)
+    步驟 
+        隨機挑選 k 個點 (可以是隨機點 也可以是data point)
+        假設這 k 個點是 center of the cluster
+            所以計算每個點距離各個 k 點的距離，根據距離 cluster
+        根據 cluster 計算這個 cluster 的中心點 成為新的 k 點
+        直到這 k 個點不會再改變
+
+Gaussian Mixture Model (GMM)
+    try to fit data in to several Gaussian distribution
+    因為學習的是 distribution 所以其實可以反回來 generate new data
+    步驟 ( 使用 EM 的概念)
+        目的 : Maximize Θ 這組參數 會產出 data X 的 Likelihood = maximize L(Θ;X) 
+            通常 L(Θ;X) 都用 L(Θ) 來表示
+        L(Θ) = L(Θ;X) = P(X;Θ) = P(X)
+        P(X;Θ) = Mul( p(xi;Θ) for all xi )
+            出現 X 的機率是 各個xi出現的機率 的 乘積
+        Maximize L(Θ) == Maximize log L(Θ), 且通常比較好計算, 所以取 log
+            log L(Θ) = log Mul( p(xi;Θ) for all xi )
+                    = sum( log p(xi;Θ) for all xi )
+        p(xi;Θ) 可以展開成 sum( p(xi, zi ; Θ) for all zi ) ... (Marginalization)
+        log L(Θ) = sum( log [sum( p(xi, zi ; Θ) for all zi)] for all xi )
+            這個式子不是 convex 也非常難以計算，所以想要帶入 Jensen's Inequality 轉換
+            想要找到這個函數的下界，這樣就可以提高這個下屆 進而讓原本的式子上升
+                想帶入 f( E[X] ) >= E[ f(X) ], for concave function
+        加入 Qi(zi) a probability distribution, 同乘除 所以值相同
+            log L(Θ) = sum( log [sum( "Qi(zi)" * <p(xi, zi ; Θ) / "Qi(zi)"> )] ) ... 省略 for all zi] for all xi
+        由於 Qi(zi) 是 probability distribution, 所以 sum( Qi(zi) ) = 1, 也就是期望值公式
+            帶入 Discrete distribution, 就可以想成 E = sum( Qi(zi) 
+        帶入 Jensen's Inequality, concave function f(x) 是 log, 所以是 f( E[X] ) >= E[ f(X) ], for concave function
+            log L(Θ) ">=" sum( sum( Qi(zi) * log [ <p(xi, zi ; Θ) / Qi(zi)> ] ) ) = lower bound
+        
+        < in class >
+        提取一個點 xi 進行 interation, 也就是去掉最外面的 sum
+            ELBO = sum( Qi(zi) * log [ p(xi, zi | Θ) / Qi(zi) ] )
+        log(A/B) = logA-logB
+            ELBO = sum( Qi(zi)*log[p(xi, zi | Θ)]) - sum(Qi(zi)*log[Qi(zi)] )
+        Bayes' Rule (對 p(xi, zi ; Θ))
+            ELBO = sum( Qi(zi)*log[p(xi | zi, Θ)*p(zi | Θ)] ) - sum( Qi(zi)*log[Qi(zi)] )
+        帶入 期望值公式
+            ELBO = Ezi~Qi(log[p(xi | zi, Θ)]) + Ezi~Qi(log[p(zi | Θ)]) - Ezi~Qi(log[Qi(zi)])
+        後兩項合併
+            ELBO = Ezi~Qi(log[p(xi | zi, Θ)]) + Ezi~Qi(log[p(zi | Θ) / Qi(zi)])
+        最後帶入 KL divergence
+            ELBO = Ezi~Qi(log[p(xi | zi, Θ)]) - Dkl(Qi(zi)||p(zi | Θ))
+        意義 > "讓 Qi(zi) 盡量接近 p(zi | Θ)"
+
+        < stanford >
+        由於我們想要優化 log L(Θ) 我們應該要讓 log L(Θ) == lower bound 在 given xi 上, "https://youtu.be/rVfZHWTwXSA?si=kfZ8GXUiAL0vFdmF&t=4325"
+            sum( log [sum( Qi(zi) * <p(xi, zi ; Θ) / Qi(zi)> )] ) = sum( sum( Qi(zi) * log [ <p(xi, zi ; Θ) / Qi(zi)> ] ) )
+        由於外面的 sum 是一樣的
+            log [sum( Qi(zi) * <p(xi, zi ; Θ) / Qi(zi)> )] = sum( Qi(zi) * log [ <p(xi, zi ; Θ) / Qi(zi)> ] )
+        為了使上式成立, 需要讓 P(xi, zi) / Qi(zi) = Constant 成立
+            Qi(zi) = p(xi, zi; Θ) / sum( p(xi, zi; Θ) for all zi) ... (normalized)
+                   = P(zi | xi; Θ) ... (這裡證明不重要)
+        
+        上面的兩個推論的結論都是 Qi(zi) = P(zi | xi; Θ)
+        E-step
+            Set Qi(zi) = P(zi | xi; Θ)
+        M-step
+            maximize sum( sum( Qi(zi) * log [ <p(xi, zi ; Θ) / Qi(zi)> ] ) )
+         == maximize sum( ELBO(xi,Qi,Θ) )
+
+        < 目前沒用到 >
+        P(X;Θ) = P(X) = sum( π_k*N(X|μ_k, Σ_k) for all k)
+            這個 X 是從第 k 個 Gaussian distribution 產出的機率 * 這個 distribution 產出 X 的機率
+            k is the number of Gaussian distribution
+            x : data vector
+            π_k : 是屬於第 k 個 Gaussian distribution 的機率 (也就是屬於 cluster k)
+            N(x | μ_k, Σ_k) : normal distribution with mean μ_k and covariance Σ_k 產生 x 的機率
+
+驗證 cluster
+    We want the average distance within cluster to be as small as possible
+    and the average distance between clusters to be as large as possible.
+
+    Internal Cluster validation : validating the goodness of clusters without external information
+    External Cluster validation : use external validation – like labels
+    Relative Cluster validation : vary k and see how best the data fits
+
+    Measures
+        Compactness or cluster cohesion: Measures how close are the objects within the same cluster. 
+            A lower within-cluster variation is an indicator of a good compactness 
+        Separation: Measures how well-separated a cluster is from other clusters. 
+            The indices used as separation measures include:
+                distances between cluster centers
+                the pairwise minimum distances between objects in different clusters
+        Connectivity: corresponds to what extent items are placed in the same cluster as their nearest neighbors in the data space. 
+            The connectivity has a value between 0 and infinity and should be minimized.
+        Index = (α×Separation)/ (β×Compactness)
+
+    Silhouette coefficient
+        usually we cal Silhouette coefficient for each k

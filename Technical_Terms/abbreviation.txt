@@ -1,0 +1,51 @@
+ML Machine Learning
+DL Deep Learning
+NN type
+    CNN Convolutional Neural Network
+    R-CNN Region-based CNN
+    RNN Recurrent Neural Network
+    DNN Deep Neural Network
+    ANN Artificial Neural Network
+
+model structure
+    LSTM Long Short-Term Memory
+    GAN Generative Adversarial Networks
+    FCN Fully Convolutional Network
+    PSPNet Pyramid Scene Parsing Network
+    ENet Efficient Neural Network
+
+Loss function
+    OLS Ordinary Least Squares
+    MLE Maximum Likelihood Estimation
+    MSE Mean Squared Error
+    L1 Mean Absolute Error
+    BCE Binary Cross-Entropy
+    WCE Weighted Cross-Entropy
+    BalanCE Balanced Cross-Entropy
+
+Vision related
+    ViT Vision Transformer
+    MViT Multiscale Vision Transformers
+    HAT Hierarchical Action Transformer
+    HRNet High Resolution Network
+
+    IOU Intersection Over Union
+    CIOU Complete Intersection Over Union
+    EIOU Efficient IOU
+
+RPN Region Proposal Network
+YOLO You Only Look Once
+SSD Single Shot MultiBox Detector
+TSM Temporal Shift Module
+ATOM Accurate Tracking by Overlap Maximization
+DiMP Discriminative Model Prediction
+CLIP Contrastive Language-Image Pretraining
+FFC Fourier Convolution
+CMT Continuous Mask-aware Transformer
+SVM Support Vector Machines
+VAE Variational Autoencoders
+PMSE Predicted Mean Squared Error
+sDice Squared Dice
+lcDice Log-Cosh Dice
+SSIM Structural Similarity Index Measure
+MS-SSIM Multiscale Structural Similarity

@@ -1,39 +1,160 @@
 資料矩陣
     矩陣大小 : Row 數量 * Column 數量
     item 位置 Anm : 第 n row(橫), 第 m cols(直) 
-        row 的數量 代表有幾筆 data
+data 矩陣
+    Observations (n) == 有幾筆 data == row 的數量
         每個 row 是 各自的 data
-            data 數量通常用 n 表示
-        col 的數量 代表有幾個 feature
+    Predictors (p Or m) == 有幾個 feature == col 的數量
         每個 column 代表相同的 feature
 權重矩陣
     矩陣大小 : 特徵數量 * 1 (回歸), 特徵數量 * node 數量
 
+為什麼矩陣*向量 矩陣可以看成 對向量的轉換
+    https://youtu.be/kYB8IZa5AuE?si=oXrNNQx6R6HeNjLh
+linearly independent
+    rank(A) = n if A is n*m
+span of vector : aV + bW (a, b 為任何純量)
+    all the linear combination of vectors
+determinant det(A) 行列式
+    可以想成 進行線性轉換後 原本的單位向量 圍成的 面積(2D) 或 體積(3D) 大小
+        也就是伸縮量
+rank
+    有幾個獨立的 列數值
+    有幾個有意義的 data 數量
+    可以擴展成幾個 dimentions
+    full rank
+        if rank(A) = n if A is n*m
+        which also means every data is linearly independent
+column space of A
+    == span of columns
+    set of all possible outputs of Av
+    如果 單位向量 轉換後 之間是 等比例縮放
+    那就會少一個 dimention 
+kernel / null space
+    all the vector after transform that will land on zero vector(origin)
+    
 垂直
     orthogonal
     perpendicular
+orthonormal 垂直 且 已標準化(長度為1)
+    通常是旋轉矩陣
+    定義 Av·Aw = v·w
+    那A就是 orthonormal
+
+    
+< 運算 > ----------------------------------------------
 
 矩陣乘法 AB (通常中間沒有符號)
+    幾何意義 : 矩陣A 對 B 進行轉換
     公式 :
-        A23×B32 = R22
-
-內積(Dot Product) A.B
-    公式 :
-        |A||B|cosθ
-        ATB
+        A23×B32 = R22 (沒有交換律)
+內積(Dot Product) A·B
+    幾何意義 : A的長度 * B投影到A的長度
+          >0 代表 方向相同(夾角 < 90)
+          <0 代表 方向相反(夾角 > 90)
+          =0 代表 垂直   (夾角 = 90)
+    公式 : 
+        |A||B|cosθ -> 所以有交換律
+        AᵀB
             ax*bx+ay*by+az*bz
     運算結果：一個 純量(scalar)
     用途：
         判斷兩向量是否垂直 (內積為 0)
+        計算距離
+            ||A||^2 = AᵀA 
+                |A||A|cos(0) = |A||A| = |A|^2 = ||A||^2
         計算向量投影
         計算角度
-外積(乘積)(Cross Product) A×B
+向量積(Cross Product) A×B (有時也會被稱為 外積)
+    幾何意義 : 兩向量張成的平行四邊形面積大小 * 同時垂直於 A和B 的單位向量
+        如果 A 逆時針轉到 B 的夾角 < 180 是正的
+        如果 A 逆時針轉到 B 的夾角 = 180 是0 (面積為0)
+        如果 A 逆時針轉到 B 的夾角 > 180 是負的
+            因為 [1,0] i * [0,1] j = 1
     公式 :
-        一個向量，長度為 |A||B|sinθ
+        如果只在意向量長度 : 
+            |A||B|sinθ = |det( A與B的並排 )|
+                EX A : [ -3    B : [ 2
+                        1 ]          1 ]
+                def ( [ -3 2
+                        1  1 ] ) = -3*1 - 2*1 = -5
+        整個向量 : det( A與B的並排 ) * n
+                    det( A與B的並排 ) : 向量長度 以及 方向
+                    n : 同時垂直於 A和B 的單位向量 (在3維空間中)
+
     用途：
-        計算面積（兩向量張成的平行四邊形）
         找垂直於平面的向量
         在物理中常用於力矩、角動量
+外積 (Outer Product) A⊗B
+    公式 : ABᵀ
+投影 A 到 B
+    單純數值 ( A_proj 的長度 )
+        A 在 B 方向上的標量投影 : ||A||cosθ
+        再乘上 長度為1 的 B 方向向量
+        = ||A||cosθ * (B / ||B||)
+        = (AᵀB) / ||B||
+        = (BᵀA) / ||B||
+    A_proj
+        單純數值 * 長度為1 的 B 方向向量
+        = (BᵀA) / ||B|| * (B / ||B||)
+        = ((BᵀA) / (BᵀB))B
+
+special matrix
+    Diagonal Matrix 
+        only from topleft to bottomright have value, otherwise is zero
+        [ a11, 0, 0, 0
+          0, a22, 0, 0
+          0, 0, a33, 0
+          0, 0, 0, a44]
+
+        Scaling Matrix
+            every element in the Matrix would mul by 5
+            [   5, 0, 0
+                0, 5, 0
+                0, 0, 5  ]
+    Orthogonal Matrix
+        square matrix
+        transpose matrix us as same as its inverse
+            Q^T = Q^-1
+            QQ^T = I
+        unit vector
+            det(Q) = 1 or -1
+
+        Rotation Matrix
+            det(Q) = 1 的情況
+            [cosθ, -sinθ
+             sinθ, cosθ]
+            rotate 90 degree clockwise
+                [0, -1
+                 1, 0]
+            rotate 90 degree counterclockwise
+                [0, 1
+                 -1, 0]
+            after applying "rotate 90 degree clockwise" and "rotate 90 degree counterclockwise"
+            it return to original matrix, which means multiply by a identity matrix
+
+        Reflection Matrix 
+            det(Q) = -1 的情況
+            [1, 0
+             0, -1]
+        
+
+Singular Value Decomposition(SVD)
+    Reduced/Thin SVD
+        M = μ σ νᵀ
+            μ : m*p
+            σ : p*p, and is diagonal matrix
+            ν : p*n
+            M : m*n is sum of smaller ranked matrix
+                M = σ1μ1ν1ᵀ + σ2μ2ν2ᵀ + σ3μ3ν3ᵀ + ... + σpμpνp
+                    p is rank of matrix
+            
+    Full SVD
+        A = UΣVᵀ
+            U : m*m, left singular vectors
+            Σ : m*n diagonal matrix
+            V : n*n, right singular vectors
+              
 
 < 向量 > ----------------------------------------------
 Magnitude 向量的長度
@@ -41,12 +162,69 @@ Magnitude 向量的長度
     如果是在說 weight
         高Magnitude == weight 較大 == 對該特徵非常敏感
 
+向量伸縮
+    eigenvalue
+        縮放倍率(純量) λ
+    eigenvector
+        經過 A 變換後 能夠維持「方向不變」的特殊向量 : v n*1
+    eigenbasis
+        兩個獨立的 eigenvector 組成的基底（Basis）
+            Standard Basis 是 (1,0), (0,1)
+    公式
+        Av = λv
+            A : n*n
+                有些矩陣 A 是沒有 eigenvector 的 : EX: 轉置矩陣
+    推導
+        Av = λv
+        Av - λv = 0
+        (A - λI)v = 0
+    計算順序
+        1. 求解 det(A - λI) = 0 得到所有可能的 λ
+        2. 帶回 λ 找出對應的空間 v
 
+    在機器學習的 PCA 中，我們說「保留 90% 的變異量」，其實就是在計算前 k 個 Eigenvalues 的總和佔全部 Eigenvalues 總和的比例。這時，這組純量就直接代表了資料中保留了多少資訊。
 
+Covariance 
 
+< 降維 > ----------------------------------------------
+Principal Component Analysis (PCA)
+    purpose : reduce dimention
+    推理
+        要讓 資料投影後最分散 以 保留最多資訊
+            分散 -> 所以想到投影後的點之間的距離 == 距離原點長度
+            保留最多資訊 -> 投影後的長度 的 "變異數"最大
+        == 最大化投影後的長度的變異數
+            由於資料已中心化 所以平均值是零
+            帶入變異數公式
+                Var(z) = (1/n)*sum( (zi-0)^2 ) 
+                       = (1/n)*sum( zi^2 ) = zi^2 就是長度平方
+        == 最大化投影後向量的長度平方和
+            假設 v 是 投影的方向 且 是 單位向量
+            投影後的長度 = (vᵀx) / ||v|| = (vᵀx) = (xᵀv)
+    步驟
+        1. 先把資料中心化
+            Xc = X − mean(X)
+        2. 計算共變異數矩陣
+            Σ = (1 / (n − 1)) Xcᵀ Xc
+            推導 :
+                隨機變數組合的變異數公式 : 
+                    Var(aX+bY) 
+                    = E[(aX+bY)^2]
+                    = E[a^2X^2 +b^2Y^2   +2abXY]                    
+                    = a^2Var(X)+b^2Var(Y)+2abCov(X,Y_mean(X),mean(Y))
+                    = [a, b][ Var(X),   Cov(X,Y)   [ a
+                              Cov(X,Y), Var(Y)   ]   b ]
+                    = uᵀΣu
+                也就是說 data 經過[a,b]線性轉換後的 Var == 共變異數矩陣 投影在 [a,b] 向量的大小
+        3. 對 Σ 找 eigen decomposition
+            Σ v1 = λ1 v1
+                v1 就是 PC1
+                λ1 是該方向上的變異量 (λ1 是解出來的 λ 中最大的)
+        4. 找 PC2 
+            Σr = Σ - λ1v1v1ᵀ
+            再用 Σr 帶入 3. 找到 PC2
 
-
-
-
-
-
+< 不錯的教材 > ----------------------------------------------
+線性代數
+視覺化 線性代數 + 矩陣
+    https://www.youtube.com/playlist?list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab

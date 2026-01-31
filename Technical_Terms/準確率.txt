@@ -14,14 +14,20 @@ Confusion matrix (混淆矩陣)
     計算出來的準確率 :
         Accuracy:  (TP+TN) / all 
             The number of correct predictions (true positives + true negatives) divided by the total number of predictions.
-        Precision: TP/辨識結果為P(TP+FP)  (垃圾郵件過濾)
+        Precision: TP/辨識結果為P(TP+FP)  (不想要錯的辨識成正確的) 避免沒病驗出有病
             The number of the cases classified as positive that are actually positive: the number of true positives divided by (the number of true positives plus false positives).
-        Recall: TP/實際結果為P(TP+FN)     (醫療診斷 (避免漏診))
+        Recall: TP/實際結果為P(TP+FN)     (不想要正確的辨識成錯的) 避免有病卻沒驗出病
             The fraction of positive cases correctly identified: the number of true positives divided by (the number of true positives plus false negatives).
-        F1 Score: 2*(Precision*Recall) / (Precision + Recall)
-            An overall metric that essentially combines precision and recall.
-    
-ROC Curve and AUC scores
+        Fβ Score 
+            (1 + β^2) * (Precision*Recall) / (β^2*Precision + Recall)
+            F1 Score: 2*(Precision*Recall) / (Precision + Recall)  (balance precision and recall)
+                An overall metric that essentially combines precision and recall.
+            F0.5 Score: (precision is more important than recall)
+                (1 + 0.5^2) * (Precision*Recall) / (0.5^2*Precision + Recall)
+            F2 Score:   (recall is more important than precision)
+                (1 + 2^2) * (Precision*Recall) / (2^2*Precision + Recall)
+
+ROC curve and AUC scores
     https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc
     ROC(receiver operating characteristic) Curve
         跟據 threshold 不同畫出來的 TP與FP 比例

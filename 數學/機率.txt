@@ -5,6 +5,7 @@ P(x|y) : 當 y 已經發生, x 發生的機率 (Conditional Probability)
     Probability of x given that y
     P(y) : Prior Distribution
 P(x,y | z) : 當 z 已經發生, x,y 同時發生的機率
+P(x;y) : 我已經確定 y (固定 或 100%會發生), x 發生的機率
 
 
 Sum Rule, Marginalization : 
@@ -17,17 +18,28 @@ Sum Rule, Marginalization :
         這個 y 叫做 Nuisance Variable : 多餘變數、干擾變數
 
 Bayes' Rule
-    P(x|y) = P(y|x) * P(x) / P(y) = P(x,y) / P(y)
-        P(x) : Prior Distribution
-        P(y|x) : Likelihood
-        P(x|y) : Posterior Distribution
-            Prior 與 likelihood 結合 形成 posterior。
+    P(Hypothesis|Evidence) / P(H|E) : the posibility of Hypothesis given Evidence
+        = P(E|H) * P(H) / P(E) 
+        = P(E,H) / P(E)
+            P(H) : Prior Distribution   (先驗 : 因為是還沒有任何線索 得出的機率)
+            P(H|E) : Posterior Distribution (後驗 : 因為是有了新線索 得出的機率)
+            P(E|H) : Likelihood
+            
+                Prior 與 likelihood 結合 形成 posterior
 Chain Rule (expand from Bayes' Rule)
     P(x,y|z) = P(x|y,z) * P(y|z)
 
 
 < likelihood >
 L(y|x) = P(x|y)
+
+likelihood function
+    L(θ) = L(θ|x) = L(θ;x) = p(x|θ) = MUL( p(xi | θ) for all i )
+        θ 包含了所有的權重（weights）與偏差（bias）
+log-likelihood function
+    log L(θ) = ℓ(θ) 
+        = log MUL {i=1}^n p(xi | θ)
+        = sum( log p(xi | θ) for all i )
 
 < odds >
 odds = p / (1-p)
@@ -41,6 +53,14 @@ log odds
             p(x) < 0.5 時 log odds 為負
     因此可以 把這個比例轉成一個線性、可加、無界的尺度
 
+< Expectation >
+    Discrete distribution
+        E[X] = sum( p(xi)*f(xi) for all i )
+            f(xi) 可以是一個 function, 或本身 xi 數值 (f(xi) = xi)
+    continuous
+        E[X] = ∫ x*f(x) dx
+            f(x) is PDF
+
 
 discriminative model VS generative model
     Y is output(labels), X is input(feature)
@@ -48,7 +68,7 @@ discriminative model VS generative model
         learning P(Y|X)
             since model is learning the relationship between X and Y "directly"
     generative model  
-        learning P(X,Y) 
+        learning P(X,Y)
             usually learning P(X|Y) and P(Y), since P(X,Y) = P(X|Y)*P(Y)
                 P(Y) is Prior Distribution, represent the distribution of Y
                 P(X|Y) is Likelihood, represent if knowing the output is Y what should X looks like
@@ -56,7 +76,10 @@ discriminative model VS generative model
 
 Naive Bayes??
 
--- < 機率分布 > ----------------------------------------------------------
+
+-- < 機率分布 Probability Distribution > ----------------------------------------------------------
+    Probability Distribution 的特點是 總合為0
+
 Discrete distribution
     Probability Mass Function (PMF)
     對 PMF 相加 可以得出 CDF
@@ -75,6 +98,10 @@ Bernoulli distribution
     在 1 次獨立試驗中，這一次只會出現 0/1 兩種結果
         P(Y = 1) = p
         P(Y = 0) = 1 − p
+    如果我想要用一個式子表示 P(Y)
+        P(Y) = p^y*(1-p)^(1-y)
+        P(Y = 1) = p     = p^y*(1-p)^(1-y), y=1 = p^1*(1-p)^(0) = p
+        P(Y = 0) = 1 − p = p^y*(1-p)^(1-y), y=0 = p^0*(1-p)^(1) = 1-p
 Binomial distribution : 
     在 n 次獨立試驗中，每一次只會出現 0/1 兩種結果
     橫軸表示 再n次的試驗中總共成功x次 

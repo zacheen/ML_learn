@@ -20,7 +20,7 @@
     Ordinary Least Squares (OLS)
         如果是 linear regression
         可以用 Ordinary Least Squares (OLS) 計算 MSE 的最佳擬合線的方法
-        (X^T X)^(-1) X^T y
+        (XᵀX)^-1 Xᵀy
 
     Gradient Descent : 對每個 var 做偏微分
         if it's a "convex function", then Gradient Descent is good enough
@@ -29,6 +29,18 @@
     Maximum likelihood estimation (MLE)
         by maximizing the likelihood of observing a given set of data under the assumed statistical distribution
         找到一組參數，讓這組參數下「產生出目前觀察到的數據」的機率（概似度）達到最大
+            所以 ML 才用 L(θ|x) (參數θ 才會在前面)
+                θ 包含了所有的權重（weights）與偏差（bias）
+        通常都會對 likelihood functiion 取 log (比較好計算), 並且假設 xi 之間是獨立的
+            log L(θ) = log MUL( p(xi | θ) )
+                     = sum( log p(xi | θ) )
+
+    Expectation maximization (EM)
+        視覺化 : https://youtu.be/rVfZHWTwXSA?si=mrJCaVkoKsfPqXMX&t=3634
+        E-step / E step : guess the value of z, use it to calculate the log likelihood
+        M-step / M step : use the estimate value of the z to update the parameters
+        Expectation Lower Bound (ELBO / ELBo)
+        
 
 但 close function 跟 convex function 沒有相互關係
         
