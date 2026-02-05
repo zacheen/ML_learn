@@ -11,3 +11,4 @@ Regularization 正規化
 
 one shot 僅憑一次經驗
 
+Sparsity（稀疏性） 指的是向量或矩陣中大部分元素為 0（或非常接近 0）的特性

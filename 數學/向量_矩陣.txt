@@ -48,11 +48,11 @@ orthonormal 垂直 且 已標準化(長度為1)
     幾何意義 : 矩陣A 對 B 進行轉換
     公式 :
         A23×B32 = R22 (沒有交換律)
-內積(Dot Product) A·B
+內積(Dot Product) A·B (只能用在向量)
     幾何意義 : A的長度 * B投影到A的長度
-          >0 代表 方向相同(夾角 < 90)
-          <0 代表 方向相反(夾角 > 90)
-          =0 代表 垂直   (夾角 = 90)
+        >0 代表 方向相同(夾角 < 90)
+        <0 代表 方向相反(夾角 > 90)
+        =0 代表 垂直   (夾角 = 90)
     公式 : 
         |A||B|cosθ -> 所以有交換律
         AᵀB
@@ -113,12 +113,13 @@ special matrix
                 0, 5, 0
                 0, 0, 5  ]
     Orthogonal Matrix
-        square matrix
-        transpose matrix us as same as its inverse
-            Q^T = Q^-1
-            QQ^T = I
-        unit vector
-            det(Q) = 1 or -1
+        性質
+            square matrix
+            transpose matrix us as same as its inverse
+                Q^T = Q^-1
+                QQ^T = I
+            unit vector
+                det(Q) = 1 or -1
 
         Rotation Matrix
             det(Q) = 1 的情況

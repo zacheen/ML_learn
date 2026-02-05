@@ -1,23 +1,15 @@
-ML Machine Learning
-DL Deep Learning
 NN type
-    CNN Convolutional Neural Network
     R-CNN Region-based CNN
-    RNN Recurrent Neural Network
     DNN Deep Neural Network
     ANN Artificial Neural Network
 
 model structure
-    LSTM Long Short-Term Memory
     GAN Generative Adversarial Networks
     FCN Fully Convolutional Network
     PSPNet Pyramid Scene Parsing Network
     ENet Efficient Neural Network
 
 Loss function
-    OLS Ordinary Least Squares
-    MLE Maximum Likelihood Estimation
-    MSE Mean Squared Error
     L1 Mean Absolute Error
     BCE Binary Cross-Entropy
     WCE Weighted Cross-Entropy
@@ -29,7 +21,6 @@ Vision related
     HAT Hierarchical Action Transformer
     HRNet High Resolution Network
 
-    IOU Intersection Over Union
     CIOU Complete Intersection Over Union
     EIOU Efficient IOU
 
@@ -42,7 +33,6 @@ DiMP Discriminative Model Prediction
 CLIP Contrastive Language-Image Pretraining
 FFC Fourier Convolution
 CMT Continuous Mask-aware Transformer
-SVM Support Vector Machines
 VAE Variational Autoencoders
 PMSE Predicted Mean Squared Error
 sDice Squared Dice

@@ -8,6 +8,7 @@
 
     微分符號 : d
     偏微分符號 : ∂
+積分符號(intergrate) : ∫
         
 對X一次微分
     X的變化量
@@ -18,7 +19,22 @@
         (所以如果 再此點的變化量 = X的變化量 乘上 Y的變化量)
         從 X = Y 的切面(X = -Y方向)看過去就會看到 X的方程式的圖形
 
+
+∂/∂x log(x) = 1/x  (這個跟 e 沒有關係)
+∂/∂x e^x = e^x
+∂/∂x sin(x) = cos(x)
+∂/∂x cos(x) = -sin(x)
+∂/∂x f(g(x)) = f'(g(x))*g'(x) ... chain rule
+∂/∂x σ(x) = σ(x)*(1-σ(x))
+    σ(x) = 1/(1+e^-x)
+
 Hessian2D (Hessian matrix)
     包含了全部 f(x) 的 二階偏導數(second partial derivative)
     其實就是從導數中選擇兩個做偏微分然後組成矩陣
     可以看 Hessian_matrix_example.png 和 Hessian_matrix.png  
+
+
+< log > (因為有時候會跟積分搞混，所以記錄在這裡)
+log(ab) = log(a) + log(b)
+log(e^x) = x
+

@@ -4,16 +4,18 @@
 Sigmoid 
 	不是某一個函數，而是指某一類形如"S"的函數，都可以成為sigmoid的函數
 	Sigmoid函數就能使Y的範圍限制在[0,1]之間，中間只有一小段模糊地帶，適合用於二分法(真或偽)
+	Sigmoid function : σ(x) = 1/(1+e^-x)
 softmax 函數，可以將Y轉為機率值，且所有類別的機率總和等於1，就適合多分類，最大值就代表可能性最大
 relu函數，它是忽視負值，Y的範圍限制在[0, ∞]之間
 	好處
 		由於沒有復雜的數學運算，因此計算開銷小。因此，該模型可以花費更少的時間進行訓練或預測。
 		它收斂更快。線性意味著當x變大時，斜率不會平穩或"飽和" 
 		它沒有其他激活函數具有的梯度消失問題（如Sigmoid或tanh）。
+			可以看形狀 當數值很大或很小的時候 梯度接近0
 		它可以被稀疏地激活。由於所有負輸入的ReLU均為零，因此任何給定的單元都可能根本無法激活。
 
-logistic function 是 logit funciton 的反函數
-logit funciton
+logistic function 是 logit function 的反函數
+logit function
 	在[0,1]範圍的數給映射到[-inf, inf]
 	L = log( p / (1-p) )
 logistic function

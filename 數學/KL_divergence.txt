@@ -49,6 +49,6 @@ cross entropy
     H(p, q) = H(p) + Dkl(p||q)
     H(p, q) = -sum( p(y) log q(y) for each y )
         真實分布 p, 模型預測分布 q
-    binary cross-entropy loss function
+    binary cross entropy loss function
         = -sum( yi*log(yi') + (1-yi)*log(1-yi') ) / n
             

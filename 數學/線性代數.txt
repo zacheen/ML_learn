@@ -22,14 +22,6 @@ regression that can regularization
     combine ridge and lasso : Elastic Net
         Lenet(B') = (||y-xB||^2)/2n + λ( ((1-a)/2)*||B||^2 + a*||B||^1)
             這裡的 /2n, /2 都是為了方便 微分之後可以抵消
-        
-Lagrange multipliers : can make constraint into unconstraint problem
-    使用情況: maximize or minimize under some constraints
-    如何轉換:
-        原式: max/min Equation s.t. something <= const
-        轉換: Equation + λ(const - something)
-    好處 : 轉換之後變成 convex function，就可以做 Gradient Descent
-
 
 convex function 凸函數(像碗)   Ex: -log(x), x^2
     f((a+b)/2) "<=" (f(a) + f(b))/2, for any point a,b 
