@@ -1,0 +1,9 @@
+CS6120 NLP
+
+computational linguistics (CL)
+    subset of CL : one of it is NLP
+Retrieval-Augmented Generation (RAG)
+    
+
+教材 book :
+    https://web.stanford.edu/~jurafsky/slp3/

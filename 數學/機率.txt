@@ -24,11 +24,11 @@ Bayes' Rule
             P(H) : Prior Distribution   (先驗 : 因為是還沒有任何線索 得出的機率)
             P(H|E) : Posterior Distribution (後驗 : 因為是有了新線索 得出的機率)
             P(E|H) : Likelihood
-            
-                Prior 與 likelihood 結合 形成 posterior
+            P(E) : Evidence
+        反正就記得 條件 不可能在同一邊 : P(A|?) 不可能再乘P(A) 所以P(A)一定在下面
+
 Chain Rule (expand from Bayes' Rule)
     P(x,y|z) = P(x|y,z) * P(y|z)
-
 
 < likelihood >
 L(y|x) = P(x|y)
@@ -74,7 +74,6 @@ discriminative model VS generative model
                 P(X|Y) is Likelihood, represent if knowing the output is Y what should X looks like
 
 
-Naive Bayes??
 
 
 -- < 機率分布 Probability Distribution > ----------------------------------------------------------
@@ -125,10 +124,34 @@ zero mean normal distribution
     符號 : 𝒩(0, σ²)
     代表 分布的中心在 0
 
-p(x)=2πσ2
-​1​exp(−2σ2(x−μ)2​)
 
 
 
 
+Naive Bayes
+    Why Naive 
+        In Bayes, all features are assumed to be independent of one another.
+        However, even this condition is usually incorrect in real life
+        the result still turns out to be good.
+    步驟 <以 binary spam 當作範例>
+        計算 prior + easier to cal
+            在沒有看到任何字之前，是 spam 的機率
+            ori      : prior = P(spam)/P(normal)
+            logprior : log( amount of spam / amount of normal )
+        計算 likelihood + Laplace smoothing + easier to cal
+            Laplace smoothing : 避免某個字沒出現導致機率為 0
+            easier to cal : log
+            ori :   loglikelihood[word] =        P(word_i in spam | spam) /   P(word_i in normal | normal) 
+            adjust: loglikelihood[word] = log( L_P(word_i in spam | spam) / L_P(word_i in normal | normal) )
+                L_P(word_i in spam | spam) = word_i 在 spam 句子中出現幾次"+1" / spam 總共有幾個單字 "+V"
+                    Laplace smoothing : +1 / +V
+                    Multinomial Naive Bayes : 會重複計算重複的單字
+                    Bernoulli Naive Bayes   : 一個句子中重複出現的單字只算一次
+                V : 所有不重複單字的總數
+                word_i in spam : word_i 在 spam 裡面出現過多少次
+        預測新文件
+            pred = logprior + sum(loglikelihood[word] for word in "free win money")
+            threshold = 0 # 如果希望更嚴格可以往上調整
+            if pred > threshold :
+                is spam
 
