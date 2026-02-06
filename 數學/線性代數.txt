@@ -45,14 +45,16 @@ Jensen's Inequality (expand the convex/concave function)
         Cov(X, Y) = E[(X − μx)(Y − μy)]
             = 1/(n-1)*∑(Xi-X_mean)(Yi-Y_mean)
         代表 x, y 之間 方向是否一致 (正 或 負)
-        當我們把全部的點正規化(減去平均) 會變成很簡單的式子
+        當我們把全部的點先正規化(減去平均) 再計算協方差 會變成很簡單的式子
             = 1/(n-1)*∑(Xi)(Yi)
+    Covariance Matrix 協方差矩陣 ∑
+        ∑ij = Xi 與 Xj 特徵之間的關係
         正規化(中心化)後的協方差矩陣
             Σ = (1 / (n − 1)) XᵀX
                 X 是 data 矩陣
     Correlation
         Corr(X, Y) = Cov(X, Y) / (Std(X) * Std(Y))
             -1 ~ 1
-        代表 x, y 之間 方向是否一致 + 資料點相對於一條直線的「集中程度」(|Correlation數值|)
+        代表 x, y 之間 方向是否一致 + 資料點相對於一條直線的"集中程度" = |Correlation數值|
      
 

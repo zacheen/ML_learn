@@ -1,0 +1,84 @@
+Ensemble Learning 集成學習
+    組合多個學習器 得出結果
+        通常各個學習器都不複雜(simple)
+        Weak Learner (弱學習器) : 一個弱學習器的預測準確度只比「隨機猜測」好一點點
+            通常具有 High Bias (高偏差)，因為模型太簡單了，無法捕捉到數據中複雜的特徵。
+    怎麼選出結果
+        結果最多的 (majority)
+        平均 (average)
+        加權平均 (weight average)
+        regression
+        
+    Bagging (Bootstrap Aggregating)
+        處理情況
+            處理 Outliers
+        概念
+            隨機抽樣"少量"data，然後只透過抽樣的data 訓練學習器
+                抽樣方法可以是 任何distribution EX: random distribution, gaussian distribution
+        好處
+            大部分的情況，Outliers 不會被抽中
+                所以 大部分模型不會被這個離群值誤導 (Overfitting)
+            少部分的情況，Outliers 被抽中
+                有時 Outliers 其實不是噪音，而是 corner case
+                這時 Outliers 在 訓練data 中 比例很高
+                這個特殊的 學習器 反而能 學會如何處理這種珍貴情況
+        缺點
+            如果 Outliers 集中在某一區
+            很難剛好把這些 Outliers 集中起來 產生一個學習器
+                這時候用 Boosting 比較好
+        結果
+            降低 Variance
+                High Bias 的弱學習器 (例如很矮的樹)，Bagging 之後的 Bias 通常還是會維持在差不多的水平
+
+    Boosting
+        處理情況
+            辨識錯誤的data"集中"在某一區
+        概念
+            Models are trained one after another
+            Each new model focuses on fixing the errors made by the previous ones
+            The final prediction is a weighted combination of all models
+        結果
+            降低 Bias (for low variance high bias models)
+        步驟
+            train a weak learner
+            up weight the samples the last learner got wrong
+            train the second weak learner
+            < code >
+            for each learner
+                for epoch (每個 learner 還是會 training 自己)
+                    停止條件 : 新 Learner 的 accuracy == 50% 
+                              (代表結果是隨機的 == 學不到新東西了)
+        AdaBoost (Adaptive Boosting):
+            在訓練下一個學習器時，AdaBoost 會為前一個學習器錯誤分類的樣本增加權重，讓下一個學習器優先處理錯誤分類的樣本
+            調整此學習器權重的公式 αr = (1/2)*log[(1-Er)/Er]
+                Er : 錯的那些題目，權重加起來佔了多少%
+                    當 Error 趨近於 0 時 (基本上都對) : αr 無限大
+                    當 Error 等於 0.5 時 (等於用猜的) : αr = 0 (沒有任何貢獻)
+                    當 Error 大於 0.5 時 (基本上都錯) : αr 會等於 負值 (反著聽這個學習器的意見)
+            調整此各個sample權重的公式 Dt+1(i) = [Dt(i)*e^(-αt*yi*yi')] / Zt
+                Dt(1) : 第 t 輪時，第 i 筆樣本的權重
+                Zt：正規化因子（Normalization factor），確保所有樣本權重總和為 1
+                yi*yi' 同號, 權重上升
+                    意義 : if the error is larger giving bigger weight
+            (這些步驟可以發現 AdaBoost 並沒有計算 y-y', 而是直接透過調整 sample 權重的方式來訓練)
+            最終 y' = y0' + αr1*y1' + ... + αrn*yn'
+        Gradient Boosting Machines (GBM) (比想像中準確度高):
+            讓每個新的 learner 去預測當前集成模型對損失函數的負梯度（或者說是當前的 residual），以彌補預測的差距。
+            用前一個 learner 的 loss 去更新現在的 learner 的 weight
+            步驟
+                train a weak learner
+                根據上一個學習器的 pseudo residuals 進行下一個學習器的 training
+                    r_i,t = -[ ∂L(y-y')/∂y' ]
+                下一個 learner 的辨識結果 : y' = y0' + α1*y1' + α2*y2' + ... + αn*yn'
+                    (在訓練過程中就會直接使用到上一個學習器的結果了)
+            優點 (跟AdaBoost比較)
+                真的是透過 residuals 進行優化
+                可微分 所以可以真的找到 min
+        Extreme Gradient Boosting (XGBoost):
+            Decision Tree，這是 XGBoost 最常用且預設的型態
+    Stacking
+        透過訓練一個「後設學習器」（Meta-Learner）
+        自動決定如何結合那些初級學習器（Base-Learners）的預測結果
+            也就是說 各個學習器權重 是透過 第二次訓練 訓練出來的
+            (weight average 通常是使用者設定的意思) 
+

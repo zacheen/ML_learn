@@ -93,10 +93,10 @@ loss 的 類別
 
     error = Bias^2 + Variance + AU
         but usually Bias and variance are inversely related, forming a trade-off
-        Bias：模型預測的平均值與真實值之間的差距
+        Bias    ：模型預測 與 真實值之間的"平均值"的差距
             high bias model : bad on validation and training data (underfitting)
                 generalizing : should increase the model complexity or adding more features
-        Variance：模型預測隨不同訓練資料的變動程度
+        Variance：模型預測隨"不同訓練資料"的差距
             high variance model : bad on validation but good on training data (overfitting)
                 generalizing : should increase the data complexity
     overfitting : 模型複雜度過高 + 資料不足 <-> underfitting

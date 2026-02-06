@@ -7,43 +7,43 @@
     numpy表示方法(把上面的經過 .T 轉置) :
         numpy.shape = (Feature 數量, Sample 數量)
 權重矩陣
-    矩陣大小 : 特徵數量 * 1 (回歸), 特徵數量 * node 數量
-
+    矩陣大小 : 特徵數量 * node 數量 (EX 回歸 : 特徵數量 * 1)
     numpy表示方法(把上面的經過 .T 轉置) :
         numpy.shape = (neuron_num, Feature 數量)
 
 為什麼矩陣*向量 矩陣可以看成 對向量的轉換
     https://youtu.be/kYB8IZa5AuE?si=oXrNNQx6R6HeNjLh
-linearly independent
-    rank(A) = n if A is n*m
-span of vector : aV + bW (a, b 為任何純量)
-    all the linear combination of vectors
+
 determinant det(A) 行列式
     可以想成 進行線性轉換後 原本的單位向量 圍成的 面積(2D) 或 體積(3D) 大小
         也就是伸縮量
-rank
+rank(用 row 舉例 : Row Rank)
     有幾個獨立的 列數值
     有幾個有意義的 data 數量
     可以擴展成幾個 dimentions
     full rank
-        if rank(A) = n if A is n*m
-        which also means every data is linearly independent
+        rank(A) = min(n,m)  A is n*m
+linearly independent
+    代表此 data 矩陣是 full rank
+    1. linearly feature independent (通常我們指這個)
+        因為 data 的數量通常 >> feature 數量
+        Full Column Rank
+        rank(A) = m if A is n*m (其中 n >= m)
+    2. linearly data independent
+        rank(A) = n if A is n*m
+    3. A is n*n
+        rank(A) = n
+        因為向量間的夾角不為0, 所以 det(A) != 0
+            注意向量間不是垂直的
+span of vector : aV + bW (a, b 為任何純量)
+    all the linear combination of vectors
 column space of A
     == span of columns
     set of all possible outputs of Av
     如果 單位向量 轉換後 之間是 等比例縮放
     那就會少一個 dimention 
 kernel / null space
-    all the vector after transform that will land on zero vector(origin)
-    
-垂直
-    orthogonal
-    perpendicular
-orthonormal 垂直 且 已標準化(長度為1)
-    通常是旋轉矩陣
-    定義 Av·Aw = v·w
-    那A就是 orthonormal
-
+    all the vector after transform that will land on zero vector(origin)=
     
 < 運算 > ----------------------------------------------
 
@@ -115,15 +115,21 @@ special matrix
             [   5, 0, 0
                 0, 5, 0
                 0, 0, 5  ]
-    Orthogonal Matrix
+    Orthogonal Matrix [通常 == Orthonormal Matrix 垂直 + 已標準化(長度為1)]
         性質
             square matrix
             transpose matrix us as same as its inverse
                 Q^T = Q^-1
-                QQ^T = I
+                QQ-1 = I
+                    after applying "rotate 90 degree clockwise" and "rotate 90 degree counterclockwise"
+                    it return to original matrix, which means multiply by a identity matrix
+                    same for Reflection Matrix
+                Q^TQ = I
+                    for Qii = qi·qi = 1
+                    for Qij = qi·qj = 0 (since all vertors are perpendicular to each other)
+        Rotation Matrix
             unit vector
                 det(Q) = 1 or -1
-
         Rotation Matrix
             det(Q) = 1 的情況
             [cosθ, -sinθ
@@ -134,9 +140,6 @@ special matrix
             rotate 90 degree counterclockwise
                 [0, 1
                  -1, 0]
-            after applying "rotate 90 degree clockwise" and "rotate 90 degree counterclockwise"
-            it return to original matrix, which means multiply by a identity matrix
-
         Reflection Matrix 
             det(Q) = -1 的情況
             [1, 0
@@ -152,7 +155,6 @@ Singular Value Decomposition(SVD)
             M : m*n is sum of smaller ranked matrix
                 M = σ1μ1ν1ᵀ + σ2μ2ν2ᵀ + σ3μ3ν3ᵀ + ... + σpμpνp
                     p is rank of matrix
-            
     Full SVD
         A = UΣVᵀ
             U : m*m, left singular vectors
