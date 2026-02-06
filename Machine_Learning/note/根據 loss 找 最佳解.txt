@@ -26,6 +26,10 @@ Gradient descent : 對每個 var 做偏微分
     if it's a "convex function", then Gradient Descent is good enough
         since the minimum is guaranteed to be the global minimum
 
+    stochastic gradient descent (SGD)
+        每次只使用一筆 data 做 gradient descent
+            有 引入了隨機噪聲 == 正則化 的效果
+
 Maximum likelihood estimation (MLE)
     by maximizing the likelihood of observing a given set of data under the assumed statistical distribution
     找到一組參數，讓這組參數下「產生出目前觀察到的數據」的機率（概似度）達到最大
@@ -44,7 +48,7 @@ Expectation maximization (EM)
 constraint optimization
     套用 Lagrange 轉換成線性代數形式，再用其他方法求解
 
-convex optimization??
+
     
 但有沒有 close function 跟是不是 convex function 沒有相互關係
         
@@ -52,16 +56,18 @@ convex optimization??
 tech term
     primal problem : 原本你一開始要解的最佳化問題
     dual problem   : 轉換後的問題
-    strong duality : primal optimal value =  dual optimal value
-        如果是 strong duality 需要滿足以下條件
+        dual version 一定是 convex optimization problem (下面影片有講解)
+    strong duality : 
+        primal optimal value = dual optimal value
+        strong duality 需要滿足以下條件
             問題是 convex
             滿足 Slater's condition
-    weak duality   : 
+    weak duality
         對 primal 是 minimization 問題來說
             primal optimal value >= dual optimal value
             在優化中 dual 會變成 lower bound
                 只要 Maximize( lower bound 也就是 dual problem )
-                下界（Dual）推到最高，它就會最接近（甚至等於）Primal 的最小值 ??
+                下界（Dual）推到最高，它就會最接近（甚至等於）Primal 的最小值
         對 primal 是 maximization 問題來說
             上面全部反過來
             
@@ -78,8 +84,9 @@ Lagrange : can make constraint into unconstraint problem
                     + g(x) = -( -g(x) ), -g(x) 會變成新的 g(x)
     轉換後的式子
         L = f(x) +/- (λ1*g1(x) + λ2*g2(x) + ... + v1*h1(x) + v2*h2(x) + ...)
-            λ, v 叫做 Lagrange multipliers
-
+            λ, v 叫做 Lagrange multipliers, 且一定 >= 0
+                λ, v 如果等於0, 代表 這個限制沒有起到限制作用 (最低點在限制範圍之內)
+                λ, v 如果大於0, 代表 這個限制  有起到限制作用 (最低點在限制範圍之外)
     全域最佳解的條件 (否則只是局部的):
         f(x) 是 convex
         g(x) 是 convex
@@ -124,7 +131,8 @@ Lagrange : can make constraint into unconstraint problem
             p* = Min(Maxλv(L))
         p* 有一個 dual version
             d* = Maxλv(Min(L))
-            且如果 f(x) 是 convex 那就是 strong duality, p* = d*
+        使用 d* 找到 p* 的最佳解
+    推薦影片 : https://youtu.be/ZX_baiqXhoE?si=n7lnVYS4JQM9PS7t&t=1434
     
         
 

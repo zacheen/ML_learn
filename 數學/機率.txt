@@ -124,10 +124,6 @@ zero mean normal distribution
     符號 : 𝒩(0, σ²)
     代表 分布的中心在 0
 
-
-
-
-
 Naive Bayes
     Why Naive 
         In Bayes, all features are assumed to be independent of one another.

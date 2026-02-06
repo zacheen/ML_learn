@@ -1,0 +1,53 @@
+Real-world data will always have issues, but data scientists can often overcome these issues by:
+    Checking for missing values and badly recorded data.
+    Considering removing obvious outliers.
+    Examining what real-world factors might affect their analysis and determining if their dataset size is large enough to reduce the impact of these factors.
+    Checking for biased raw data and considering their options to fix the bias, if found.
+
+outliers : 特別的 case (有可能是紀錄錯誤的data)，應該要從訓練資料中移除
+Bias : 偏見 (會導致兩個人判斷出來的分數有差距，因而導致 ML 無法完美擬和)
+    這裡是指資料中有 Bias
+
+<降維 / 移除相關性高的 feature>
+Principal Component Analysis (PCA)
+    purpose : reduce dimention
+    推理
+        要讓 資料投影後最分散 以 保留最多資訊
+            分散 -> 所以想到投影後的點之間的距離 == 距離原點長度
+            保留最多資訊 -> 投影後的長度 的 "變異數"最大
+        == 最大化投影後的長度的變異數
+            由於資料已中心化 所以平均值是零
+            帶入變異數公式
+                Var(z) = (1/n)*sum( (zi-0)^2 ) 
+                       = (1/n)*sum( zi^2 ) = zi^2 就是長度平方
+        == 最大化投影後向量的長度平方和
+            假設 v 是 投影的方向 且 是 單位向量
+            投影後的長度 = (vᵀx) / ||v|| = (vᵀx) = (xᵀv)
+    步驟
+        1. 先把資料中心化
+            Xc = X − mean(X)
+        2. 計算共變異數矩陣
+            Σ = (1 / (n − 1)) Xcᵀ Xc
+            推導 :
+                隨機變數組合的變異數公式 : 
+                    Var(aX+bY) 
+                    = E[(aX+bY)^2]
+                    = E[a^2X^2 +b^2Y^2   +2abXY]                    
+                    = a^2Var(X)+b^2Var(Y)+2abCov(X,Y_mean(X),mean(Y))
+                    = [a, b][ Var(X),   Cov(X,Y)   [ a
+                              Cov(X,Y), Var(Y)   ]   b ]
+                    = uᵀΣu
+                也就是說 data 經過[a,b]線性轉換後的 Var == 共變異數矩陣 投影在 [a,b] 向量的大小
+        3. 對 Σ 找 eigen decomposition
+            Σ v1 = λ1 v1
+                v1 就是 PC1
+                λ1 是該方向上的變異量 (λ1 是解出來的 λ 中最大的)
+        4. 找 PC2 
+            Σr = Σ - λ1v1v1ᵀ
+            再用 Σr 帶入 3. 找到 PC2
+    在機器學習的 PCA 中，我們說「保留 90% 的變異量」
+    == 計算前 k 個 Eigenvalues 的總和佔全部 Eigenvalues 總和的比例
+相關係數過濾
+    計算各個 feature 之間的相關係數 R
+    剔除 R > 0.9 的 feature
+    

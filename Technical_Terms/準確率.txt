@@ -1,6 +1,5 @@
 imporet sklearn # Scikit-learn
 
-
 Confusion matrix (混淆矩陣) 
     from sklearn.metrics import confusion_matrix
         可以直接印出 Confusion matrix
@@ -37,6 +36,10 @@ ROC curve and AUC scores
             面積愈大愈好
         from sklearn.metrics import roc_auc_score
 
+PR curve (Precision-Recall Curve)
+    通常用在 data 類別數量不平衡 的時候
+    找到 Precision 跟 Recall 之間的平衡
+
 都是準確率的計算方法 反正愈大愈好
     AP (Average Precision)
     AR (Average Recall)
@@ -69,7 +72,11 @@ cost funtion == loss function
                     (X^T X)^(-1) X^T y
         root mean squared error, RMSE
             RMSE 是 MSE 開根號之後的結果
-
+    mean absolute percentage error (MAPE)
+        sum_i( |y - y'|/y ) / n
+    correlation coefficient (R2)
+        1 - [ sum_i((y - y')^2) / sum_i((y - y'_mean)^2) ]
+        how closely the predicted values match the actual values
 
 
 loss 的 類別

@@ -27,6 +27,7 @@ convex function 凸函數(像碗)   Ex: -log(x), x^2
     f((a+b)/2) "<=" (f(a) + f(b))/2, for any point a,b 
 concave function 凹函數(像山丘) Ex: log(x)
     f((a+b)/2) ">=" (f(a) + f(b))/2, for any point a,b
+    通常我們會把 max concave function 加負號 變成 min convex function (比較熟悉)
 Jensen's Inequality (expand the convex/concave function)
     (這裡使用 Convex function 來舉例 , concave function 一樣的道理)
     original
