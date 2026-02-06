@@ -8,7 +8,7 @@ outliers : 特別的 case (有可能是紀錄錯誤的data)，應該要從訓練
 Bias : 偏見 (會導致兩個人判斷出來的分數有差距，因而導致 ML 無法完美擬和)
     這裡是指資料中有 Bias
 
-<降維 / 移除相關性高的 feature>
+<降維 / 移除相關性高的 feature> ------------------------------------------------------
 Principal Component Analysis (PCA)
     purpose : reduce dimention
     推理
@@ -51,3 +51,4 @@ Principal Component Analysis (PCA)
     計算各個 feature 之間的相關係數 R
     剔除 R > 0.9 的 feature
     
+< 資料增量 > ------------------------------------------------------

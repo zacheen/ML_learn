@@ -82,8 +82,8 @@ cost funtion == loss function
 loss 的 類別
     aleatoric uncertainty 偶然不確定性 == 資料不確定性 (Data Uncertainty)
         不能被縮小 是隨機發生的誤差
-        RL 可以控制 ??
-            不太懂??
+        只有 RL 可以控制
+            處理 Exploitation (利用) 與 Safety (安全) 之間的平衡
     epistemic uncertainty 認知不確定性 == 模型不確定性 (Model Uncertainty)
         只能被縮到 aleatoric uncertainty 這麼大
 

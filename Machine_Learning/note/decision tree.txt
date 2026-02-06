@@ -1,41 +1,69 @@
-decision tree 相關的
-Teck term
-
-algorithm to decide the decision point
-    Misclassification error
-        Misclassification error = 1 - max_k p_k
-            p_k 是第 k 類在該節點的比例
-            EX:
-                一個節點有 10 筆資料
-                7 筆是 Class A
-                3 筆是 Class B
-                Misclassification error = 1 - 7/10 = 0.3
-    Gini coefficient (Gini impurity)
-        1-sum()
-    Entropy
-
-decision tree 決策樹
+Decision Tree 決策樹
     通過判斷某個條件 歸類這個東西是屬於什麼東西
-Information gain
-    lower the Entropy, higher the information gain
-    用 var X 對某個 dataset 做判斷所獲得的資訊量
-    用來判斷應該要先判斷什麼資料 (目的應該是為了要 balance tree 的深度)
 
-Ensemble Learning 集成學習
-    Bagging (Bootstrap Aggregating)
-        control the bias
+Information gain
+    目標 : Maximize the Information gain
+        用來判斷應該要先判斷什麼資料 (目的應該是為了要 balance tree 的深度)
+        用 某個feature 對 dataset 做判斷所獲得的資訊量
+    公式 : IG = H(parent) - sum( (ni/N)*H(all children) )
+        ni：第 i 個子節點的樣本數
+        N ：父節點的總樣本數
+algorithm to decide the decision point
+    Impurity measure 不純度指標
+        split's overall impurity score : nL/n*IL + nR/n*IR
+            Left child 有 nL 筆資料(sample)
+            Left child 的 Impurity score 是 IL
+            Right child 有 nR 筆資料(sample)
+            Right child 的 Impurity score 是 IR
+        Misclassification error
+            公式 : 1 - max(p_k)
+                p_k 是第 k 類在該節點的比例
+                EX:
+                    一個節點有 10 筆資料
+                    7 筆是 Class A
+                    3 筆是 Class B
+                    Misclassification error = 1 - 7/10 = 0.3
+        Gini coefficient (Gini impurity)
+            公式 : 1-sum( p_k^2 )
+        Entropy
+            公式 : sum( p_k*log(p_k) ) 
+            通常我們挑 最低的 split impurity score 當作指標
+                lower the Entropy, higher the information gain
+    Deviance measure
+        你的模型與假設模型之間差距
+        一個節點 S 中，假設有 c 個類別，第 i 個類別的樣本數為 ni，總樣本數為 n
+            D(S) = -2*sum_i(n_i*ln(n_i/n))
+    注意: depth of tree 與 bias 成 負相關 與 variance 成 正相關
+        如果深度太深，會造成 overfit
+
+apply Ensemble Learning
+    Bagging
         Random forest 隨機森林
             使用很多的 decision tree 的結果 以多數決的方式決定最終結果
-
+            重點
+                各個 Data Set 是 Randomly Selected
+                不要把tree的depth限制得太死
+                    即便單棵樹會有一點 High Variance 也沒關係，因為最後會被大家平均掉
+                Feature Sampling
+                    在決定節點如何分裂時，演算法只會考慮部分特徵
+                    這是為了降低樹與樹之間的相關性
+                        如果某個特徵強到爆，每棵樹可能都用它當開頭的判斷條件
     Boosting
-        AdaBoost (Adaptive Boosting):
-        Gradient Boosting:
-
-    Deviance
-    
-
-
-
+        XGBoost (XGBoost 最常用且預設的型態 是 XGBoost + Decision Tree)
+            XGBoost has several advantages compared to other algorithms, such as its ability to handle missing data, highly parallelizable code, and large and complex datasets. 
+            XGBoost is a robust algorithm for both classification and regression problems
+            公式 : L(t) = ∑_i[ l(y_i, y^_i(t−1) + f_t(x_i)) ] + Ω(f_t) 
+                y_i : observed data 
+                y^_i :predicted data 
+                f_t : model of the t-th tree
+                t : iteration index
+                Ω(f) : regularization term
+                    Ω(f) = rT + (1/2)λ||w||^2
+                        T : total number of tree leaves
+                        r, λ : penalty coefficients
+                        w : vector containing each leaf's score
+            優化 hyperparameters 方法
+                Grid search, random search, and Bayesian optimization
     
 圖片特徵量化
     SIFT: Scale Invariant Feature Transform
