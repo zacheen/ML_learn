@@ -69,7 +69,7 @@ cost funtion == loss function
             EX:
                 如果是 linear regression
                     可以用 Ordinary Least Squares (OLS) 計算 MSE 的最佳擬合線的方法
-                    (X^T X)^(-1) X^T y
+                    (XᵀX)^-1 Xᵀy
         root mean squared error, RMSE
             RMSE 是 MSE 開根號之後的結果
     mean absolute percentage error (MAPE)

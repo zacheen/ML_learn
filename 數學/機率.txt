@@ -26,20 +26,24 @@ Bayes' Rule
             P(E|H) : Likelihood
             P(E) : Evidence
         反正就記得 條件 不可能在同一邊 : P(A|?) 不可能再乘P(A) 所以P(A)一定在下面
-
-Chain Rule (expand from Bayes' Rule)
-    P(x,y|z) = P(x|y,z) * P(y|z)
+    推導出新公式
+        P(A,B) = P(A|B) * P(B) = P(B|A) * P(A)
+    Chain Rule (expand from Bayes' Rule)
+        P(x,y|z) = P(x|y,z) * P(y|z)
 
 < likelihood >
 L(y|x) = P(x|y)
 
 likelihood function
-    L(θ) = L(θ|x) = L(θ;x) = p(x|θ) = MUL( p(xi | θ) for all i )
-        θ 包含了所有的權重（weights）與偏差（bias）
+    L(θ) = L(θ|X) = L(θ;X) 
+        = P(x1,x2,x2...,xn | θ) = P(X|θ)
+        = P(x1|θ) * P(x2|θ) * ... * P(xn|θ)
+        = MUL_n( p(xi | θ) )
+            θ 包含了所有的權重（weights）與偏差（bias）
 log-likelihood function
     log L(θ) = ℓ(θ) 
-        = log MUL {i=1}^n p(xi | θ)
-        = sum( log p(xi | θ) for all i )
+        = log MUL_n( p(xi | θ) )
+        = sum_n( log p(xi | θ) )
 
 < odds >
 odds = p / (1-p)
@@ -61,6 +65,8 @@ log odds
         E[X] = ∫ x*f(x) dx
             f(x) is PDF
 
+joint probability table
+    Tij = P(ij)
 
 discriminative model VS generative model
     Y is output(labels), X is input(feature)
@@ -73,11 +79,8 @@ discriminative model VS generative model
                 P(Y) is Prior Distribution, represent the distribution of Y
                 P(X|Y) is Likelihood, represent if knowing the output is Y what should X looks like
 
-
-
-
 -- < 機率分布 Probability Distribution > ----------------------------------------------------------
-    Probability Distribution 的特點是 總合為0
+    Probability Distribution 的特點是 總合為1
 
 Discrete distribution
     Probability Mass Function (PMF)
@@ -99,8 +102,8 @@ Bernoulli distribution
         P(Y = 0) = 1 − p
     如果我想要用一個式子表示 P(Y)
         P(Y) = p^y*(1-p)^(1-y)
-        P(Y = 1) = p     = p^y*(1-p)^(1-y), y=1 = p^1*(1-p)^(0) = p
-        P(Y = 0) = 1 − p = p^y*(1-p)^(1-y), y=0 = p^0*(1-p)^(1) = 1-p
+            P(Y = 1) = p     = p^y*(1-p)^(1-y), y=1 = p^1*(1-p)^(0) = p
+            P(Y = 0) = 1 − p = p^y*(1-p)^(1-y), y=0 = p^0*(1-p)^(1) = 1-p
 Binomial distribution : 
     在 n 次獨立試驗中，每一次只會出現 0/1 兩種結果
     橫軸表示 再n次的試驗中總共成功x次 
@@ -109,7 +112,7 @@ Binomial distribution :
 
 normal distribution (Gaussian distribution) : 常態分布
     符號 : 𝒩(μ, σ²)
-        μ 是平均數 mean, 也就是中心位置
+        μ 是平均數 mean, 也就是鐘形的中心位置
     Gaussian function (Gaussian Equation) 指的是一個函數形狀
         f(x) = e^(-(x-μ)² / (2σ²))
     Gaussian distribution function <Gaussian distribution function.png>
@@ -129,7 +132,21 @@ Naive Bayes
         In Bayes, all features are assumed to be independent of one another.
         However, even this condition is usually incorrect in real life
         the result still turns out to be good.
-    步驟 <以 binary spam 當作範例>
+    步驟 
+        以 binary spam 當作範例
+            通常會使用 "Odds"，而不是普通機率，處理二元分類（Binary Classification）問題
+            因為這樣 P(E) 在計算過程中會被消除
+            普通機率 : 
+                P(H_pos|E) = P(E|H_pos) * P(H_pos) / P(E)
+                P(H_neg|E) = P(E|H_neg) * P(H_neg) / P(E)
+                    所需機率 : P(E|H_pos), P(H_pos), P(E|H_neg), P(H_neg), P(E)
+            但是如果是 Odds 的話
+            Odds :
+                P(H_pos|E)/P(H_neg|E) = P(E|H_pos) * P(H_pos) / P(E|H_neg) * P(H_neg)
+                P(H_neg|E)/P(H_pos|E) = P(E|H_neg) * P(H_neg) / P(E|H_pos) * P(H_pos)
+                    所需機率 : P(E|H_pos), P(H_pos), P(E|H_neg), P(H_neg)
+                        可以不需要 P(E)
+                        且通常 P(E) 很難求
         計算 prior + easier to cal
             在沒有看到任何字之前，是 spam 的機率
             ori      : prior = P(spam)/P(normal)
@@ -150,4 +167,6 @@ Naive Bayes
             threshold = 0 # 如果希望更嚴格可以往上調整
             if pred > threshold :
                 is spam
+        code example
+            Naive Bayes_Twitter Sentiment.ipynb
 

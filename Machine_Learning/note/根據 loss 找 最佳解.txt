@@ -4,23 +4,49 @@
 
 Continuous 的結果
     Linear regression : 
-        function 形式 : y = b0 + b1*x + b2*x^2 + ... + bn*x^n = X^T B(linear 的定義)
-            輸出 y 是一個數字 
+        預估
+            單個 data : XᵀB = Y'
+                function 形式 : y' = b0 + b1*x1 + b2*x2 + ... + bn*xn = XᵀB (linear 的定義)
+                    輸出 y 是一個數字 
+            data 陣列 : XB = Y'
+        真實
+            單個 data : XᵀB + E = Y
+            data 陣列 : XB  + E = Y
+        Linearity 是指對參數 B 的線性組合，而不是對特徵 x。
+            即使特徵是 x^2 或 log(x)
+            只要公式長得像 b_1(feature_1) + b_2(feature_2)
+            它在統計學上就屬於 線性回歸。
 Discrete 的結果 (classification)
     Logistic regression : 
-        function 形式 : y = sigma(X^T B)
+        function 形式 : y = sigmoid(XᵀB)
             輸出落在 0 到 1 的機率，也就是為了要 classification
         Logistic regression func can be expressed as the log odds
             log( p(x) / (1-p(x)) ) = B0 + B1 X
-            p(x) = (1 / 1 + e^(-(B0 + B1 X)) ... which is sigmoid equation
+            p(x) = 1 / (1 + e^-(B0 + B1 X)) ... which is sigmoid equation
                 but there is no close solution, and this function is not convex function
                 so the only way to solve it is through MLE
 
 < 找解答的方法 > ------------------------------------------------------
 Ordinary Least Squares (OLS)
-    如果是 linear regression
+    如果是 linear regression : XᵀB = Y
     可以用 Ordinary Least Squares (OLS) 計算 MSE 的最佳擬合線的方法
-    (XᵀX)^-1 Xᵀy
+        B = (XᵀX)^-1 Xᵀy
+    目標 :
+        argB min( (y-y')^2 )
+    推導方法1 (幾何) :
+        我們要讓 |y-y'| 最小
+        也就是殘差向量 y-y' 必須與 X 的每一個列向量都相互垂直 (垂直距離才會最短)
+        要找 Xᵀ(y-y') = 0 ( Xᵀ 是因為是內積的概念 )
+            Xᵀ(y-XB) = 0
+            Xᵀy-XᵀXB = 0
+            Xᵀy = XᵀXB
+            B = (XᵀX)^-1 Xᵀy
+    推導方法2 (微分) :
+        Loss = (y-y')^2
+            = ||(y-XB)||^2
+            = (y-XB)ᵀ(y-XB)
+        展開 = yᵀy - 2yᵀXB + (XB)ᵀXB
+        做 Gradient descent
 
 Gradient descent : 對每個 var 做偏微分
     if it's a "convex function", then Gradient Descent is good enough

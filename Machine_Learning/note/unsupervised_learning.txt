@@ -1,5 +1,5 @@
 << unsupervised learning >>
-K-means cluster (K means cluster)
+K-means cluster (K means/Kmeans cluster)
     步驟 
         隨機挑選 k 個點 (可以是隨機點 也可以是data point)
         假設這 k 個點是 center of the cluster

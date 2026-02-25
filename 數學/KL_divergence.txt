@@ -1,42 +1,30 @@
-KL divergence :
-    the distance between two distribution/density
-    Dkl(P||Q) 
-        = ∫ p(x)*log(p(x)/q(x)) dx
-        = ∫[log(p(x))−log(q(x))]p(x) dx > 帶入 continuous 期望值公式
-        = E(P(x))[ log(p(x)/q(x)) ] = E(P(x))[ log(p(x)) - log(q(x)) ]
-        = E(P(x))[ log(p(x)) ] - E(P(x))[ log(q(x)) ] 
-        = -E(P(x))[ log(q(x)) ] - E(P(x))[ -log(p(x)) ]
-        = h(P,Q) - h(P)
-    結果同樣適用於 Discrete distribution
-        Dkl(P||Q) = H(P,Q) - H(P)
-    推導 : Dkl(P||Q) != Dkl(Q||P)
-
-Information Theory
-    information 定義 : that can be store in variables
-    越容易預測的事情，其含有的資訊價值就越低
-    Self-information (Information content)
-        公式 : I(x) = -log p(x)
-            如果一個事件極罕見
-            當它發生時，會帶給你很大的「驚訝程度」
-            這表示該事件蘊含了極高的資訊量
-
 Surprise 出現此事件的驚訝程度
     直觀 : 1/p(x)
     為了好計算 加上log : log( 1/p(x) )
     公式 : h(x) = log( 1/p(x) ) = -log p(x) == I(x)
 
+Information Theory == Surprise
+    information 定義 : that can be store in variables
+    越容易預測的事情，其含有的資訊價值就越低
+    Self-information (Information content)
+        公式 : I(x) = -log p(x)
+            如果一個事件極罕見
+            "當它發生時"，會帶給你很大的「驚訝程度」
+            這表示該事件蘊含了極高的資訊量
+
 entropy (其實也可以拿來當 loss)
     def
-        1. the measure of uncertainty of information
-        2. the average amount of information
+        1. the measure of uncertainty of result, uncertainty 與 entropy 成正比
+        2. the average amount of information = E[ h(Y) ]
         3. measure the amount of surprise the variables holds 
+        EX: 如果一個系統的所有事件都很難預測（如公平的骰子），它的 Entropy 就高
     target :
         minimize the entropy to bring some certainty
     H(Y) : discrete entropy
-        = -E[ h(y) ] 
-        = -E[ log p(y) ] 
-        = sum( log(1/p(y))*p(y) for each y) 
-        = -sum( p(y) log p(y) for each y ) (最常看到的形式)
+        = E[ h(Y) ] 
+        = E[ -log p(Y) ] = -E[ log p(Y) ]
+            "p(yi)*" 是因為 log p(yi) 是 value, p(yi) 剛好是這個 value 的出現機率
+        = -sum_n( p(yi)*log p(yi) ) (最常看到的形式)
         預期驚訝程度
             如果 0/1 出現的機率相同 (各自 出現機率 0.5)
                 -sum( (1/2) log2(1/2), (1/2) log2(1/2)) = 1
@@ -45,10 +33,25 @@ entropy (其實也可以拿來當 loss)
     h(Y) : continuous entropy (注意裡面是大寫的Y)
 
 cross entropy
-    用 q 去預測 p 時的 total cost
-    H(p, q) = H(p) + Dkl(p||q)
-    H(p, q) = -sum( p(y) log q(y) for each y )
-        真實分布 p, 模型預測分布 q
+    在真實分布為 p 的情況下，使用模型 q 所估計的資訊量之期望值
+    H(p, q) = Ep[ h(y) ] = Ep[ -log q(Y) ] ... 這是單筆數據的 entropy
+            = -sum_k( p(yk)*log q(yk) )
+                k 是 label 數量
+            = H(p) + Dkl(p||q)
     binary cross entropy loss function
-        = -sum( yi*log(yi') + (1-yi)*log(1-yi') ) / n
-            
+        = -sum_n( yi*log(yi') + (1-yi)*log(1-yi') ) / n ... 這是 entropy 總和
+            n 是 data 數量
+        
+KL divergence :
+    the distance between two distribution/density
+    Dkl(P||Q) 
+        = ∫ p(x)*log(p(x)/q(x)) dx
+        = ∫[log(p(x))−log(q(x))]p(x) dx > 帶入 continuous 期望值公式
+        = E(P(x))[ log(p(x)/q(x)) ] = E(P(x))[ log(p(x)) - log(q(x)) ]
+        = E(P(x))[ log(p(x)) ] - E(P(x))[ log(q(x)) ] 
+        = -E(P(x))[ log(q(x)) ] - E(P(x))[ -log(p(x)) ]
+        = H(P,Q) - H(P)
+    結果同樣適用於 Discrete distribution
+        Dkl(P||Q) = H(P,Q) - H(P)
+    推導 : Dkl(P||Q) != Dkl(Q||P)
+

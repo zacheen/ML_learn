@@ -5,7 +5,7 @@ Information gain
     目標 : Maximize the Information gain
         用來判斷應該要先判斷什麼資料 (目的應該是為了要 balance tree 的深度)
         用 某個feature 對 dataset 做判斷所獲得的資訊量
-    公式 : IG = H(parent) - sum( (ni/N)*H(all children) )
+    公式 : IG = H(parent) - sum_node_n( (ni/N)*H(all children) )
         ni：第 i 個子節點的樣本數
         N ：父節點的總樣本數
 algorithm to decide the decision point

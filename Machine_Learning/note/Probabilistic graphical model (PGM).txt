@@ -13,7 +13,8 @@
 Conditional Random Field (CRF)
     用在序列資料上的機率模型
         常見於 NLP, 序列標註任務(EX:詞性標註、命名實體辨識、分詞)
-    P(Y|X)
+    目的
+        找出 P(Y|X) directly
     任務 :
         在所有可能的標籤序列中找出「整體最合理」的一整串標籤
         也就是 最大化 log P(Y|X)
@@ -35,9 +36,8 @@ Markov chain
             C   0.5 0.0 0.5
             性質
                 當 T^2 這裡面的數值會變成 : 剛好兩步 從 X 變成 X' 的機率
-        還需要 initial state 的機率 
-            假設 initial state 為 B
-            π0 = [0, 1, 0]
+        還需要 initial state π 的機率 : initial probability
+            EX: NN是第一個字(π0 = [0, 1, 0]) 的機率 是 0.3
         當前一個 state * transition matrix = 下一個 state 的機率
             [0, 1, 0] * [ 0.2 0.6 0.2   = [0.3, 0.0, 0.7]
                           0.3 0.0 0.7
@@ -67,13 +67,13 @@ Hidden Markov Models (HMM)
             H3  0.2 0.8
     HMM 的三大問題 (The Three Problems)
         Likelihood problem
-            給定模型參數  和觀察序列 O，計算這個序列出現的機率 P(O|transition matrix)
-            意義 : regardless
-            ??
-            
+            給定模型參數( HMM λ = (Emission Matrix, transition matrix, π) ) and O
+            "請問 這個O序列 出現的 likelihood P(O|λ) ?"
+                因為我們不在意 Hidden status Q 怎麼走，所以把 Q Marginalization
+                P(O|λ) = sum_Q( P(O,Q|λ) )
         Decoding
-            given an observation sequence O and ... discover the best hidden state sequence
-            我們現在有 Observed variable 請問 Hidden status 機率最高的 sequence 是什麼?
+            給定模型參數( HMM λ = (Emission Matrix, transition matrix, π) ) and O
+            "請問 Hidden status sequence 機率最高的 sequence 是哪一個?"
             <步驟>
             首先推導出各個 組合的 機率    
                 = argmax P(H = h1, h2, ..., hn | O = o1, o2, ..., on)
@@ -85,8 +85,10 @@ Hidden Markov Models (HMM)
                     P(H) = Π_n P(hi | hi-1)
                 = argmax Π_n P(oi | hi) * (hi | hi-1) ... 這些都是表中可以查詢到的值
             再使用 Viterbi algorithm 計算出各個組合對應的機率
-                
         Learning
-            given an ob and the set of states in the HMM, how to learn the parameters trasition probability and e... probability
-            ??
-            Bean search
+            給定 the set of states in the HMM 和 O
+            "如何訓練 the parameters in trasition Matrix, Emission Matrix, π ?
+            <步驟>
+                Expectation maximization
+                ...
+                Bean search

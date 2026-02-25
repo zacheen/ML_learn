@@ -1,7 +1,7 @@
 資料矩陣 (data matrix)
     數學表示方法 (Pandas, PyTorch, Excel ... ) :
         矩陣大小 : Row 數量(data 數量) n * Column 數量(feature 數量) m
-        item 位置 Anm : 第 n row(橫), 第 m cols(直) 
+        item 位置 Anm : 第 n row(橫), 第 m cols(直)
             Observations (n) : 每個 row 是 各自的 data
             Predictors (p Or m) == 每個 column 代表相同的 feature
     numpy表示方法(把上面的經過 .T 轉置) :
@@ -119,12 +119,12 @@ special matrix
         性質
             square matrix
             transpose matrix us as same as its inverse
-                Q^T = Q^-1
+                Qᵀ = Q^-1
                 QQ-1 = I
                     after applying "rotate 90 degree clockwise" and "rotate 90 degree counterclockwise"
                     it return to original matrix, which means multiply by a identity matrix
                     same for Reflection Matrix
-                Q^TQ = I
+                QᵀQ = I
                     for Qii = qi·qi = 1
                     for Qij = qi·qj = 0 (since all vertors are perpendicular to each other)
         Rotation Matrix

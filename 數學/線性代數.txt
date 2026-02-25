@@ -1,4 +1,6 @@
 binomial 二項式
+Dependent Variable    也就是 Y, output
+Independent Variables 也就是 X, input
 
 regression that can regularization
     by adding limitation to B to prevent B explosion
