@@ -1,0 +1,27 @@
+POS Tagging（Part-of-Speech Tagging）詞性標註
+    book 對應 NN 名詞
+    is   對應 VB 動詞
+
+Byte Pair Encoding
+    步驟
+        首先各個字母 會有一個對應的 ID
+        計算各個 ID pair 的出現次數
+        挑出現最高次數的 merge
+        並給它一個 新的ID
+            移除已經合併的 ID
+            加入新的 ID 與其他 ID 組合出現的次數
+
+loss
+    Perplexity (ppl)
+        PP(Sentense) 
+            = e^( -1/N * log P(w1, ..., wi-1) )
+            = e^( -1/N * log P(w1) * P(w2 | w1) * ... * P(wi | w1, ..., wi-1) )
+            = e^( -1/N * Σ_n log P(wi | w1, ..., wi-1) )
+                worst case : Perplexity = N
+
+-----------------------------------------------------------
+Language_term (語言學專業術語)
+
+Corpus 語料庫
+lexicon 詞彙
+delimiter 分隔符
