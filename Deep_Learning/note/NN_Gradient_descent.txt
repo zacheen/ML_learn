@@ -1,0 +1,64 @@
+Gradient descent
+< 根據 binary entropy loss 的公式 對參數做修正 >
+現在有兩層神經網路
+W1*X+b1
+W2*X2+b2 (X2 is previous layer output)
+
+L = -(1/n)*sum_i( yi*log(yi') + (1-yi)*log(1-yi'))
+因為想要知道 W2 怎麼調整，所以對 W2 做偏微分 
+    ∂L/∂W2
+    但上面的公式並沒有 W2 所以我們要帶入 chain rule
+        yi' = σ(W2*X2+b2)
+        ∂L/∂W2 = ∂L/∂yi' * ∂yi'/∂W2
+    由於 yi' 也是有兩個 function 組成的，因此再帶入一次 chain rule
+        Z2 = W2*X2+b2
+        note that σ(Z2) = yi' = level 2 layer output
+        ∂L/∂yi' = ∂L/∂yi' * ∂yi'/∂Z2 * ∂Z2/∂W2
+    開始分別展開
+    ∂L/∂yi' = ∂[-(1/n)*sum_i( yi*log(yi') + (1-yi)*log(1-yi'))]/∂yi'
+            帶入 log 的 chain rule
+            = -(1/n)*sum_i( yi*(1/yi')*[∂yi'/∂yi']+ (1-yi)*(1/(1-yi'))*[∂(1-yi')/∂yi'] )
+            展開剩下的 ∂
+            = -(1/n)*sum_i( yi*(1/yi')*[1]+ (1-yi)*(1/(1-yi'))*[-1] )
+            整理 (1-yi)*(-1) = (yi-1)
+            = -(1/n)*sum_i( (yi/yi') + (yi-1)/(1-yi') )
+            通分
+            = -(1/n)*sum_i( [yi*(1-yi')+(yi-1)*yi']/(yi'*(1-yi')) )
+            = -(1/n)*sum_i( [yi-yi*yi'+yi*yi-yi']  /(yi'*(1-yi')) )
+            = -(1/n)*sum_i( [yi-yi']               /(yi'*(1-yi')) )
+    ∂yi'/∂Z2 = ∂σ(Z2)/∂Z2
+            = σ(Z2)*(1-σ(Z2))
+            = yi'*(1-yi')
+    ∂Z2/∂W2 = ∂(W2*X2+b2)/∂W2
+            = X2
+    先相乘 ∂L/∂yi' * ∂yi'/∂Z2
+        = -(1/n)*sum_i( [yi-yi']/(yi'*(1-yi')) ) * yi'*(1-yi')
+        "yi'*(1-yi')" 可以抵消
+        = -(1/n)*sum_i( [yi-yi'] ) 
+    再把上述結果 * ∂Z2/∂W2
+        = -(1/n)*sum_i( [yi-yi'] ) "* X2"
+        = -(1/n)*sum_i( [yi-yi'] ) * X2 ... ∂L/∂W2 也就是 W2 的調整方向
+因為想要知道 b2 怎麼調整，所以對 b2 做偏微分
+    ∂L/∂yi' = ∂L/∂yi' * ∂yi'/∂Z2 * ∂Z2/∂b2
+    這時候會發現 "∂L/∂yi' * ∂yi'/∂Z2" 跟上面是相同的，所以可以重複使用
+    ∂Z2/∂b2 = ∂(W2*X2+b2)/∂b2
+            = 1
+    ∂L/∂W2 = -(1/n)*sum_i( [yi-yi'] ) "*1"
+           = -(1/n)*sum_i( [yi-yi'] ) ... ∂L/∂b2 也就是 b2 的調整方向
+因為想要知道 W1 怎麼調整，所以對 W1 做偏微分
+    yi' = σ(W2*X2+b2) = σ(Z2)
+    Z2 = W2*X2+b2
+    X2 = σ(W1*X+b1) = σ(Z1)
+    Z1 = W1*X+b1
+∂L/∂W1 = ∂L/∂yi' * ∂yi'/∂Z2 * ∂Z2/∂X2 * ∂X2/∂Z1 * ∂Z1/∂W1
+    "∂L/∂yi' * ∂yi'/∂Z2" 一樣可以帶入上面的結果
+    ∂Z2/∂X2 = ∂(W2*X2+b2)/∂X2
+            = W2
+    ∂X2/∂Z1 = ∂σ(Z1)/∂Z1
+            = σ(Z1)*(1-σ(Z1))
+    ∂Z1/∂W1 = ∂(W1*X+b1)/∂W1
+            = X
+    σ(Z1) 其實就是 level 1 layer output
+    所以 σ(Z1)*(1-σ(Z1)) = L1_output * (1-L1_output)
+    全部相乘
+    ∂L/∂W1 = -(1/n)*sum_i( [yi-yi'] ) [* W2] [* L1_output * (1-L1_output)] [* X]
