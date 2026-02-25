@@ -1,0 +1,80 @@
+Support Vector Machines (SVM) 
+    把資料投影到更高的維度，試著在更高的維度找到可以劃分資料的平面
+        這個分類平面距離最近的點愈遠愈好 (代表這個面才會垂直點)
+    注意 :
+        特徵之間盡量不要有相關
+            當兩個特徵高度相關時，SVM 的優化目標函數會變得非常"平坦"
+                這意味著特徵權重 w 的解可能不唯一，或者對訓練數據的微小變動極其敏感
+                甚至有可能 模型可以給 x1 很大的權重而給 x2 很大的負權重，兩者抵消後結果依然不變
+    "Hard SVM" 推導 :
+         目標 : max(||w||)
+            假設分類平面是 wx + b = 0
+            那兩邊的 margin 就是 wx + b = c/-c
+            我們想要讓 margin 的寬度 k 最大化 (k 是 分類平面到 margin 的距離)
+                分類平面 + 往 w方向 推 k 的距離 = margin 位置 (假設我們是往正的方向推)
+                wx + b + wk(分類平面到 margin 的距離) = wx + b = c
+                wk = c
+                k = c/||w||
+            最大化 margin 到 分類平面的距離 == max(2*k)
+                也就是 max( 2*(c/||w||) )
+            去掉常數 : max( 1/||w|| )
+            max( 1/f(x) ) = min( f(x) ) 
+                因為 1/||w|| 永遠大於 0 且 最小值存在且不為 0
+            -> min(||w||)
+        constrains
+            if yi = 1, wx + b >= c
+            if yi = -1, wx + b <= -c
+                因為同乘 -1 大小於符號要反過來
+                yi(wx + b) >= c (同 yi = 1 的式子)
+            -> yi(wx + b) >= c = yi(wx + b) - c >= 0
+        組合
+            min(||w||) s.t. yi(wx + b) - c >= 0
+        套入 Lagrange
+            L(w, b, λ) = min( ||w|| - sum( λi*( yi(wx + b)-c ) ) )
+            由於我們發現用 (1/2)||w||^2 取代 ||w|| 在微分時比較方便計算
+                min( (1/2)||w||^2 ) 與 min( ||w|| ) 等價
+            L(w, b, λ) = min( 1/2||w||^2 - sum( λi*( yi(wx + b)-c ) ) )
+        套入 KKT
+            ∂L/∂w => ||w|| - sum(λiyixi) = 0 => sum(λiyixi) = ||w|| ... (1)
+            ∂L/∂b => sum(λiyi) = 0                                  ... (2)
+        把 (1) 跟 (2) 代入 L(w, b, λ)
+            1/2||w||^2 - sum( λi*( yi(wx + b)-c ) )
+            帶入 (1) replace ||w|| = sum(λiyixi)
+            = (1/2)*sum(λiyixi)ᵀsum(λiyixi) - sum( λi*( yi(sum(λiyixi))x + yib )-c ) 
+            經過 一系列 拆開 合併
+            = -(1/2)*sum[ sum(λiλi*yiyi*xixi) ] - b*sum(λiyi) + 
+            帶入 (2) replace sum(λiyi) = 0
+            => L(w, b, λ) = sum(λic) - (1/2)*sum[ sum(λiλi*yiyi*xixi) ] 
+                特點 : w, b 不見了!
+        帶入 Primal Problem
+            min_w_b( max_λ( L(w, b, λ) ) )
+            由於 λ*(yi(wx + b) - c) = 0
+                當點在 mergin 上的時候 yi(wx + b) = c
+                => λ*(c-c) = 0 => λ 可以為任意 >0 的值
+                當點在 mergin 外的時候 yi(wx + b) > c
+                => λ*(一個 >0 的數字) = 0 => λ 一定為 0
+            很多 λ=0 在式子中 sum(λic) - (1/2)*sum[ sum(λiλi*yiyi*xixi) ] 
+                所以我其實只要考慮在 margin 上的點即可
+                這些點就是 Support Vector
+        apply kernel trick
+            因為發現有 sum( ... xixi )
+            也就是 x 只以"內積"的形式出現
+            就代表這個公式 只關心"兩個點之間的相對關係(相似度)"
+            所以可以替換成任何的 kernel function
+            但 kernel function 要符合 某個高維空間中的內積
+                Linear Kernel : XᵀX (就是推導出來的) (但只能在原本的維度畫直線)
+                Polynomial Kernel : (1+XᵀX)^2
+                RBF Kernel : e^-r||x-x'||^2
+
+
+
+
+    "Soft SVM" 推導 :
+        目標 : Hinge loss
+            給在 margin 裡面的點加上 panelty
+
+
+            
+
+
+    
