@@ -1,0 +1,50 @@
+Optimizer - 調整 LR 的方法
+    Stochastic Gradient Descent (SGD)
+        概念
+            固定 LR
+        嚴格定義 SGD
+            每次只使用一筆 data 做 gradient descent
+                有 引入了隨機噪聲 == 正則化 的效果
+        更新公式
+            θt+1 ​= θt ​− η∇f(θt​)
+                η 是 learning rate
+
+    SGD momentum (SGD with Momentum)
+        Momentum 想法是加上"速度累積"
+        更新公式
+            vt+1 ​= μvt ​− η∇f(θt​)
+            θt+1​ = θt ​+ vt+1​
+            合併 : θt+1​ = θt ​+ μvt ​− η∇f(θt​)
+                μ 是 momentum 係數
+                通常 0.9 左右
+        
+    SGD Nesterov momentum (SGD with Nesterov momentum) 
+    == Nesterov Accelerated Gradient (NAG)
+        Nesterov 概念
+            看下一步位置的 gradient 來調整現在位置應該要更新多少
+        更新公式
+            vt+1 = μvt − η∇f(θt+μvt)
+            θt+1​ = θt ​+ vt+1​
+    
+    Adagrad (Adaptive Gradient Algorithm)
+        概念
+            為每一個參數維度
+            累積歷史梯度平方
+                常更新的維度   learning rate 會變小
+                很少更新的維度 learning rate 保持大
+        更新公式
+            Gt ​= Gt−1​ + gt^2​ (gt^2 is element-wise square)
+            θt+1 ​= θt ​− η/[Gt^(1/2)​​+ϵ] ⊙ gt​
+                ε 是小常數避免除以 0
+    
+    Adam - base line (但適用各種情況)
+        V 跟 M 都會被之前所有的 gradient 影響
+        更新公式
+            mt+1 = β1mt ​+ (1−β1)gt
+            vt+1 = β2vt ​+ (1−β2)gt^2
+            θt+1 ​= θt ​− η/(ϵ + √v't+1) * m't+1
+
+    Learning Rate Scheduler
+        概念
+            逐步降低 : LR 
+                LR = LR * 0.9 

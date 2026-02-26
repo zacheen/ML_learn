@@ -51,10 +51,7 @@ Ordinary Least Squares (OLS)
 Gradient descent : 對每個 var 做偏微分
     if it's a "convex function", then Gradient Descent is good enough
         since the minimum is guaranteed to be the global minimum
-
-    stochastic gradient descent (SGD)
-        每次只使用一筆 data 做 gradient descent
-            有 引入了隨機噪聲 == 正則化 的效果
+    see "Optimizer.txt"
 
 Maximum likelihood estimation (MLE)
     by maximizing the likelihood of observing a given set of data under the assumed statistical distribution
