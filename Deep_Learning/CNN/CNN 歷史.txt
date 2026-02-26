@@ -1,33 +1,75 @@
 CNN 歷史
 
 整理不錯的網站
-	https://medium.com/ching-i/卷積神經網絡-cnn-經典模型-googlelenet-resnet-densenet-with-pytorch-code-1688015808d9
+	https://medium.com/ching-i/卷積神經網絡-cnn-經典模型-lenet-alexnet-vgg-nin-with-pytorch-code-84462d6cf60c
+    https://medium.com/ching-i/卷積神經網絡-cnn-經典模型-googlelenet-resnet-densenet-with-pytorch-code-1688015808d9
 
-ConvNet ??
+< focus on Image Classification / Backbone >
+    主要用這個比較 ImageNet LSVRC / ILSVRC / ImageNet Large Scale Visual Recognition Challenge
+        
+LeNet (1998)
+    卷積神經網路的始祖
 
-OverFeat 某一種經典的 CNN 架構
-    OverFeat adopted a strategy similar to early neural network face detectors by applying a ConvNet as a "sliding window detector" on an image pyramid.
-R-CNN
-    R-CNN adopted a "region proposal-based" strategy in which each proposal was scale-normalized before classifying with a ConvNet
-SPPnet
-    應該是想要取代 R-CNN
-    優點好像是比 R-CNN 更快
-Fast R-CNN
-Faster R-CNN
-    advocate using features computed from a single scale, because it offers a good trade-off between accuracy and speed
-    但是 Multi-scale detection, however, still performs better, especially for small objects.
-2014 COCO
-    Microsoft COCO: Common objects in context.
+AlexNet (2012) (2012 年 ImageNet LSVRC 競賽中 冠軍)
+        https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf
+    Maxpooling, 也因此 stride 可以小於 size
+    ReLU 替代 tanh/Sigmoid 
+    加入 Dropout 
+    對 RGB 通道做主成分分析 (PCA)，接著使用高斯擾動，對顏色、光照做變換
 
-2015 VGG
+VGG (2014) (2014 年 ImageNet LSVRC 分類競賽中 亞軍)
+        https://arxiv.org/pdf/1409.1556.pdf
     Very deep convolutional networks for large-scale image recognition.
+    更多 layer 的網路架構
+    且改用小卷積核
 
-201510 ResNets
+    VGGNet 最具代表性的是 VGG16
+        五個卷積區塊 + 三個全連接層
+            其中前兩個卷積層內含 2 個基礎模組、後三個卷積層內含 3 個基礎模組，
+            總共為 2x2 + 3x3 + 3 = 16 層網路層數
+
+NiN (Network in Network) (2014)
+        https://arxiv.org/pdf/1312.4400
+    MLP 卷積層 (Mlpconv)
+        要提取的特徵 是 高度非線性的
+        因此在每個局部感受野中加入更複雜的神經網路來運算
+    首次提出 1x1 卷積層
+        做 channel 間的線性組合
+        增加非線性，因為可以接 activation
+        降維或升維
+        提升表達能力但計算成本低
+    Global Average Pooling (GAP)
+        每個 channel 的 spatial 平均值
+            減少大量參數
+            降低 overfitting
+
+GoogLeNet (Inception-V1，2014) (2014 年 ImageNet LSVRC 分類競賽中 冠軍)
+    受到 NiN 啟發
+        把多個不同大小的卷積層組合 並把運算結果合併 
+    分類輔助器 (Auxiliary Classifiers）
+        優點
+            解決深層神經網路的梯度消失問題
+            regularization 效果
+        結構
+            在網路的中間層額外接出的「小型分類器」
+            這些輔助器會根據標籤（Ground Truth）計算自己的 Loss
+            訓練時的最終損失函數是主路徑損失與輔助路徑損失的加權總和
+                訓練後會被移除
+        未來
+            被 Batch Normalization（批次標準化）與 ResNet（殘差連接）取代
+
+201510 ResNet (2015 年 ImageNet LSVRC 分類競賽中 冠軍)
     Deep Residual Learning for Image Recognition
         https://doi.org/10.48550/arXiv.1512.03385
 
-    Using FPN in a basic Faster R-CNN system, 
-    our method achieves 最先進的 single model results on the COCO detection benchmark 
+    發明了 Residual Learning, 
+        解決深層網路隨深度增加反而退化的 degradation problem
+            也就是解決了深層網路 中 淺層網路的梯度消失問題
+        Shortcut Connection : Prev_x + this_x = output_x
+            當訓練達到飽和的時候, this_x 的輸出會變成 0
+                也就是這個 node 學到 輸出為0 (identity mapping) 反而是最佳解
+            也就是 Prev_x 的結果 會直接傳到 output_x
+                梯度數值能夠直接回傳至淺層
 
 201611 ResNeXt 
 	Aggregated Residual Transformations for Deep Neural Networks
@@ -38,22 +80,64 @@ Faster R-CNN
 201608 DenseNet 
     Densely Connected Convolutional Networks
         https://doi.org/10.48550/arXiv.1608.06993
-    更複雜化 ResNet 的 shorter connections
-        ResNet只是在block的最頂端拉一條線出來，DenseNet是直接讓每一層的輸出傳遞到之後的每一層
-            從低階特徵到高階特徵都會被直連到最後一層卷積層，這讓下一層接受到更全面的圖像資訊。
+    更複雜化 ResNet 的 Shortcut Connection
+        ResNet只是在block的最頂端拉一條線出來，DenseNet是直接讓每一層的輸出 concat 到之後的每一層
+            從低階特徵到高階特徵都會被直連到最後一層卷積層，這讓下一層接受到更全面的圖像資訊
         比起 GoogLeNet 加寬又加深，DenseNet 變成增加 channel
-    
     效果 
         更加減緩梯度消失問題
         上面提到的 可以看到低階到高階的特徵
         減少參數量!
-            那是因為對於舊的特徵圖(feature-map)是不需要再去重新學習的，
+            那是因為對於舊的特徵圖(feature-map)是不需要再去重新學習的
             而且因為growth-rate不用設很大，所以減少許多參數。
             這並不對應計算量與使用空間會縮小 ! 
                 因為最後一層要計算 每一層加起來的特徵 所以其實計算量跟記憶體是需要很大的
 
+FPN (Feature Pyramid Network) 
+    為了同時看清楚 大物體 與 小物體
+    但是第一次使用是用在 Faster R-CNN 上
 
 2019 EfficientNet
+    最優化 scaling, depth, width, resolution 之間的關係
+
+< focus on object detection / Head > -------------------------------------------------------------------------------
+OverFeat (2013)
+    發明 滑動窗口（Sliding Window) 的高效實現方式
+    對輸入圖像進行不同偏移的採樣
+        確保網絡能捕捉到更細微的空間資訊
+    全卷積化（FCN 的雛形）
+        避免對重疊區域的重複計算
+    
+R-CNN (2014)
+    region proposal-based 
+        每次只會計算被 propose 的 region
+        但這是靠 外部演算法(Selective Search) 才能生成建議區域
+
+SPPnet (Spatial Pyramid Pooling Network) 
+    會先將整張圖先跑一次 CNN 得到特徵圖
+        避免每個 proposal 都重跑 CNN
+        而是在 shared feature map 上做 pooling
+    Spatial Pyramid Pooling Layer (多尺度金字塔)
+        解決 CNN全連接層 要求固定尺寸的輸入 > 會導致物體變形
+        原理: 不論輸入的特徵區域大小如何，SPP 層會將其劃分為固定的格數（例如 4*2, 2*2, 1*1）。
+        對每個格子進行 Max Pooling，最終產生的向量長度固定
+
+Fast R-CNN
+    RoI Pooling (單尺度)
+        只是把 Spatial Pyramid Pooling Layer 改成單一尺度(7*7)
+
+Faster R-CNN (2015 end)
+    RPN (Region Proposal Network)
+        替換原本的 Selective Search
+        RPN 直接在特徵圖上滑動，利用 Anchor Boxes（錨點框）機制，直接預測哪裡有物體
+
+SSD (Single Shot MultiBox Detector)
+    one stage detector
+        在不同 feature map scale 上直接預測 bbox
+        使用 default boxes，也就是 anchor
+
+FPN + Faster R-CNN (2017)
+    看 FPN
 
 參數名稱
     Growth-rate
@@ -61,3 +145,7 @@ Faster R-CNN
 
 
 multiscale context aggregation convolutional neural network (MCACNN) 
+
+-- < tech term > ---------------------------------------------------
+ConvNet : 泛指所有 CNN
+stride : kernel shift distance
