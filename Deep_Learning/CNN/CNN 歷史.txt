@@ -4,7 +4,11 @@ CNN 歷史
 	https://medium.com/ching-i/卷積神經網絡-cnn-經典模型-lenet-alexnet-vgg-nin-with-pytorch-code-84462d6cf60c
     https://medium.com/ching-i/卷積神經網絡-cnn-經典模型-googlelenet-resnet-densenet-with-pytorch-code-1688015808d9
 
-< focus on Image Classification / Backbone >
+Backbone :  extract feature
+Neck :      multiscale
+Head :      different task
+
+< Backbone >
     主要用這個比較 ImageNet LSVRC / ILSVRC / ImageNet Large Scale Visual Recognition Challenge
         
 LeNet (1998)
@@ -89,18 +93,18 @@ GoogLeNet (Inception-V1，2014) (2014 年 ImageNet LSVRC 分類競賽中 冠軍)
         上面提到的 可以看到低階到高階的特徵
         減少參數量!
             那是因為對於舊的特徵圖(feature-map)是不需要再去重新學習的
-            而且因為growth-rate不用設很大，所以減少許多參數。
+            而且因為 growth-rate 不用設很大，所以減少許多參數。
             這並不對應計算量與使用空間會縮小 ! 
                 因為最後一層要計算 每一層加起來的特徵 所以其實計算量跟記憶體是需要很大的
 
-FPN (Feature Pyramid Network) 
+FPN (Feature Pyramid Network) (Neck)
     為了同時看清楚 大物體 與 小物體
     但是第一次使用是用在 Faster R-CNN 上
 
 2019 EfficientNet
     最優化 scaling, depth, width, resolution 之間的關係
 
-< focus on object detection / Head > -------------------------------------------------------------------------------
+< Head > -------------------------------------------------------------------------------
 OverFeat (2013)
     發明 滑動窗口（Sliding Window) 的高效實現方式
     對輸入圖像進行不同偏移的採樣
@@ -139,13 +143,148 @@ SSD (Single Shot MultiBox Detector)
 FPN + Faster R-CNN (2017)
     看 FPN
 
-參數名稱
-    Growth-rate
-        卷積層中卷積核的數量(k)
+< YOLO > - 為了速度
+YOLO v1 (2015) 
+    概念
+        把 影像 分隔成多個格子
+        每個格子獨自預測 (是什麼 y0, y1, y2 ..., 
+                        兩個候選框 
+                            中心位置距離左上角的偏移量 X1, Y1, 相對於整張影像的比例 W1, H1, Confidence P1
+                            中心位置距離左上角的偏移量 X2, Y2, 相對於整張影像的比例 W2, H2, Confidence P2)
+            limitation : one cell can only detect one object
+            priors = 2 : 兩個候選 box 
+        為什麼 loss 要全部加起來，這樣我怎麼知道 是哪一個 label 造成的 loss ??
+        最後有一個 7*7*30 的全連接層 為什麼 7*7 一定會是各個 grid 的結果 ??
+
+YOLO v2 (2016)    
+    https://arxiv.org/pdf/1612.08242
+    Batch Normalization
+        捨棄 Dropout (因為沒有全連接層)
+        換用 Batch Normalization
+            對每一層的輸出都做 Normalization
+    High Resolution Classifier 更大的解析度
+        先用 224*224 訓練
+        再用 448*448 進行 10 次的訓練微調
+    Convolutional With Anchor Boxes
+        Anchor Boxes 有助於 recall 的提升
+        在這裡 Anchor Boxes == priors 
+    Dimension Clusters
+        用 k-means 找 priors (best value k = 5)
+            run k-means clustering on the training set bounding boxes
+            k-means 所用的距離公式 : 1 - IOU(box, centroids)
+    Direct location prediction
+        v1 預測偏移量 會導致收斂問題
+        v2 改成使用 在這個grid中是 什麼位置 
+            若 X, Y 都為 0.5 : 代表在中心點
+            若 X, Y 都為 0   : 代表在左上角
+            real_x = σ(output_x) + center_x (center_x 是這個 grid 從左數來第幾個)
+            real_w = prior_w * exp(output_w)
+                這些單位是網格單位，所以不用再乘上邊長
+    Fine-Grained Features
+        DownSample 是直接拆分
+            原圖大小 2X*2X 直接拆分成 X*X 然後 channel 變成 4 倍
+    Backbone : DarkNet19 (VGG+Resnet)
+        移除了 FCL
+        只包含卷積層, 也就是 Fully Convolutional Network, FCN
+            也就是說能夠輸入任何大小的圖像 (Multi-Scale Training)
+        所以最後 Grid 大小並不是固定的
+            會根據 input shape 變化
+            但 Direct location prediction 資訊長度是相同的
+                因為有 1*1 的卷積層 可以調整 channel 數量
+
+YOLO v3 (2018)
+    https://arxiv.org/pdf/1804.02767
+    升級 DarkNet
+        不同 scale 預測不同大小的物件
+            因此更適合小物件偵測
+    priors 改成 9 種 (也是 Dimension Clusters 方法)
+        3種scale 有"各自"不同的 3種大小的 priors
+    softmax 改進，因此可以預測多標籤的任務
+        EX: 這個物件同時是 狗, 吉娃娃, 動物
+
+-- 換作者 --   
+            
+
+    
+
+
+YOLO v4 (2020)
+    https://arxiv.org/pdf/2004.10934
+    架構
+        Weighted-Residual-Connections (WRC)
+        Cross-Stage-Partial-connections (CSP)
+        Cross mini-Batch Normalization (CmBN)
+        Self-adversarial-training (SAT)
+        Mish-activation
+    Backbone :  extract feature
+    Neck :      multiscale
+    Head :      different task
+
+YOLO v7
+    ELAN（Efficient Layer Aggregation Network）
+
+YOLO v8 (2022)
+    https://arxiv.org/pdf/2501.13400
+    Backbone : 
+        C2f block
+            旨在改進 
+            在保持輕量化的同時，獲得更豐富的梯度流（Gradient Flow）資訊
+                結合 YOLOv5 中 C3模組 的優點
+                參考了 YOLOv7 中 ELAN 的結構思想
+            架構
+                1*1 卷積
+                Split 切分：將輸出特徵圖切分為兩個部分
+                    堆疊 Bottleneck：其中一個分支會經過一系列的 Bottleneck 運算層
+                多路徑融合：C2f 會將每個 Bottleneck 的輸出都進行 Concatenate（連接），而不僅僅是最後一層的輸出。
+                1*1 卷積 : 特徵整合回原始通道數
+    
+        Conv block
+            Conv2d
+            BatchNorm2d
+            SILU : activation function
+    Neck : 
+        SPPF (Spatial Pyramid Pooling Fast)
+        C2f block
+        Upsample
+    Head : anchor free
+        predict happend in the grid cell
+
+
+        
 
 
 multiscale context aggregation convolutional neural network (MCACNN) 
 
+
+
 -- < tech term > ---------------------------------------------------
 ConvNet : 泛指所有 CNN
 stride : kernel shift distance
+
+Kernel == Filter
+
+Concat (Concatenation) 
+    只是維度拼接,沒有任何運算
+    為了特徵多樣性 (特徵會從不同 Layer 過來)
+    EX:
+        feature data 1 大小是 H*W*C1
+        feature data 2 大小是 H*W*C2
+        Concat 之後大小就是 H*W*(C1+C2)
+
+DownSample
+    Max pooling
+    Average Pooling
+    Strided Convolution
+UpSample
+    Nearest Neighbor Interpolation : 直接複製像素
+    Bilinear Interpolation : 平滑版本
+    Transposed Convolution
+    Sub Pixel Convolution
+    上採樣 + Conv
+    Padding : 如果尺寸差異極小 就直接補0
+        
+
+Growth-rate
+    每一層會新增多少個 feature channel (k)
+        == DenseNet 每一層會新增的 feature map 數量
+    是 hyperparameter 
