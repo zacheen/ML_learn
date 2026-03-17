@@ -14,18 +14,3 @@ annotation 標記數據的過程
 	長方體標註（Cuboid Annotation）
 	語義分割（Semantic Segmentation）
 	
-regions of interest (ROIs) (有可能聽錯成 RY)
-	可以想成有幾個結果
-    
-IOU (intersection over union)
-    預測與 ground truth 相交的面積大小
-	
-downsampling 
-	降低資料大小
-	但當然也不希望失去特徵
-	EX: max pooling、降維
-upsampling 
-	提高資料解析度
-	EX: 插值
-	
-	

@@ -12,3 +12,6 @@ CIFAR
 
 SVHN
     32×32 colored digit images
+
+Microsoft COCO:
+    Common objects in context.

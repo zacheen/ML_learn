@@ -34,7 +34,8 @@ VGG (2014) (2014 年 ImageNet LSVRC 分類競賽中 亞軍)
 
 NiN (Network in Network) (2014)
         https://arxiv.org/pdf/1312.4400
-    MLP 卷積層 (Mlpconv)
+    MLP (Multi-Layer Perceptron) (Mlpconv)
+        其實就是 多層 FCN
         要提取的特徵 是 高度非線性的
         因此在每個局部感受野中加入更複雜的神經網路來運算
     首次提出 1x1 卷積層
@@ -97,12 +98,131 @@ GoogLeNet (Inception-V1，2014) (2014 年 ImageNet LSVRC 分類競賽中 冠軍)
             這並不對應計算量與使用空間會縮小 ! 
                 因為最後一層要計算 每一層加起來的特徵 所以其實計算量跟記憶體是需要很大的
 
+Skip Connection
+    Concat 
+        拼接
+            所以會有更豐富的資訊，但也怕 overfit
+    
+    Residual 殘差
+        相加
+            其實相加後會有天然的 Regularization 效果
+    
+    比較 
+        Concat 通常可以取代 Residual
+        Concat 比 Residual 運算量 記憶體 需求量更大
+
+
 FPN (Feature Pyramid Network) (Neck)
     為了同時看清楚 大物體 與 小物體
     但是第一次使用是用在 Faster R-CNN 上
+    結構
+        淺層 向 深層 進行運算 (卷積 pooling ...)
+        從中每過一個特定層數 拉某個 feature-map P 出來
+            左邊的運算可能有 100 層，但 feature-map P 只有 10 層
+        把 深層 的 feature-map 傳遞到 淺層
+        且 每個 feature-map 都會有自己的判斷
+        組合方法 (不同 scale 的 feature-map)
+            element wise 相加
+    優點
+        這樣淺層也會知道深層學到的資訊
+PAN (Path Aggregation Network)
+    FPN 問題
+        淺層的資訊 要經過很遠 才能到 深層 (經過 100 層運算)
+    結構
+        FPN + Bottom-up path augmentation(N層)
+        N層 其實就是 P層 的相反方向
+        因此 淺層的資訊 可以透過 N層 傳遞至 深層
+            路徑較短 因為 N層 通常也只有 10 層左右
 
 2019 EfficientNet
     最優化 scaling, depth, width, resolution 之間的關係
+
+Transformer 
+    DETR (End-to-End Object Detection with Transformers) (classification) (2020.05)
+        https://arxiv.org/pdf/2005.12872
+        https://github.com/facebookresearch/detr
+        https://colab.research.google.com/github/facebookresearch/detr/blob/colab/notebooks/detr_attention.ipynb#scrollTo=PcxWAOzOYTEn
+            可以看 attention 區域
+        特點
+            有 Transformer 的 encoder 與 "decoder"
+                encoder 的輸入是 resnet 提取特徵後的結果
+                decoder 用於直接預測 100 個框
+                    所以捨棄 anchor 跟 NMS
+        架構
+            encoder 的架構與 ViT 差不多
+                輸出 encoder_h
+            decoder 
+                上面的 encoder_h 跟 object queries 做 cross attention
+                    W_k, W_V 是跟 encoder_h 相乘
+                    W_Q 是跟 object query 相乘
+                        object queries : 
+                            輸入 100 個 query 向量 (也是會經過訓練的)
+                            有自己做 self attention (== 討論哪個 query 要問什麼)
+                輸出 1.框的位置 以及 2.分類機率 的 特徵向量資訊
+                    再進入 FFN 產出 可以理解的數字
+            loss
+                匈牙利匹配
+                    按照 loss 最小的組合 當 Loss (因為也才 100 個框)
+        為什麼一開始要 self attention 不直接 cross attention ??
+        loss 只找最匹配的結果, 但這樣 P 不會偏向變 1.0 嗎?
+            因為這樣 P 的 loss 才會都是 0 (最小)
+
+    ViT (2020.10) 
+        https://arxiv.org/pdf/2010.11929
+        特點 :
+            幾乎完全屏棄了傳統的卷積層
+                但其實 將影像餵進去 一開始 其實做了 類似卷積的操作 
+        把影像切割成固定大小的 Patch，然後對 P 做 flatten
+            size = (P*P, N, C)
+                N = H*W/P^2
+                P = 每個 Patch 長度與寬度
+        經過 Linear Projection 轉換成 Embedded Patches
+            Linear Projection 是可訓練的
+                此論文是用 FCL
+            size(Embedded Patches) = (N, D)
+                D = Embedding dim
+        把 (Embedded Patches + 位置訊息 + [classification token]) 當作序列 做 self-attention
+            位置訊息: (ViT 論文說 v1, v2 差異不大, 可能因為論文的任務是 classification)
+                v1 : 第 i 個小圖片
+                v2 : 第 (i,j) 個小圖片
+                size 都是 (P^2+1, D)
+                    +1 for classification token
+        架構
+            z'l = MSA( LN(zl-1) ) + zl-1
+                + zl-1 是殘差連接
+            zl = MLP( LN(z'l) ) + z'l
+                MSA (Multiple self Attention) == encoder
+                MLP (Multi-Layer Perceptron)
+                LN : Layer Normalization
+    TNT (2021.02)
+        https://arxiv.org/pdf/2103.00112
+        PatchEmbedding
+            把 ViT 中的 "把影像分割成 n 個小圖片", 再分割成更小的圖片丟入 Transformer
+            
+    Deformable DETR
+        優化
+            可變形注意機制
+            把 resnet 各個維度的特徵 傳給 Transformer
+
+    LOFTER
+
+    BEVformer
+
+    maskformer
+    mask2former ??
+        分割
+
+            
+CBAM (Convolutional Block Attention Module) (Channel and Spatial Attention Module)
+    Channel Attention Module (CAM)
+        給各個 Channel 不同的 weight
+    Spatial Attention Module (SAM)
+        給各個 pixel/feature value 不同的 weight
+        步驟
+            先"運算" > 對整個 feature-map softmax > 產出就是 Spatial Attention
+                運算 可以是任何運算
+            原本的 feature-map 與 Spatial Attention 做 pixel wise 相乘 就是新的 feature-map Output
+
 
 < Head > -------------------------------------------------------------------------------
 OverFeat (2013)
@@ -143,8 +263,9 @@ SSD (Single Shot MultiBox Detector)
 FPN + Faster R-CNN (2017)
     看 FPN
 
-< YOLO > - 為了速度
-YOLO v1 (2015) 
+< YOLO > - 速度第一 MAP第二
+    to check previous contribution : https://docs.ultralytics.com/models/yolo11/
+YOLO v1 (2015) (Joseph Redmon)
     概念
         把 影像 分隔成多個格子
         每個格子獨自預測 (是什麼 y0, y1, y2 ..., 
@@ -156,18 +277,14 @@ YOLO v1 (2015)
         為什麼 loss 要全部加起來，這樣我怎麼知道 是哪一個 label 造成的 loss ??
         最後有一個 7*7*30 的全連接層 為什麼 7*7 一定會是各個 grid 的結果 ??
 
-YOLO v2 (2016)    
+YOLO v2 (2016) (Joseph Redmon)
     https://arxiv.org/pdf/1612.08242
-    Batch Normalization
-        捨棄 Dropout (因為沒有全連接層)
-        換用 Batch Normalization
-            對每一層的輸出都做 Normalization
     High Resolution Classifier 更大的解析度
         先用 224*224 訓練
         再用 448*448 進行 10 次的訓練微調
     Convolutional With Anchor Boxes
         Anchor Boxes 有助於 recall 的提升
-        在這裡 Anchor Boxes == priors 
+    在這裡 Anchor Boxes == priors 
     Dimension Clusters
         用 k-means 找 priors (best value k = 5)
             run k-means clustering on the training set bounding boxes
@@ -185,46 +302,154 @@ YOLO v2 (2016)
             原圖大小 2X*2X 直接拆分成 X*X 然後 channel 變成 4 倍
     Backbone : DarkNet19 (VGG+Resnet)
         移除了 FCL
+            也因此移除 Dropout
         只包含卷積層, 也就是 Fully Convolutional Network, FCN
             也就是說能夠輸入任何大小的圖像 (Multi-Scale Training)
         所以最後 Grid 大小並不是固定的
             會根據 input shape 變化
             但 Direct location prediction 資訊長度是相同的
                 因為有 1*1 的卷積層 可以調整 channel 數量
+        引入 Batch Normalization
+            有點替代 Dropout 的功能
+            對每一層的輸出都做 Normalization
 
-YOLO v3 (2018)
+YOLO v3 (2018) (Joseph Redmon)
     https://arxiv.org/pdf/1804.02767
-    升級 DarkNet
-        不同 scale 預測不同大小的物件
-            因此更適合小物件偵測
+    升級成 DarkNet53
+        Predictions Across Scales
+            把視域大的feature UpSample 與 視域較小的feature Concat, 每一層直接有一個 predict
+            不同 scale 預測不同大小的物件
+                因此更適合小物件偵測
+        Feature Extractor 
+            + resnet (更深)
+        stride = 2 替代 MaxPooling
     priors 改成 9 種 (也是 Dimension Clusters 方法)
         3種scale 有"各自"不同的 3種大小的 priors
-    softmax 改進，因此可以預測多標籤的任務
-        EX: 這個物件同時是 狗, 吉娃娃, 動物
+            k-means 找 9 種再分配 給不同大小的 scale
+    Class Prediction
+        替換 softmax -> 個別class數值 + Sigmoid
+        然後 loss 改成使用 binary cross-entropy
+            因此可以預測多標籤的任務
+            EX: 這個物件同時是 狗, 吉娃娃, 動物
 
--- 換作者 --   
+-- 換作者 -- 
+
+YOLO v4 (2020) (Alexey Bochkovskiy)
+    https://arxiv.org/pdf/2004.10934
+    https://github.com/AlexeyAB/darknet
+    data : Bag of freebies (BOF)
+        用意
+            只增加訓練成本，不增加 inference 速度
+        
+        Data augmentation
+            CutOut, MixUp, CutMix
+            Mosaic data augmentation
+
+    加入雜訊
+        Self-adversarial-training (SAT)
+            在原圖中加入噪音 pixel = pixel + 0.007 * random noise
+        Label smoothing
+            (0,1) -> (0.05,0.95)
+            避免 overfit
+
+    架構
+        導入 Dropblock : CNN 的 dropout
+            dropout 是隨機 drop 某個點(pixel)
+            Dropblock 是直接 drop 一個區域
+        Weighted-Residual-Connections (WRC)
             
+        導入 Cross-Stage-Partial-connections (CSP)
+            (未來的架構其實用到很多 通常用 C 代表) EX: C3k2, C2PSA
+            把 channel 拆成 part1, part2
+            只挑其中一part 做運算(卷積...)
+            然後直接再 concat 回另外一part
+            優點 :
+                網路可以更深 速度可以更快
+        導入並優化 PAN
+            原本不同層之間的組合方法是 element wise 相加
+            v4 改成使用 concat
+        導入並優化 SAM (attention 的一種)
+            v4 中的 SAM "運算"部分 只有一個卷積層
+        導入 Mish-activation
+        Cross mini-Batch Normalization (CmBN)
 
+        導入 Eliminate grid sensitivity
+            之前: Output = σ(Y)
+            v4 : Output = scale * σ(Y) + shift + C, 但通常 scale 只會略大於1
+    loss
+        CIoU
+        DIOU-NMS
+
+YOLO v5 (release 2021 Jan) (Ultralytics) (implementation change)
+    https://github.com/ultralytics/yolov5
+    沒有論文
+    Focus Module : 只是為了提升速度
+    用 Hardswish 替換 Mish-activation
+
+    Label Assignment (正樣本分配策略)
+        Neighboring Grids / Grid Sensitivity Elimination (跨網格預測)
+            現在不只一個 grid 可以有機會預測結果
+            改成鄰近中心點的 "3個" gird
+                上下左右 shift 0.5 C, 如果到其他 grid, 那個 grid 也可以參與預測 ... R1
+        
+        正樣本篩選策略
+            先篩長寬比
+                1/4 < (GT長寬比/prior長寬比) < 4 ... R2
+            再篩IoU
+                每個 prior 先跟 GT 計算 IoU
+                取前 k 個
+                計算前 k 個總和 = s
+                取前 s 個 (前 k 個[:s])
+                    "巧妙的"進一步篩掉數字太小的
+            如果 prior 跟 "兩個" GT 都很像?
+                選 IoU loss 低的學
+
+        由於可以預測隔壁 grid 的中心點，當然 scale 就要改變
+            v4 : Output = scale * σ(Y) + shift + C, 但通常 scale 只會略大於1
+            v5 : Output = 2*σ(Y) - 0.5 + C,
+                scale 為了可以到其他格子 直接改成 2 ... 呼應 R1
+                shift 直接定下來 0.5
+                    可是這樣 不會有 Eliminate grid sensitivity 的問題嗎 ??
+        width 與 height 加上了 Sigmoid ... 為了呼應 R2
+            W_out = p_w*( 2*σ(W_Y) )^2
+                σ(W_Y) 在 0~1 之間, 對應 W_out 在 0~4 之間
+    
+    Minimum Work Letterbox
+        Letterbox 其實 v3 就有了
+            以前 縮放後 會用特定數值填滿邊框 變成 640*640
+        v5 :
+            只要能被 32 整除即可，最小化需要補上的 pixel 數量
+                640*382-> 640*384
+
+YOLO v6 (2022) (美團)
+    RepVGG: 推理加速
+        model training 完之後，其實 conv 跟 BN 這兩個運算都是已知的 且 有辦法合併
+        為什麼 NN 無法直接學 合併後的結果 ??
+
+YOLO v7 (2022 07) (WongKinYiu)
+    (沒啥新意)
+    https://arxiv.org/pdf/2207.02696
+    https://github.com/WongKinYiu/yolov7
+    
+    Backbone
+        大部分都是 concat 的修改
+        ELAN/E-ELAN (Efficient Layer Aggregation Network)
+            其實就是 加上小型的 FPN (concat版本)
+        MPConv
+            就是 Maxpooling 與 Conv(stride = 2) concat
+
+    AUX 輔助輸出
+        PAN 的 P 跟 N 層的數量增加 ( 3 -> 4 )
+        PAN 的輸出 變成 2 個 (Lead Head, AUX head)
+            因此總共有 8個 輸出層
+        且 Lead Head/AUX head ?? 的 Neighboring Grids
+            shift 0.5 改成 1
+        但 AUX head 訓練完會被拿掉 
     
 
-
-YOLO v4 (2020)
-    https://arxiv.org/pdf/2004.10934
-    架構
-        Weighted-Residual-Connections (WRC)
-        Cross-Stage-Partial-connections (CSP)
-        Cross mini-Batch Normalization (CmBN)
-        Self-adversarial-training (SAT)
-        Mish-activation
-    Backbone :  extract feature
-    Neck :      multiscale
-    Head :      different task
-
-YOLO v7
-    ELAN（Efficient Layer Aggregation Network）
-
-YOLO v8 (2022)
+YOLO v8 (2023.10) (Ultralytics)
     https://arxiv.org/pdf/2501.13400
+    https://github.com/ultralytics/ultralytics : 第一個 tag
     Backbone : 
         C2f block
             旨在改進 
@@ -237,23 +462,68 @@ YOLO v8 (2022)
                     堆疊 Bottleneck：其中一個分支會經過一系列的 Bottleneck 運算層
                 多路徑融合：C2f 會將每個 Bottleneck 的輸出都進行 Concatenate（連接），而不僅僅是最後一層的輸出。
                 1*1 卷積 : 特徵整合回原始通道數
-    
         Conv block
             Conv2d
             BatchNorm2d
-            SILU : activation function
+            "SiLU" : activation function
     Neck : 
         SPPF (Spatial Pyramid Pooling Fast)
-        C2f block
         Upsample
     Head : anchor free
-        predict happend in the grid cell
+        Decoupled Head : 
+            分類（Classification） 與 回歸（Regression） 是在不同的卷積分支中完成的
+                也就是 框是什麼 以及 框的位置 使用 不同的卷積分支
+        直接預測特徵圖上的每個點（Grid Cell）距離物體上下左右 (l,t,r,b) 四個邊界的距離
+            Grid Cell : 特徵圖（Feature Map）上的每一個像素點（Pixel）
+        DFL (Distribution Focal Loss) :
+            預測 各個方向(l,t,r,b) 距離的機率分佈
+            最後的距離是 這個機率分佈 的期望值 
+        TaskAlignedAssigner : 
+            盡量讓 模型學會"高品質的定位必須伴隨高品質的分類"
 
+YOLO v9 (2023) 
+    https://arxiv.org/pdf/2402.13616 (不值得看)
+    直接把梯度傳回淺層
 
-        
+YOLO v10 
+    用 NN 替換 NMS
+    速度有上來 但準確率下去了
 
+YOLO v11 (2024.09) (Ultralytics)
+    https://github.com/ultralytics/ultralytics : v8.3.0
+    C2PSA = split + PSA_Block (Pointwise Spatial Attention)
+        PSA_Block
+            attention(是 YOLO 自己的 不是 pytorch 的) 然後再接 FFN
+    C3k2
+        進階版的 C2f
+        應該是做了很多實驗 發現這種架構最有效
 
-multiscale context aggregation convolutional neural network (MCACNN) 
+YOLO v12 (Attention-Centric YOLO)
+    是真正意義上以 Attention 為核心設計的 YOLO
+    A2C2f
+        = Attention + C2f
+        方法 Area Attention
+            把 feature map 分割成一些區域
+            每個區域自己跟自己找 attention
+            藉此降低運算量
+        我想要清楚的知道是怎麼切的 ??
+    Residual Efficient Attention
+
+YOLO v13 (2025)
+    https://arxiv.org/pdf/2506.17733
+    HyperACE
+        這裡牽扯到 GNN, 訓練 feature value 跟 Hyper 之間的關係
+            為什麼要 Hypergraph ?
+                因為想要找到這些 feature 更高維度的關係
+                EX: 動物們常常一起出現
+        總共有 4 個 Hyper 每個用 64維 表示 (64維 == len 64 Embedding)
+            Embedding 一開始是用統計數據
+            Embedding = Embedding 經過 FCN`1qwfgh
+        X_new = torch.bmm(A, He)
+            根據 Hyper 學完的 value, 再"回報"給各 feature
+            X_new 也會經過 FCN 學習 應該怎麼加回原本的 feature
+
+multiscale context aggregation convolutional neural network (MCACNN) ??
 
 
 
@@ -282,6 +552,7 @@ UpSample
     Sub Pixel Convolution
     上採樣 + Conv
     Padding : 如果尺寸差異極小 就直接補0
+    插值
         
 
 Growth-rate

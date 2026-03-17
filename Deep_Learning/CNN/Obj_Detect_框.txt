@@ -1,0 +1,70 @@
+Object Detection 物件偵測
+    框 / 框的 loss / 框的處理
+    boundary
+
+IoU 判斷 predict 和 ground truth 的框 的 相似度
+    IoU loss 就是差異
+NMS predict 的兩個結果重疊要怎麼處理
+
+-- < IoU > ---------------------------------------------------------------------------------
+    IoU (intersection over union)
+        預測與 ground truth 相交的面積大小
+            IOU_value = intersection area / union area
+        IOU loss = 
+            1. 1 - IOU_value
+            2. -ln( IOU_value )
+    GIoU
+        C : 可以包住 predict 和 ground truth 的 "最小長方形"
+        GIoU loss = IOU loss + (C - union area / C)
+        解決 : 當 predict 和 ground truth 沒有重疊，產生 "梯度為0" 的問題
+            IOU 就算有位移 還是會等於 0，因此不會知道位移的方向
+    DIoU
+        DIoU loss = IOU loss + d_pg/c^2
+            d_pg = predict 和 ground truth 中心點的歐式距離
+                = (x_p-x_g)^2 + (y_p-y_g)^2
+            c = 可以包住 predict 和 ground truth 最小長方形 的 "對角線長度"
+        解決 : 當 predict 和 ground truth 被另外一個包住 產生 "梯度為0" 的問題
+            當包覆發生時 GIoU 就算有位移 還是會等於 1，因此不知道中心差距
+    CIoU 
+        CIoU loss = DIoU loss + a*v
+            v = 4/π^2*( arctan(w_p/h_p) - arctan(w_g/h_g) )^2
+                w_p predict 的 寬, w_g ground truth 的 寬
+                h_p predict 的 高, h_g ground truth 的 高
+            a = (v)/(1-IoU+v)
+        解決 : 再加上長寬比 的 Loss
+    regions of interest (ROIs) (有可能聽錯成 RY)
+        可以想成有幾個結果
+
+-- < NMS > ---------------------------------------------------------------------------------
+    https://towardsdatascience.com/non-maximum-suppression-nms-93ce178e177c
+    Non-maximum Suppression (NMS) (其實就是使用 IOU 排除相似答案)
+        原因:
+            原本的 anchor + sliding window 方法重複度太高 且會產生很多候選結果 因為隔幾格又掃一次 通常結果是相似的
+        目的:
+            Input: A list of Proposal boxes B, corresponding confidence scores S and overlap threshold N.
+            Output: A list of filtered proposals D.
+        原理:
+            主要是判斷 IOU 有沒有超過閾值
+        缺點
+            但有可能兩個相鄰的物件重疊在一起 其中一個會被蓋掉
+                工作人員戴著帽子(帽子完全被工作人員覆蓋)
+    Soft-NMS:
+        原理:
+            不是設定單純的閾值
+            而是看 confidence 給相對應的閾值
+                EX : confidence 0.9 可接受的閾值為 0.8, confidence 0.7 可接受的閾值為 0.5
+            因此提升 recall
+        缺點:
+            我覺得這個設定很麻煩
+            應該要看output結果 去覺得這兩個數值對應的關係
+    DIOU-NMS
+        是 Soft-NMS
+        只是 閾值 的篩選是 根據 DIoU 的公式計算
+
+    Weighted Boxes Fusion :	
+        https://medium.com/analytics-vidhya/weighted-boxes-fusion-86fad2c6be16
+        原理:
+            不會捨棄任何的候選 而是把他們合併
+            
+Fibonacci Lattice
+    這是 3D 的 NMS
