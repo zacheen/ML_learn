@@ -1,0 +1,133 @@
+GNN (Graph Neural Network)
+    組成
+        V (vertex or node) : 特徵值
+        E (edge) : 關係
+        G (graph)
+        
+        Adjacency Matrix (A) : 各個點之間有沒有關係
+        Adjacency List : 通常 Adjacency Matrix 會很大 且 關係都為0，所以只記錄有關係的邊
+
+    每個 V 所帶的特徵, 要考慮到鄰居的特徵
+        EX: Ii = G( {Wij*Xj:j屬於N(i)} )
+            N(i) 代表 所有 i 的鄰居
+            G 代表計算方式
+                sum, mean, max, min 
+    彙總 hi
+        hi' = Wii*hi + Ii(上面的)
+    多次彙總之後 hi所包含的資訊愈來愈多(包含愈來愈多鄰居點的資訊)
+
+GCN (Graph Convolutional Network)
+    其實根本沒有卷積
+    組成
+        GNN 有的
+        Degree Matrix (D) : 每個 node 的 degree (包含 node 自己)
+            通常是為了 average 用
+    F' = ( D^-(1/2) A D^-(1/2) )F
+       = (New_A)F
+        左邊的 D^-(1/2) 對行做 Standardization
+        右邊的 D^-(1/2) 對列做 Standardization
+            (1/2) 是為了避免重複做 Standardization
+            拆解成單一個點解釋 Standardization
+            Fi' = 1 / Π_nei( √deg(nei_i) )
+                假設 self 只有一個鄰居
+                = 1 / √deg(self) * √deg(nei)
+                    假設 deg(nei) 非常大 那影響 V_self 就非常小
+                    (self 可能認識 nei, 但 nei 認識的人很多 不一定記得 self)
+    套用到 NN 中, 如果是兩層的架構
+    Z = f(F, A) = softmax( New_A*Relu(New_A*F*W0)*W1 )
+        第一層 : Relu(New_A*F*W0)
+        第二層 : softmax( New_A*第一層*W1 )
+
+GAN (Graph Attention Network)
+    想要計算各個點之間的關係
+        其實就是調整 Adjacency Matrix
+        masked attention 就是調整方法 
+            new Adjacency Matrix = Adjacency Matrix * masked attention
+        把原本是 1 的數值，跟據關係強度改成另一個數字
+            原本是 0 的位置，一樣還是 0 < 因為本來就沒有關係
+            但即使是 0 透過多次彙總，還是能獲得其他點資訊
+        
+    e_ij = a_f(W*hi, W*hj)
+        Whi = hiᵀW
+        a_f : attention coefficient
+        a_f(W*hi, W*hj)
+            v1 : 在加上一個 可訓練的權重 a_W
+                e_ij = Leaky_ReLU((concat Whi, Whj) . a_W)
+            v2 : 直接內積
+                e_ij = WhiᵀWhj
+            v3 ... 有很多種 每篇都有論文
+    att_ij = softmax(e_ij) = exp(e_ij) / sum_nei( e_i_nei )
+        att_ij : Attention Pattern
+
+QKV in Transformer (single head)
+    設定
+        a_f(Whi, Whj) 是使用 v2
+            hi, hj 是 feature_map 的 某一個 向量value
+    Query 與 Key
+        d_k = Key Query space(hyperparameter)
+        d_v = Value space(hyperparameter)
+        
+        其實 Query 跟 Key 的架構是一樣的
+            只是先後順序的問題
+            WQ * hi = Query_Vec_i
+            WK * hj = Key_Vec_j
+                size(WQ, WK) = d_k * Embedding_dim
+                size(hi, hj) = Embedding_dim * 1
+                size(Query_Vec_i, Key_Vec_j) = d_k * 1
+        我們希望 Query_Vec 像在問一個問題
+            希望 Key_Vec   像在回答問題
+        如果 Query_Vec_i . Key_Vec_j 愈大 (有可能超出 1)
+            就代表回答正確 "Fea"對另一個"Fea"的影響就高
+            EX: Query_Vec (Fea = "car") 問 你是形容詞嗎?
+                若 Key_Vec (Fea = "blue")
+                    回答"是" == (Query_Vec_i . Key_Vec_j) 接近 1
+                    那 "blue" 對 "car" 就有高度影響
+                    == tech term : Attend to
+        為了 normalize 每個再除 dim
+            e_ij = (Query_Vec_i . Key_Vec_j) / √d_k
+        且 為了不要讓 後面的字 影響前面的
+            設定 e_ij = -inf, if j > i
+            因為設定成 -inf softmax 的 output 會變成 0
+            https://youtu.be/eMlx5fFNoYc?si=IJhqGFY7T2xCckB2&t=668
+    att_ij = softmax( each (Query_Vec_i . Key_Vec_j) / √d_k "for all j" )
+           = softmax(e_ij)
+    
+    Value
+        方向 Key_Vec 架構相同, 只不過輸出大小是 d_v
+            且 d_v 通常跟 Embedding_dim 長度相同
+            WV * hj = Value_Vec_j
+            size(WV) = d_v * Embedding_dim
+                但是我們通常用兩個小的矩陣乘積表示, 這樣的參數量比較少
+                    r = 比較小的 rank 
+                WV = WV2(d_v * r) * WV1(r * Embedding_dim)
+                    WV1 : value up matrix
+                    WV2 : value down matrix
+        Δh_i = sum_j (att_ij * Value_Vec_j)
+    整個 attention matrix(Δh) 要再經過 output projection
+        把維度 d_v 轉換成 Embedding dim
+        Δh_i = W_O * Δh_i
+    最後 new_hi = Δh_i + hi
+        
+    為什麼 QKV 可以接受任何大小 (以 DETR 的 encoder 為例)
+        resnet 計算出的 特徵 output size = (B, W, H, Embedding dim)
+        一開始會先 flatten 變成 (B, N, Embedding dim)
+            N = W*H, 而 W, H 與 input圖片大小 有關
+        (假設 batch = 1)
+        WQ = (d_k * Embedding dim)
+        所以 all Q vector  = (N, d_k)
+        all K vector  也是 = (N, d_k)
+        這樣才可以各個去計算內積
+        (假設我從 N 中挑出某一個 特徵output向量)
+        特徵output向量 size : Embedding dim * 1
+        某一個 V vector 的大小是 : d_v
+            但通常 d_v == d_k
+            要不然還要多一個轉換, 把 d_v 轉換到 Embedding dim
+        相加後的長度 : Embedding dim
+        之後會丟入固定大小的 FFN
+        因為 FFN 是對每一個 N 做, 因此 attention 可以接受任何大小的 input
+    
+
+TGNN (Temporal Graph Neural Network)
+
+Flash attention (2026)
+
