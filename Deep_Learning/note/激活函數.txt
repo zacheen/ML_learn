@@ -1,0 +1,94 @@
+activation function 激活函數
+
+用意
+	為了產生非線性的結果
+
+-- < 0~1 之間 > -----------------------------------------------------------------------
+0~1 之間
+	機率
+	相對位置
+		在整個畫面中的哪個位置
+	標準化
+
+Sigmoid (Standard Logistic Function)
+	廣義
+		不是某一個函數，而是指某一類形如"S"的函數，都可以成為sigmoid的函數
+		Sigmoid函數就能使Y的範圍限制在[0,1]之間，中間只有一小段模糊地帶，適合用於二分法(真或偽)
+	ML定義
+		Sigmoid function : σ(Y) = 1/(1+e^-Y) = 1/(1+e^-(wx+b))
+			看 w 跟 b 對 Sigmoid 圖形 的影響
+				https://www.desmos.com/calculator
+				copy this : "f\left(x\right)\ =\ 1/(1+e^{(-\left(wx+b\right))})"
+			特性
+				直觀 : σ(-x) = 1 - σ(x) (因為是對稱的)
+				常用 : 1 - σ(-x) = σ(x)
+	logistic function 是 logit function 的反函數
+		logit function
+			在[0,1]範圍的數給映射到[-inf, inf]
+			L = log( p / (1-p) )
+		logistic function
+			把[-inf, inf]的數給映射到[0,1] 所以是一種Sigmoid函數
+			p = 1 / (1+e^-L)
+
+softmax 函數
+	運算
+		可以將Y轉為機率值，且所有類別的機率總和等於1
+		softmax(yi) = e^yi / Σ_j(e^yj)
+			yi 我們通常會稱為 logits
+	意義
+		probability normalization
+		就適合 classification，最大值就代表可能性最大
+	temperature (hyperparameter)
+		softmax(yi) = e^(yi/temp) / Σ_j( e^(yj/temp) )
+			temperature 愈高，轉換後的數值愈接近 uniform
+			temperature = 0 代表 最高數值機率 = 1, 其他 = 0
+
+Eliminate grid sensitivity
+	問題
+		使用 Sigmoid 如果要產出結果為 0 或 1 (也就是剛好在邊界)，輸入必須為非常大或小
+	公式
+		Output = scale * σ(Y) + shift
+			scale 是一個大於 1.0 的常數, 為了讓 Output 可以輕鬆的產出 1
+			shift 小的負數, 為了讓 Output 可以輕鬆的產出 0
+		
+-- < -1~1 之間 > -----------------------------------------------------------------------
+
+Tanh
+
+
+-- < 小於0 平的, 大於0 才有斜率 > ------------------------------------------------------
+
+relu函數，它是忽視負值，Y的範圍限制在[0, ∞]之間
+	公式
+		np.maximum(z, 0)
+	好處
+		由於沒有復雜的數學運算，因此計算開銷小。因此，該模型可以花費更少的時間進行訓練或預測。
+		它收斂更快。線性意味著當x變大時，斜率不會平穩或"飽和" 
+		它沒有其他激活函數具有的梯度消失問題（如Sigmoid或tanh）。
+			可以看形狀 當數值很大或很小的時候 梯度接近0
+		它可以被稀疏地激活。由於所有負輸入的ReLU均為零，因此任何給定的單元都可能根本無法激活。
+
+Mish-activation (應該要用 SiLU 取代)
+	公式
+		x*tanh( ln(1+e^x) )
+	特點 
+		非單調性
+		無上界且有下界
+		平滑性
+	優點
+		給一個改過自新的機會 (在每一個點都有斜率)
+		relu 太絕對的, Mish 更符合實際
+Hardswish (如果不追求速度 應該要用 SiLU 取代)
+	公式
+		x*ReLU6(x+3) / 6
+	優點
+		計算速度快版本的 Mish-activation
+		甚至比 SiLU 快
+		但是沒有 平滑性
+SiLU (Sigmoid Linear Unit)
+	公式
+		SiLU(x) = x * sigmoid(x) = x / (1 + e^(-x))
+	特點 
+		跟 Mish-activation 的圖形非常的像
+		但計算較快 > 基本上可以直接替代 Mish-activation
+	
