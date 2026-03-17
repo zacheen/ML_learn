@@ -22,6 +22,18 @@ loss
 -----------------------------------------------------------
 Language_term (語言學專業術語)
 
-Corpus 語料庫
+Token       單字拆解之後的最小單位
+Embedding   Token 或 word 轉換成向量的數值
+    == vector representation
+    embedding size 是向量的維度數/長度 (1*n 的 n)
+
+context window : 可以丟入 LLM 的 token 大小
+
+
+Corpus 語料庫 (data sentences)
+Vocabulary 所有可能出現的字
 lexicon 詞彙
 delimiter 分隔符
+utterances 使用者的輸入
+stop words 常用但是沒有意義的單字
+    英文例子：the, is, at, which, on

@@ -1,0 +1,11 @@
+Machine Translation (MT) 機器翻譯
+    語言翻譯成另一個語言
+    The goal is to automatically translate text from one language to another.
+
+Statistical Machine Translation (SMT)
+    relies on statistical models to learn how to translate between languages. 
+
+Neural Machine Translation (NMT)
+    the use of neural networks and large corpora to translate between language
+
+Parallel Corpora: Bilingual text data with pairs of samples in each language

@@ -1,0 +1,18 @@
+Embedding Token 或 word 轉換成向量的數值
+
+Word2Vec
+    contain only one level of hidden layer, and this layer don't have activation layer
+    訓練方式
+        CBOW :
+            給定 context window
+        skip gram :
+            其實就是 CBOW 的相反
+    Negative Sampling
+
+    比較 similarity 的方法是 : 
+        cos similarity / Cosine Similarity
+        cos(θ) = A·B / |A||B|
+    
+    缺點
+        bank 有很多意義，但是只能回傳一個 embedding
+
