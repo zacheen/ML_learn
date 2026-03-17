@@ -29,14 +29,37 @@
         2. Pointwise Convolution
             有點像 縮減 channel 的方法
 
-
-
-激發函數
-    ReLU
-
-正規化
-    BatchNorm2d
-
+訓練中的 normalization
+    在每一層 Activation Function 之前，對該層的輸出進行歸一化處理
+        效果是
+            梯度比較穩定
+            不容易爆炸或消失
+            對初始化比較不敏感
+            可以用更大的 learning rate
+    公式
+        x' = (x - x_mean) / √(σ2 + ε)
+            讓每一層輸出變成 mean 接近 0, variance 接近 1
+        affine transformation
+            公式
+                new_x = gamma * x_hat + beta
+                    gamma, beta 是可訓練參數
+            用意
+                如果某一層本來就需要某種尺度或偏移
+    Batch Normalization (BN) (2015)
+        通常用在 CNN (現在已經是標配了)
+            CNN 中是針對每一個 Channel 進行標準化
+        計算維度 : 跨越 Batch，針對單一 Feature 計算
+            把 一個batch 每個 node 的產出 (all z)，計算 mean, variance
+        訓練與測試 : 需紀錄 Moving Average，兩者行為不同
+        Batch Size 依賴 : 強烈依賴 Batch Size，Batch 太小效果差
+    Layer normalization
+        通常用在 LLM, transformer
+            對每一個字的產出進行標準化
+            所以對 input 的長度不敏感
+        計算維度 : 跨越 Feature，針對單一 Sample 計算
+            把 每個 data 對各個 node 的產出，計算 mean, variance
+        訓練與測試 : 訓練與測試行為完全一致
+        Batch Size 依賴 : 完全不依賴 Batch Size
 
 
 
