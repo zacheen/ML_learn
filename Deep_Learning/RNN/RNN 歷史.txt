@@ -1,0 +1,65 @@
+RNN 
+    最簡單的架構(Vanilla RNN)就只有3個W
+        ht = tanh(Wx*xt + Wh*ht-1 + b)
+        yt = sig(Wy*ht + by)
+            Wx : X  輸入會經過的
+            Wh : ht 輸入會經過的
+            Wy : 把 ht 轉成 可以理解的 Y
+    loss function
+        Many-to-One
+            loss = L(yt', yt)
+        Many-to-Many
+            loss = sum_t( L_t(yt', yt) )
+    Backpropagation through time (BPTT)
+        梯度會沿著時間軸向 t=1 傳導
+        公式 for Many-to-One (比較明顯且簡單)
+            ∂L/∂Wh = mul_t( ∂hi/∂hi-1 ) * ∂hi-1/∂Wh
+        當 ∂hi/∂hi-1 很大或很小 會 導致 
+            Gradient Vanishing, 當 -1 < Wh < 1
+            Gradient Exploding, 當 1 < Wh or -1 > Wh
+    防止 Gradient Vanishing/Exploding 的方法
+        Gradient Clipping
+            公式 
+                if |gradient| >= threshold :
+                    gradient = (threshold / |gradient|)*gradient
+        Truncated BPTT
+            我只看 T-range ~ T 之間的 gradient
+
+
+LSTM (Long Short-Term Memory) (1997)
+    2000 加入 forget gate 變成現在熟知的標準 LSTM
+    架構
+        LSTM block replace RNN 的 Wh
+    LSTM block
+        cell state   代表 long term memory  
+        hidden state 代表 short term memory 
+        forget gate
+            control previous cell state into new cell state
+            f_val = σ(Wfx*xt + Wfh*ht-1 + bf)
+        input gate
+            control new info(X) into cell state
+            potential long term memory == (input modulation gate)
+                代表 傳遞的訊息
+                p_val = tanh(Wpx*xt + Wph*ht-1 + bi)
+            in_pass_val : 
+                代表 要讓多少 potential long term memory 過去
+                in_pass_val = σ(Wix*xt + Wih*ht-1 + bi)
+            in_val = in_pass_val ⊙ potential long term memory
+        output gate 
+            control cell state out to output
+            out_val = σ(Wox*xt + Woh*ht-1 + bo)
+
+        new_cell_state = f_val ⊙ prev_cell_state + in_val ⊙ p_val
+        new_hidden_state = tanh(new_cell_state) ⊙ out_val
+
+        解決 Gradient Vanishing
+            假設 p_val Gradient Vanishing 的情況
+            new_cell_state 還是有 f_val ⊙ prev_cell_state 的資訊可以更新 W
+        但如果 Gradient Exploding, 不能依靠另外一邊很小解決
+            所以通常用 Gradient Clipping 防止
+
+GRU (2014)
+
+
+
+
