@@ -14,8 +14,10 @@ Confusion matrix (混淆矩陣)
         Accuracy:  (TP+TN) / all 
             The number of correct predictions (true positives + true negatives) divided by the total number of predictions.
         Precision: TP/辨識結果為P(TP+FP)  (不想要錯的辨識成正確的) 避免沒病驗出有病
+            高 : 不應該出現的 基本上都沒有出現
             The number of the cases classified as positive that are actually positive: the number of true positives divided by (the number of true positives plus false positives).
         Recall: TP/實際結果為P(TP+FN)     (不想要正確的辨識成錯的) 避免有病卻沒驗出病
+            高 : 應該要出現的 基本上都有出現
             The fraction of positive cases correctly identified: the number of true positives divided by (the number of true positives plus false negatives).
         Fβ Score 
             (1 + β^2) * (Precision*Recall) / (β^2*Precision + Recall)

@@ -25,3 +25,5 @@
 
 設定 term
 	batch / batch size : 這回合的訓練會用幾筆資料
+		不是每次都把全部的 data 丟進去會比較好
+        	可以想想 Boosting 的好處

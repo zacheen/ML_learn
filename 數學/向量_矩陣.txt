@@ -10,6 +10,8 @@
     矩陣大小 : 特徵數量 * node 數量 (EX 回歸 : 特徵數量 * 1)
     numpy表示方法(把上面的經過 .T 轉置) :
         numpy.shape = (neuron_num, Feature 數量)
+    通常寫程式我們會把 weight 放在 input 左邊
+        onput_Y = W*X
 
 為什麼矩陣*向量 矩陣可以看成 對向量的轉換
     https://youtu.be/kYB8IZa5AuE?si=oXrNNQx6R6HeNjLh
@@ -46,6 +48,9 @@ kernel / null space
     all the vector after transform that will land on zero vector(origin)=
     
 < 運算 > ----------------------------------------------
+element wise multiple 元素乘法 A⊙B
+    公式 :
+        Aij×Bij = (A⊙B)ij
 
 矩陣乘法 AB (通常中間沒有符號)
     幾何意義 : 矩陣A 對 B 進行轉換

@@ -28,6 +28,9 @@
 ∂/∂x σ(x) = σ(x)*(1-σ(x))
     σ(x) = 1/(1+e^-x)
 
+∂AᵀB / ∂A = B
+∂AᵀB / ∂B = A
+
 Hessian2D (Hessian matrix)
     包含了全部 f(x) 的 二階偏導數(second partial derivative)
     其實就是從導數中選擇兩個做偏微分然後組成矩陣
