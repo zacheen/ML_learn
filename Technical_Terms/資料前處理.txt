@@ -5,18 +5,6 @@ Real-world data will always have issues, but data scientists can often overcome 
     Examining what real-world factors might affect their analysis and determining if their dataset size is large enough to reduce the impact of these factors.
     Checking for biased raw data and considering their options to fix the bias, if found.
 
-Standardization (標準化)
-    rescales a dataset to have a mean of 0 and a standard deviation of 1. 
-    xnew = (xi – x) / s
-        xi : The sample mean
-        s : The sample standard deviation
-
-Normalization (正規化) (有時候有人會講成標準化 要注意)
-    rescales a dataset so that each value falls between 0 and 1. 
-    xnew = (xi – xmin) / (xmax – xmin)
-        xmin: The minimum value in the dataset
-        xmax: The maximum value in the dataset
-
 <降維 / 移除相關性高的 feature> ------------------------------------------------------
 Principal Component Analysis (PCA)
     purpose : reduce dimention

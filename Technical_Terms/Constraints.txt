@@ -1,0 +1,100 @@
+L1, L2 norm
+    其實是一個 function, 是計算向量的大小
+        L1 norm = ||W||1 = 絕對值之和
+        L2 norm = ||W||2 = 平方和 再 開根號
+    在 Normalization
+        Normalization 不是通常會 / 本身的大小
+            L1, L2 norm 就是那個大小
+    在 Regularization
+        變成懲罰
+            L1, L2 norm 愈大 懲罰愈大
+    在 loss function
+        目的是: 衡量預測準不準
+
+Normalization (廣義 歸一化) (有時候有人會講成標準化 要注意)
+    廣義 : 將原始數據透過數學變換，縮放到特定範圍或改變其分佈
+    目的 : 加速訓練與提高數值穩定性
+    通常對 Feature 做
+    公式
+        rescales to 0~1
+            Min-Max Normalization (狹義歸一化)
+                xnew = (xi – xmin) / (xmax – xmin)
+                    xmin: The minimum value in the dataset
+                    xmax: The maximum value in the dataset
+            Max Abs Scaler
+                xnew = xi / |xmax|
+        Standardization == Z-score Normalization (標準化)
+            rescales a dataset to have a mean of 0 and a standard deviation of 1. 
+            xnew = (xi – μ) / σ
+                μ : sample's mean
+                σ : sample's standard deviation
+    Normalization Layer
+        在每一層 Activation Function 之前，對該層的輸出進行歸一化處理
+            效果是
+                梯度比較穩定
+                不容易爆炸或消失
+                對初始化比較不敏感
+                可以用更大的 learning rate
+        雖然叫 Normalization 但其實裡面是在做 Standardization
+            ML中 為了避免 /0 
+                x' = (x - x_mean) / √(σ2 + ε)
+                    讓每一層輸出變成 mean 接近 0, variance 接近 1
+            affine transformation
+                公式
+                    new_x = gamma * x_hat + beta
+                        gamma, beta 是可訓練參數
+                用意
+                    如果某一層本來就需要某種尺度或偏移
+        Batch Normalization (BN) (2015)
+            通常用在 CNN (現在已經是標配了)
+                CNN 中是針對每一個 Channel 進行標準化
+            計算維度 : 跨越 Batch，針對單一 Feature 計算
+                把 一個batch 每個 node 的產出 (all z)，計算 mean, variance
+            訓練與測試 : 需紀錄 Moving Average，兩者行為不同
+            Batch Size 依賴 : 強烈依賴 Batch Size，Batch 太小效果差
+        Layer normalization
+            通常用在 LLM, transformer
+                對每一個字的產出進行標準化
+                所以對 input 的長度不敏感
+            計算維度 : 跨越 Feature，針對單一 Sample 計算
+                把 每個 data 對各個 node 的產出，計算 mean, variance
+            訓練與測試 : 訓練與測試行為完全一致
+            Batch Size 依賴 : 完全不依賴 Batch Size
+
+Regularization (正規化)
+    通常對 weight 做
+    目的 : prevent overfitting
+    dropout
+    regression that can regularization : 
+        L1 Regularization / L2 Regularization
+            利用 Norm 的計算結果來限制模型的複雜度
+            new_Loss = Loss + λ*L1/L2 norm
+        by adding limitation to B to prevent B explosion
+            限制 ||B||^1 or ||B||^2 是為了防止 B 太大，因為 linear regression 中 係數B的大小直接反映了模型對特徵的敏感度
+            (This problem actually only happen in linear models (include linear regression and logistic regression))
+        ridge regression 
+            Ridge 限制的是係數的平方和（L2 範數）
+            式子 : min(||y-xB||^2) s.t. ||B||^2 <= c^2
+            透過 Lagrange 轉換 : min(||y-xB||^2) + λ(||B||^2 - c^2)
+                ||B||^2 其實也是 L2 norm : sum(B^2 for all B)
+        lasso regression (Least Absolute Shrinkage and Selection Operator)
+            Lasso 限制的是係數的絕對值之和（L1 範數）
+            式子 : min(||y-xB||^2) s.t. ||B||^1 <= c
+            透過 Lagrange 轉換 : min(||y-xB||^2) + λ(||B||^1 - c)
+                ||B||^1 其實也是 L1 norm : sum(|B| for all B)
+            在幾何圖上 這個 boundary 會有菱有角，這些頂點很容易是最佳解 : 所以才能達成「特徵選取」
+            這些最佳解會直接讓 某個沒有貢獻的特徵直接歸零
+        c 的影響
+            如果c太大, 根據 λ(||B||^2 - c^2) ||B|| 也可以很大
+                所以沒有限制到 B 的大小
+                那就跟原式子一樣，沒有 generalizing 的效果
+            如果c太小，根據 λ(||B||^2 - c^2) ||B|| 只能很小
+                B 被過度壓縮，模型 underfitting
+        combine ridge and lasso : Elastic Net
+            Elastic Net(B') = (||y-xB||^2)/2n + λ( ((1-a)/2)*||B||^2 + a*||B||^1)
+                這裡的 /2n, /2 都是為了方便 微分之後可以抵消
+
+generalization
+    是 "泛化能力" 
+    用來"評估"從未見過的新題目時，依然能答對的能力
+    是 Normalization 與 Regularization 的目的
