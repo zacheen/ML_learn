@@ -1,0 +1,17 @@
+Quartiles : 四分位數
+Percentiles : 百分位數
+
+Quantile Function 分位數函數
+    橫軸：累積機率 (從 0 到 1)
+    縱軸：對應的 Q 值
+    quantiles is inverse of the CDF
+        F(x) = P(X ≤ x) : 某個數值對應到的機率
+            The probability that a random variable is less than or equal to x.
+        Q(P(X ≤ x)) = x : 某個機率對應到的數值
+            The value x such that the probability of a random variable being ≤ x is p.
+
+Quantile Loss
+    err = (y - y')
+    α * err  , if err <= 0
+    (1-α)*err, if err >  0
+        α 是 Quantile Percentage value

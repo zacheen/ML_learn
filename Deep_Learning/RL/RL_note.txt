@@ -1,0 +1,275 @@
+RL_note.txt
+
+Tech Term
+    Agent: The learner or decision maker that interacts with the environment.
+    Environment: Everything outside the agent that it interacts with and learns from.
+    State: A snapshot of the environment.
+    Action: A decision or move made by the agent to transition between states.
+    Policy: A strategy or mapping from states to actions.
+        Policy function(π): the distribution of actions given a state.
+    Reward(R): A numerical feedback signal from the environment based on an action.
+    Return(Gt​): The total sum of rewards from time t until the end.
+        Gt​ = Rt+1 + γ*Rt+2 + γ^2*Rt+3 + γ^3*Rt+4 + ...
+           = Rt+1 + γ*Gt+1
+        Discount Factor (γ gamma): Balancing Current and Future Rewards
+    Value Function: 
+        V(s)   (State-Value Function) "狀態"價值函數 
+            estimated return starting from state s
+            = E[Q(s,a)] = Q(s,a) 的期望值
+            = sum_a( π(a|s)*Q(s,a) ) = 
+                如果是每次都挑選 optimal action
+                = max_a( Q*(s,a) ) 
+            = E[Gt(s)]
+        Q(s,a) (Action-Value Function) "動作"價值函數
+            estimated return starting from state s "by" taking action a
+            Q(s,a) = E[Gt | St = s, At = a​]
+        Q*(s,a): optimal Q(s,a)
+    Advantage Function : how much better an action is than average reward
+        A(s,a) = Q(s,a) - V(s)
+    TD-error : how much error in Q(s,a) prediction 
+
+RL
+    Value-based
+        目標: 學習 Value Function (通常是 Q)
+            使 NN 正確估計長期 reward
+            Tabular
+                Q-Learning
+                SARSA
+            NN架構
+                Deep Q-Learning
+                    Deep Q-Network (DQN)
+        行為: 選擇 Q 值最大的 action
+    Policy-based
+        目標: 讓 J(θ) = E[Gt​] 最大
+            讓 NN 學習 π
+            NN架構
+                Policy Network
+        行為: 透過 π 分布, 隨機選擇動作
+        特性: 適合處理連續性的動作空間
+        learning value function
+            Reinforce (old method)
+                把整個遊戲軌跡記錄下來，用觀測到的 Gt​ 來訓練
+            Actor-Critic (還是歸類在 Policy-based)
+    Actor-Critic (AC)
+        Actor: 負責 Policy-based 的 NN
+        Critic: 讓 NN 學習 value function（通常是 V(s)，有時是 Q）
+            等同結合了 Value-based 的概念
+            但也因此有兩個 NN 最難訓練
+        步驟 : 
+            使用 Actor 的 Policy機率分佈 隨機 Actor 的 action a_t
+            執行 a_t 得到 st+1, rt
+            透過 Critic 的 Policy機率分佈 隨機 a_t+1'
+            計算估值
+                qt   = q(st, a_t; wt)
+                qt+1 = q(st+1, a_t+1'; wt)
+            TD error = qt - (rt + γ*qt+1)
+            backpropagation
+
+Learning Method
+    Temporal Difference Learning (TD) / 
+        TD error : 你對某個 state-action 的價值預測錯了多少 (TD-error / TD_error)
+            δt ​= TD target(含有真實R的目標估計值) - Current Prediction of Q
+               = (這一步 reward + 對未來 V 估計) - 現在的估計
+               = (rt+1           ​+ γ*V(st+1​)  ) - V(st​)
+            
+        因此只要有做 action，就可以產生一筆 TD target data 用於訓練
+        具體:
+            選動作：在 s' 所有的可能動作中，找出哪一個動作的 Q值最高
+            估分：把 Q值最高的分數 拿來當作 Gt+1
+    Monte Carlo (MC)
+        玩完整場遊戲, 再訓練
+        具體: 
+            會記錄所有的 action 然後遊戲結束後會計算所有 t 的 Gt
+            根據這些資料訓練
+        優點: 這些 Gt 是 ground truth (因為已經發生了), 所以 Unbiased
+        缺點: High Variance
+            隨機干擾 在累積一百步後 G_t的數值波動會變得極大
+            神經網路會無所適從，一下要往 100 靠攏，一下要往 0 靠攏，導致訓練極難收斂
+        如果是回合制的桌遊 ??
+            會不會用 Monte Carlo 反而訓練比較穩
+            因為 隨機的 只有發牌順序 ??
+            Monte Carlo Tree Search (MCTS) ??
+    n-step / Multi-step
+        是 TD 和 MC 之間的折衷
+        主要還是使用 TD，只是 TD 的計算使用 n-step return
+            δt ​= 前n步reward(有折扣) + 第n步之後的估計 - 現在的估計
+                 rt+1         ​      + γ*V(st+1​)      - V(st​)
+
+Deep Q-Network (DQN) (201502)
+    DQN 就是用 NN 去學習 Q*(s,a)
+    標準是搭配 TD
+    架構
+        policy_net (Q-Network / Evaluation Network)
+            由 policy_net 計算當前狀態的 Q(s, a)
+            決定 Agent 的行動
+            每次都會更新
+        target_net (Target Q-Network)
+            由 target_net 計算下一狀態的最大Q值(TD Target)
+                TD Target = r + γ*max_Q_target(s', a')
+                    r: 做 s 當下的 reward
+            提供穩定的最大Q值 當作 Policy Network 的 loss
+            因此更新較慢
+                Soft Update
+                    θ_target​ = τ*θ_policy ​+ (1−τ)*θ_target​
+                        τ: update rate (通常很小, EX: 0.001)
+                    讓 target_net 追逐 policy_net, 避免 Moving Target Problem
+                Hard Update
+                    其實就是 Soft Update, τ = 1
+                    但每隔 C 次 才會更新一次
+
+n-step DQN
+
+Double DQN (DDQN) (201512)
+    solve the problem of Overestimation
+    diff
+        DQN  中 TD 在 挑選最佳步驟是用 target 去挑選的
+        DDQN 中 TD 在 挑選最佳步驟是用 policy 去挑選的
+            估值都是由 target 做的
+
+Dueling Network (201605)
+    Dueling Network Architectures for Deep Reinforcement Learning (201605)
+    diff 
+        Q 是透過預測 adv 與 V 來計算的
+            Q(s,a;W) = V(s;Wv)        + ( adv(s,a;Wa)     - mean_a(adv(s,a;Wa)) )
+                     = 這個state的價值 + ( 選擇這個動作的adv - 所有動作的adv的平均)
+
+Rainbow DQN (2017)
+    Rainbow: Combining Improvements in Deep Reinforcement Learning
+    綜合
+        Dueling DQN
+        PER
+        n-step
+        Distributional RL
+        Noisy Nets
+
+
+
+
+PPO (Proximal Policy Optimization, 2017) 
+
+EfficientZero / MuZero (2020-2021)
+
+Decision Transformer (2021)
+
+Q Learning evolution
+    Distributional RL / C51（Categorical DQN with 51 atoms）
+        A Distributional Perspective on Reinforcement Learning (201707)
+            https://arxiv.org/abs/1707.06887
+        主張 RL 不應該只學「期望報酬」(傳統 Q 值)，而應該學完整的報酬分布 (value distribution)
+        diff
+            原本 : 對每個 (state, action) 輸出 一個數值 Q(s,a)
+            new : 對每個 (state, action) 輸出 51 個機率數值 
+                用來代表 Q(s,a) 的完整機率分布 (Distribution)
+            如果要求 E[Q(s,a)] 就是要求這個 Quantile Function 底下的面積
+
+        
+    
+    QR-DQN
+    IQN (Implicit Quantile Networks) (2018)
+    FQF (Fully Parameterized Quantile Function) (2019)
+    MM-DQN (Moment Matching DQN) (2021)
+    SinkhornDRL (2022)
+    Spline DQN (2021)
+    Dual Expectile-Quantile (2023)
+    Sliced Distributional RL (SDRL) (2025)
+
+
+
+< Actor-Critic > ------------------------------------------
+DDPG (Deep Deterministic Policy Gradient)
+TD3 (Twin Delayed DDPG)
+    使用兩個 Q network, 挑選估值較低的
+        避免 DDPG 估值過高的問題
+    Delayed Policy Update
+        Actor 不每一步更新，希望 critic 先訓練好
+    Target Policy Smoothing
+        a′ = π(s′)+ϵ
+            解決 TD3 的 policy 容易 overfit Q function 的尖峰
+SAC (Soft Actor-Critic)：目前在連續控制任務中最穩定且強大的算法之一
+    從 deterministic → stochastic policy
+        a∼π(a∣s) (機率分佈)
+        exploration 變內建，不用靠 noise
+Clipping
+    PPO (Proximal Policy Optimization)
+        其實就是限制 Policy 機率的變化量
+            透過 clip loss function 去 限制 Policy 變化量
+        層級：在 loss.backward() 之前，根據「新舊策略的比率」來決定 Loss 的大小
+            只會做一次 clip 在計算 loss 的時候
+    Gradient Clipping
+        是對全部的 Gradient 總量去做 clipping
+            new_grad = old_grad*(limit_scale / Global_Norm_len)
+        層級：在 loss.backward() 之後，optimizer.step() 之前
+            其實沒有做 clip, 因為是根據大小等比例縮放 Gradient
+
+CV specific
+    DrQ (Data‑Regularized Q‑learning)
+        把 資料增強（data augmentation）用在強化學習中
+    DrQ-v2
+        https://github.com/facebookresearch/drqv2
+        SAC 換成 DDPG
+        n‑step return 來估計 TD error
+
+< Hyperparameter >
+    TAU : 是 soft update 的比例
+        要注意跟 gamma 不同
+    ALPHA : 決定了「探索 (Exploration)」與「利用 (Exploitation)」之間的平衡
+        較大時 : 會傾向於讓動作分佈更加分散   以獲取更大的 ENTROPY
+        較小時 : 會傾向於選擇能帶來高分的動作 以獲取更大的 reward
+        可以將 ALPHA 設為可學習的參數 
+            與下面 TARGET_ENTROPY 搭配使用
+    TARGET_ENTROPY
+        如果 ENTROPY 高於 TARGET_ENTROPY, ALPHA 降低
+            TARGET_ENTROPY 通常設定為 -dim(A)
+                dim(A) 是 model 有幾個輸出
+                    Discrete : 有幾個 one hot output == 總共有幾種動作可以選
+                    Continuous : 有幾個 Continuous output
+                    因為 輸出愈多 ENTROPY 會傾向變大
+                
+                    
+
+
+            
+
+    tips
+        如果 acc 有循環
+            代表 critic 還沒訓練好
+            actor 跟據 critic 的 reward overfit 了
+            Sol : 
+                Delayed Updates : 前 5000 步只訓練 Critic，之後才開始訓練 Actor
+                讓 Critic 更新 2 或 3 次，Actor 才更新 1 次
+                調低 actor 的 LR
+        通常公用 backbone 的 LR 最低
+            LR_backbone = LR * 0.1
+
+< Tech term > ------------------------------------------
+Prioritized Experience Replay (PER)
+    根據 TD error 決定哪些 data(transition) 比較重要
+    要小心 stochastic transition :
+        在某個狀態 S 其實同一個 action 會有不同結果
+            EX: 猜大猜小
+        這種情況 因為 PER 是根據 TD-error 計算的
+            大跟小 的 TD-error 應該都要相同, 但是方向相反
+        所以 TD-error 會一直有數值
+    Hyperparameter
+        alpha 
+            α=0 純 uniform
+            α=1 完全照 priority
+        β 控制的是 IS weight 的強度(修正 prioritized sampling 帶來的 bias)
+            β=0 weight 全等於 1 → 完全不修正 bias(對「常被抽到的高 priority sample」沒打折)
+            β=1 完全修正(理論最 unbiased,但訓練前期 weight 變動大、不穩)
+            標準做法:從 0.4 anneal 到 1.0,讓訓練前期穩定、後期再強制 unbiased
+
+Model-free ： 直接試錯，根據 reward 來修正行為
+Model-based： 先理解環境規律，再計畫action
+
+off-policy algorithm 離策算法
+    學習者正在優化的目標策略，與產生訓練數據的行為策略不一致
+
+< Q > ----------------------------------------------------
+在 Actor Critic 為什麼 Critic 計算 Q 的時候 會把 action 當作部分 input?
+    Critic的目標是去預測"Q(s, a)"
+    所以本來就會需要知道 a 是什麼
+為什麼 DQN 不用把 action 當作部分計算Q的 input?
+    因為 policy_net 會 計算出現在 state "全部action" 的 Q
+
+
