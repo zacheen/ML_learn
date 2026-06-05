@@ -22,6 +22,8 @@ Sigmoid (Standard Logistic Function)
 			特性
 				直觀 : σ(-x) = 1 - σ(x) (因為是對稱的)
 				常用 : 1 - σ(-x) = σ(x)
+			現在通常只會用在 二分類的輸出層 (輸出機率)
+				其他都用 tanh
 	logistic function 是 logit function 的反函數
 		logit function
 			在[0,1]範圍的數給映射到[-inf, inf]
@@ -54,13 +56,15 @@ Eliminate grid sensitivity
 -- < -1~1 之間 > -----------------------------------------------------------------------
 
 Tanh
-
+	Tanh(x) = (exp(x) − exp(−x)) / (exp(x) + exp(−x))
+	與 sigmoid 相比
+		較陡峭，收斂較快
+		通常隱藏層用 tanh
 
 -- < 小於0 平的, 大於0 才有斜率 > ------------------------------------------------------
 
 relu函數，它是忽視負值，Y的範圍限制在[0, ∞]之間
-	公式
-		np.maximum(z, 0)
+	np.maximum(z, 0)
 	好處
 		由於沒有復雜的數學運算，因此計算開銷小。因此，該模型可以花費更少的時間進行訓練或預測。
 		它收斂更快。線性意味著當x變大時，斜率不會平穩或"飽和" 
@@ -69,8 +73,7 @@ relu函數，它是忽視負值，Y的範圍限制在[0, ∞]之間
 		它可以被稀疏地激活。由於所有負輸入的ReLU均為零，因此任何給定的單元都可能根本無法激活。
 
 Mish-activation (應該要用 SiLU 取代)
-	公式
-		x*tanh( ln(1+e^x) )
+	x*tanh( ln(1+e^x) )
 	特點 
 		非單調性
 		無上界且有下界
@@ -79,16 +82,22 @@ Mish-activation (應該要用 SiLU 取代)
 		給一個改過自新的機會 (在每一個點都有斜率)
 		relu 太絕對的, Mish 更符合實際
 Hardswish (如果不追求速度 應該要用 SiLU 取代)
-	公式
-		x*ReLU6(x+3) / 6
+	x*ReLU6(x+3) / 6
 	優點
 		計算速度快版本的 Mish-activation
 		甚至比 SiLU 快
 		但是沒有 平滑性
+
 SiLU (Sigmoid Linear Unit)
-	公式
-		SiLU(x) = x * sigmoid(x) = x / (1 + e^(-x))
+	iLU(x) = x * sigmoid(x) = x / (1 + e^(-x))
 	特點 
 		跟 Mish-activation 的圖形非常的像
 		但計算較快 > 基本上可以直接替代 Mish-activation
+	跟 GELU 差不多, 通常用在 CV
+		因為計算速度快
 	
+GELU
+	GELU(x)=x∗Φ(x)
+		Φ(x) is the Cumulative Distribution Function for Gaussian Distribution
+	跟 SiLU 差不多, 通常用在 LLM
+		GELU 在處理高度抽象的語義特徵時表現更佳
