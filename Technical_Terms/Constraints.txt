@@ -1,4 +1,4 @@
-L1, L2 norm
+L1, L2 Norm (範數) (!= Normalization)
     其實是一個 function, 是計算向量的大小
         L1 norm = ||W||1 = 絕對值之和
         L2 norm = ||W||2 = 平方和 再 開根號
@@ -10,6 +10,8 @@ L1, L2 norm
             L1, L2 norm 愈大 懲罰愈大
     在 loss function
         目的是: 衡量預測準不準
+
+-----------------------------------------------------------
 
 Normalization (廣義 歸一化) (有時候有人會講成標準化 要注意)
     廣義 : 將原始數據透過數學變換，縮放到特定範圍或改變其分佈
@@ -23,6 +25,7 @@ Normalization (廣義 歸一化) (有時候有人會講成標準化 要注意)
                     xmax: The maximum value in the dataset
             Max Abs Scaler
                 xnew = xi / |xmax|
+            softmax 其實也是其中一種，但他是非線性的 Normalization
         Standardization == Z-score Normalization (標準化)
             rescales a dataset to have a mean of 0 and a standard deviation of 1. 
             xnew = (xi – μ) / σ
@@ -40,24 +43,38 @@ Normalization (廣義 歸一化) (有時候有人會講成標準化 要注意)
                 x' = (x - x_mean) / √(σ2 + ε)
                     讓每一層輸出變成 mean 接近 0, variance 接近 1
             affine transformation
+                其實 Batch Normalization 跟 Layer normalization 都有兩個可訓練參數
                 公式
-                    new_x = gamma * x_hat + beta
-                        gamma, beta 是可訓練參數
+                    BN_out = a*xnew + b
+                        a, b 是可訓練參數
+                        因為有可能真正的分布
+                            平均不是在0(所以需要b)
+                            標準差不是1(所以需要a)
                 用意
                     如果某一層本來就需要某種尺度或偏移
+                    當 a = σ, b = x_mean
+                        分布就會還原回去
+                    也就是 model 可以自己決定要不要採用 Normalization
         Batch Normalization (BN) (2015)
+            解決問題:
+                一個 Batch 裡面可能會有 Internal Covariate Shift
+                    Covariate（協變數）是指 NN 的 input feature
             通常用在 CNN (現在已經是標配了)
                 CNN 中是針對每一個 Channel 進行標準化
-            計算維度 : 跨越 Batch，針對單一 Feature 計算
-                把 一個batch 每個 node 的產出 (all z)，計算 mean, variance
+            計算維度 : 跨越 Batch，針對單一 Feature數值 計算
+                把 一個batch 每個node的 對應的 Feature[i]，計算 mean, variance
+                    mean = sum / "Batch Size"
+                為什麼叫 "Batch" Normalization 
+                    因為Batch中的每個一data 都會對某一個 Feature數值 有影響
             訓練與測試 : 需紀錄 Moving Average，兩者行為不同
             Batch Size 依賴 : 強烈依賴 Batch Size，Batch 太小效果差
         Layer normalization
             通常用在 LLM, transformer
                 對每一個字的產出進行標準化
                 所以對 input 的長度不敏感
-            計算維度 : 跨越 Feature，針對單一 Sample 計算
-                把 每個 data 對各個 node 的產出，計算 mean, variance
+            計算維度 : 跨越 Feature
+                把 整個 data/Feature 計算 mean, variance
+                    mean = sum / "Feature Size"
             訓練與測試 : 訓練與測試行為完全一致
             Batch Size 依賴 : 完全不依賴 Batch Size
 
@@ -93,8 +110,7 @@ Regularization (正規化)
         combine ridge and lasso : Elastic Net
             Elastic Net(B') = (||y-xB||^2)/2n + λ( ((1-a)/2)*||B||^2 + a*||B||^1)
                 這裡的 /2n, /2 都是為了方便 微分之後可以抵消
-
-generalization
-    是 "泛化能力" 
-    用來"評估"從未見過的新題目時，依然能答對的能力
-    是 Normalization 與 Regularization 的目的
+    generalization
+        是 "泛化能力" 
+        用來"評估"從未見過的新題目時，依然能答對的能力
+        是 Regularization 的目的

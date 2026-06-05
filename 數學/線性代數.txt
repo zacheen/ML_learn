@@ -2,29 +2,6 @@ binomial 二項式
 Dependent Variable    也就是 Y, output
 Independent Variables 也就是 X, input
 
-regression that can regularization
-    by adding limitation to B to prevent B explosion
-        限制 ||B||^1 or ||B||^2 是為了防止 B 太大，因為 linear regression 中 係數B的大小直接反映了模型對特徵的敏感度
-        (This problem actually only happen in linear models (include linear regression and logistic regression))
-    ridge regression 
-        Ridge 限制的是係數的平方和（L2 範數）
-        式子 : min(||y-xB||^2) s.t. ||B||^2 <= c^2
-        透過 Lagrange 轉換 : min(||y-xB||^2) + λ(c^2 - ||B||^2)
-            ||B||^2 其實也是 L2 norm : sum(B^2 for all B)
-    lasso regression (Least Absolute Shrinkage and Selection Operator)
-        Lasso 限制的是係數的絕對值之和（L1 範數）
-        式子 : min(||y-xB||^2) s.t. ||B||^1 <= c
-        透過 Lagrange 轉換 : min(||y-xB||^2) + λ(c - ||B||^1)
-            ||B||^1 其實也是 L1 norm : sum(|B| for all B)
-        在幾何圖上 這個 boundary 會有菱有角，這些頂點很容易是最佳解 : 所以才能達成「特徵選取」
-        這些最佳解會直接讓 某個沒有貢獻的特徵直接歸零
-    c 的影響
-        如果c太大，dominant 是 λ(c^2 - ||B||^2) : 無法抑制 B 變很大
-        如果c太小，dominant 是 min(||y-xB||^2)  : 那就跟原式子一樣，沒有 generalizing 的效果
-    combine ridge and lasso : Elastic Net
-        Lenet(B') = (||y-xB||^2)/2n + λ( ((1-a)/2)*||B||^2 + a*||B||^1)
-            這裡的 /2n, /2 都是為了方便 微分之後可以抵消
-
 convex function 凸函數(像碗)   Ex: -log(x), x^2
     f((a+b)/2) "<=" (f(a) + f(b))/2, for any point a,b 
 concave function 凹函數(像山丘) Ex: log(x)
