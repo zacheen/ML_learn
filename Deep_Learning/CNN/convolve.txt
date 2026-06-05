@@ -1,0 +1,25 @@
+convolve 符號
+    (1,2,3)*(4,5,6)
+convolve 定義
+    維持第一個順序
+    把第二個list反過來
+    開始shift, 然後把重疊的相乘 後 相加
+np.convolve((1,2,3), (4,5,6)) 
+    = (1*4, 1*5+2*4, 1*6+2*5+3*4, 2*6+3*5, 3*6)
+    = (4, 13, 28, 27, 18)
+    https://youtu.be/KuXjwB4LzSA?si=NR6AVxBd5HzbBSBw&t=390
+FFT : 快速計算 convolve 的方法
+    O(nlogn)
+    概念
+        (1,2,3) (4,5,6) 想像成 方程式
+            f(x) = 1 + 2x + 3x^2
+            g(x) = 4 + 5x + 6x^2
+        計算 f(x)*g(x)
+        反推 f(x)*g(x) 的 係數
+        這個係數就是 convolve 的結果
+
+Backpropagation
+    ∂L/∂Kernel
+        https://youtu.be/Lakz2MoHy6o?si=sI7pkLsEwGPfAk7z&t=829
+    ∂L/∂x (where the reverse happened)
+        https://youtu.be/Lakz2MoHy6o?si=YClAWVmlTpTffY8p&t=1291
