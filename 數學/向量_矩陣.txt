@@ -11,7 +11,7 @@
     numpy表示方法(把上面的經過 .T 轉置) :
         numpy.shape = (neuron_num, Feature 數量)
     通常寫程式我們會把 weight 放在 input 左邊
-        onput_Y = W*X
+        output_Y = W*X
 
 為什麼矩陣*向量 矩陣可以看成 對向量的轉換
     https://youtu.be/kYB8IZa5AuE?si=oXrNNQx6R6HeNjLh

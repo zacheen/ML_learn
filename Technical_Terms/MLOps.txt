@@ -1,0 +1,36 @@
+machine learning operations (MLOps)
+    不是 machine learning optimization !!
+
+ML includes all the machine learning workloads for which a data scientist is responsible. A data scientist will do:
+    Exploratory data analysis (EDA)
+    Feature engineering
+    Model training and tuning
+    
+DEV refers to the software development, which includes:
+    Plan: Define the model's requirements and performance metrics.
+    Create: Create the model training and scoring scripts.
+    Verify: Check for code and model quality.
+    Package: Get ready for deployment by staging the solution.
+    
+OPS refers to operations and includes:
+    Release: Deploy the model to production.
+    Configure: Standardize infrastructure configurations with Infrastructure as Code (IaC).
+    Monitor: Track metrics and ensure the model and infrastructure are performing as expected.
+
+CI(continuous integration) 開發的過程
+    may include:
+        Refactoring exploratory code in Jupyter notebooks into Python or R scripts.
+            https://learn.microsoft.com/en-us/azure/machine-learning/how-to-convert-ml-experiment-to-production?view=azureml-api-1
+        Linting to check for any programmatic or stylistic errors in the Python or R scripts. For example, check whether a line in your script contains fewer than 80 characters.
+        "Unit testing" to check the performance of the content of the scripts. For example, check whether the model generates accurate predictions on a test dataset.
+CD(continuous delivery)    更新到伺服器上的過程
+
+
+
+
+
+
+
+
+
+

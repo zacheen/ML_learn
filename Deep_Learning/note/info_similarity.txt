@@ -1,0 +1,7 @@
+Embedding / vector
+    在向量中 距離會被 normalization
+        所以相對沒有意義
+    cos similarity / Cosine Similarity
+        cos(θ) = A·B / |A||B|
+
+Jacquard similarity

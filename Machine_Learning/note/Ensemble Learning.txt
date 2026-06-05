@@ -34,8 +34,8 @@ Ensemble Learning 集成學習
         處理情況
             辨識錯誤的data"集中"在某一區
         概念
-            Models are trained one after another
-            Each new model focuses on fixing the errors made by the previous ones
+            Models are trained one after another (sequentially)
+            "Each new model focuses on fixing the errors made by the previous ones"
             The final prediction is a weighted combination of all models
         結果
             降低 Bias (for low variance high bias models)

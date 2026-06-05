@@ -28,6 +28,10 @@ Confusion matrix (混淆矩陣)
             F2 Score:   (recall is more important than precision)
                 (1 + 2^2) * (Precision*Recall) / (2^2*Precision + Recall)
 
+PR curve (Precision-Recall Curve)
+    通常用在 data 類別數量不平衡 的時候
+    找到 Precision 跟 Recall 之間的平衡
+
 ROC curve and AUC scores
     https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc
     ROC(receiver operating characteristic) Curve
@@ -38,17 +42,13 @@ ROC curve and AUC scores
             面積愈大愈好
         from sklearn.metrics import roc_auc_score
 
-PR curve (Precision-Recall Curve)
-    通常用在 data 類別數量不平衡 的時候
-    找到 Precision 跟 Recall 之間的平衡
-
 都是準確率的計算方法 反正愈大愈好
     AP (Average Precision)
     AR (Average Recall)
         IOU 的準確率
     mAP (mean Average Precision)
 
--- <各種計算 Loss 的方法> ----------------------------------------------------------------------
+-- <各種計算 Loss 的方法 (Loss function) > ----------------------------------------------------------------------
 cost = loss == residuals(殘差) == errors
     residuals = (ŷ - y)
 表示方法 :
@@ -58,7 +58,6 @@ cost funtion == loss function
     L1 (Manhattan Norm) (不會開根號) 
         Mean absolute error, MAE(平均絕對值誤差) (L1 loss)
             sum(abs(預測答案 - 正確答案)) / 個數
-            nn.MSELoss()
     L2 系列(其實都通用 也沒那麼嚴謹)
     表示方法 : arg min B (|y - y'|) L2 norm
         SSE (Sum of Squared Errors) 
@@ -79,6 +78,23 @@ cost funtion == loss function
     correlation coefficient (R2)
         1 - [ sum_i((y - y')^2) / sum_i((y - y'_mean)^2) ]
         how closely the predicted values match the actual values
+    特殊 Loss function
+        條件式計算 loss
+            Huber's Loss
+                想要解決 Outlier 對 loss 的影響
+                (1/2)*(err)^2      , if err < δ  (exponential increase)
+                δ*(err - (1/2)*δ), otherwise     (linearly    increase)
+                    err = |y - y'|
+                    δ is hyperparameter
+                    - (1/2)*δ 是為了讓圖形連續
+            Asymmetric Huber Loss
+                高估（over-prediction）和低估（under-prediction）成本不同
+                    判斷 y - y' 決定 scale 大小
+                        if (y - y') < 0  : loss * scale_a
+                        if (y - y') >= 0 : loss * scale_b
+
+
+
 
 
 loss 的 類別

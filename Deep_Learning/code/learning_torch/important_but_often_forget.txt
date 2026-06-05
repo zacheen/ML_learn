@@ -1,0 +1,21 @@
+
+# torch.no_grad() 可以關閉梯度計算
+    # 加速辨識的運行速度 與 節省記憶體
+    # 避免在推論階段誤用 loss.backward() 而導致參數意外更新
+with torch.no_grad():
+    求結果過程(辨識)
+
+torch.clamp() : 用來將張量中的數值限制在指定範圍內。
+torch.MODEL() : 通常是呼叫 forward
+
+dataN1, dataN2 = random_split(資料集 [N1,N2])
+    dataN1 會包含第 1   ~N1 筆的資料
+    dataN2 會包含第 N1+1~N2 筆的資料
+dataF1, dataF2 = random_split(資料集 [F1,F2])
+    dataF1 會包含第 F1% 筆的資料
+    dataF2 會包含第 F2% 筆的資料
+
+
+如果要設定 seed 
+generator = torch.Generator().manual_seed(42)
+dataN1, dataN2 = random_split(資料集 [N1,N2], generator=generator)
