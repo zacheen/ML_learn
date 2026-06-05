@@ -1,6 +1,11 @@
 POS Tagging（Part-of-Speech Tagging）詞性標註
     book 對應 NN 名詞
     is   對應 VB 動詞
+Named Entity Recognition, NER
+    識別出具有「特定意義」的實體(Entity)
+    Hit : 0 (非實體字通常標為 O)
+    Morocco : geopolitical entity
+    Christmas : time indicator
 
 Byte Pair Encoding
     步驟

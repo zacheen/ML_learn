@@ -1,18 +1,25 @@
 Embedding Token 或 word 轉換成向量的數值
 
 Word2Vec
-    contain only one level of hidden layer, and this layer don't have activation layer
+    contain only one level of hidden layer + this layer don't have activation layer
+        Wout*Win*X
+            X 是 one-hot vector : vocab_size * 1
+            Win : hidden layer size * vocab_size
+            Wout : vocab_size * hidden layer size( = embedding size)
     訓練方式
         CBOW :
-            給定 context window
+            給定 context window 要猜 中間的字 是什麼
         skip gram :
-            其實就是 CBOW 的相反
+            給定 中間的字 要猜 context window 是什麼
+                CBOW 的相反
     Negative Sampling
-
-    比較 similarity 的方法是 : 
-        cos similarity / Cosine Similarity
-        cos(θ) = A·B / |A||B|
-    
+        U(w)^(3/4) / Z
+            U(w)：word 的 unigram frequency
+            Z 是 normalizing constant
+                Z = sum_all_word( U(w)^(3/4) )
+            (3/4) : 
+                如果用 1 : 高頻詞（the, is）太容易被抽到
+                如果用 0 : 太平均
     缺點
         bank 有很多意義，但是只能回傳一個 embedding
 

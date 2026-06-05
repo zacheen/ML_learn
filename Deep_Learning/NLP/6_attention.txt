@@ -1,0 +1,184 @@
+QKV in Attention (single head)
+    hyperparameter
+        Embedding_dim
+        d_k = Key Query space
+        d_v = Value space
+    Query 與 Key
+        Query 跟 Key 的架構是一樣的，只是input不同，且weight是各自的
+            WQ * hi = Query_Vec_i
+            WK * hj = Key_Vec_j
+                hi, hj 是 feature_map 的 某一個 向量value
+                size(WQ, WK) = d_k * Embedding_dim
+                size(hi, hj) = Embedding_dim * 1
+                size(Query_Vec_i, Key_Vec_j) = d_k * 1
+    e_ij : 代表 Query_Vec_i 對 Key_Vec_j 的相關程度
+        目的
+            我們希望 Query_Vec 像在問一個問題
+                希望 Key_Vec   像在回答問題
+            如果 Key_Vec 是 Query_Vec 的回答 我們希望對應數值大一點
+        e_ij = a_f(Query_Vec_i, Key_Vec_j)
+            a_f : attention coefficient
+                ver : 直接內積 (Luong2015)
+                    e_ij = Query_Vec_i . Key_Vec_j
+                ver : 直接內積 再 normalized (Vaswani2017)
+                    e_ij = Query_Vec_i . Key_Vec_j / √d_k
+                        √d_k 是為了 normalization, 這個 d_k 就是前面設定的 hyperparameter
+                ver : additive attention (Bahdanau2015)
+                    e_ij = v^T · tanh(Query_Vec_i + Key_Vec_j)
+                ver : 在加上一個 可訓練的權重 a_W (from GAT)
+                    e_ij = Leaky_ReLU((concat Query_Vec_i, Key_Vec_j) . a_W)
+                ver ... 有很多種 每篇都有論文
+                    Content-base attention	score(st​,hi​)=cosine[st​,hi​]	Graves2014
+                        其實當 normalize 距離之後
+                        找 vector 距離 == 找 兩個 vector 的 dot productau2015
+                    Location-Base	αt,i​=softmax(Wa​st​) (註：簡化為僅取決於目標位置)	Luong2015
+                    General	score(st​,hi​)=st⊤​Wa​hi​ (註：Wa​ 為可訓練權重矩陣)	Luong2015
+        舉例 a_f 使用 ver : 直接內積
+            如果 Query_Vec_i . Key_Vec_j 愈大 (有可能超出 1)
+                就代表回答正確 "Fea"對另一個"Fea"的影響就高
+                EX: Query_Vec (Fea = "car") 問 你是形容詞嗎?
+                    若 Key_Vec (Fea = "blue")
+                        回答"是" == (Query_Vec_i . Key_Vec_j) 接近 1
+                        那 "blue" 對 "car" 就有高度影響
+                        == tech term : Attend to
+    [如果是 causal self-attention]
+        為了不要讓 後面的sequence 影響前面的
+            設定 e_ij = -inf, if j > i
+            因為設定成 -inf softmax 的 output 會變成 0
+            https://youtu.be/eMlx5fFNoYc?si=IJhqGFY7T2xCckB2&t=668
+    att_ij 代表 某個 Q 對 全部的 K 的相關程度 做 softmax
+        att_ij = softmax( e_ij "for all j" )
+    Value
+        方向 Key_Vec 架構相同, 只不過輸出大小是 d_v
+            且 d_v 通常跟 Embedding_dim 長度相同
+            WV * hj = Value_Vec_j
+            size(WV) = d_v * Embedding_dim
+                但是可以用兩個小的矩陣乘積表示, 這樣的參數量比較少
+                    r = 比較小的 rank 
+                WV = WV2(d_v * r) * WV1(r * Embedding_dim)
+                    WV1 : value up matrix
+                    WV2 : value down matrix
+        Δh_i = sum_j (att_ij * Value_Vec_j)
+    整個 attention matrix(Δh) 要再經過 output projection
+        主要目的是把維度 d_v 轉換成 Embedding dim
+            這樣才能再傳入下一個 attention block
+        Δh_i = W_O * Δh_i
+    Δh_i 應用方法
+        v1 : new_hi = Δh_i + hi
+        V2 : Δh_i 當作另一個 input (Cross Attention solving MT problem)
+        
+    為什麼 QKV 可以接受任何大小 (以 DETR 的 encoder 為例)
+        resnet 計算出的 特徵 output size = (B, W, H, Embedding dim)
+        一開始會先 flatten 變成 (B, N, Embedding dim)
+            N = W*H, 而 W, H 與 input圖片大小 有關
+        (假設 batch = 1)
+        WQ = (d_k * Embedding dim)
+        所以 all Q vector  = (N, d_k)
+        all K vector  也是 = (N, d_k)
+        這樣才可以各個去計算內積
+        (假設我從 N 中挑出某一個 特徵output向量)
+        特徵output向量 size : Embedding dim * 1
+        某一個 V vector 的大小是 : d_v
+            但通常 d_v == d_k
+            要不然還要多一個轉換, 把 d_v 轉換到 Embedding dim
+        相加後的長度 : Embedding dim
+        之後會丟入固定大小的 FFN
+        因為 FFN 是對每一個 N 做, 因此 attention 可以接受任何大小的 input
+
+Cross Attention solving MT problem (2014)
+    attention 的目的是要找 hi 與 di 之間的相關性得分
+        hi(Source Hidden States) 是 Encoder 產出的 h 值
+        di(Target Hidden States) 是 Decoder 產出的 h 值
+            RNN 可以是 GRU, LSTM ...
+    QKV 在 Cross Attention solving MT problem 的名稱/來源
+        Query(Q) = Decoder 的 h = di
+        Key(K)   = Encoder 的 h = hi
+        Value(V) = Encoder 的 h = hi
+    跟 transformer 差異
+        Attention 計算出來的結果會 "當成新的 input 傳入 RNN"
+            在 LSTM 中會跟 X 走同樣的路徑，只是他有自己的一套 weight
+            (Transformer 後來完全淘汰 RNN)
+
+Transformer  (2017.6)
+    完全由 Attention 組成的架構，就被命名為 Transformer
+        Attention Is All You Need
+        https://arxiv.org/abs/1706.03762
+    解決問題 : MT
+    Transformer 可以被視為一種特殊形式的 GNN
+        將序列視為全連接圖，每個單詞是一個節點
+    attention 架構
+        att_input = Input Embedding + Positional encoding
+        att_out = att_input 經過 multi-head Attention
+        att_out = Norm(att_input + att_out)
+        FFN_out = att_out 經過 FFN
+        FFN_out = Norm(FFN_out + att_out)
+    Decoder
+        先 self attention 再 cross attention(K,V from encoder)
+            訓練時 self attention 的 top right 會被 mask 掉
+            原理等同 當前的sequence 不會看到 未來的sequence
+
+Flash attention (2022)
+
+-- <tech term> ---------------------------------------------------
+
+Self Attention(== intra-attention) 與 Cross Attention
+    前提
+        Attention 一定是找 "多個向量資訊" 之間的關係
+    Self Attention = Multi-Head Self-Attention block
+        每個 向量 都要跟"同一組" 向量資訊 的其他 向量 計算 attention
+        Q, K, V 都來自同一個輸入 X
+    Cross Attention = Multi-Head Attention block
+        每個 向量 都要跟"另一組" 向量資訊 的其他 向量 計算 attention
+        Q 來自序列 A, K, V 來自序列 B
+    相似點
+        計算方法是完全相同的
+
+    Multi-Head 意義
+
+Positional encoding (PE)
+    fix (in paper attention is what you need)
+        加入位置資訊
+            真的要相加，在這裡 concat 不合理
+        PE(pos, 2i)   = sin(pos / 10000^(2i/d_model))
+        PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+            pos : 真正要 encode 的數字位置
+            d_model : 總共要 encode 的維度 (因為要變成 vector)
+            i : vector 中第幾個數字
+            10000 是實驗得出來的數字
+        sin cos 的好處
+            1. 相對位置 使用的 旋轉矩陣 相同
+                PE(t+delta)  = 旋轉矩陣*PE(t)
+                PE(t2+delta) = 旋轉矩陣*PE(t2)
+                這兩個 旋轉矩陣 是相同的，因此是 linear 的，代表 Model 比較好學
+            2. 計算較快
+                PE(t+1) = 旋轉矩陣*PE(t)
+                    旋轉矩陣 是 固定的
+                    因此比每次都還要計算 sin cos 快很多
+
+    Rope 
+        in Llama3  Qwen3
+        根據 pos 距離 旋轉的角度會變大
+    
+
+
+FFN = FCL 1(Up-projection) + activation function + FCL 2(Down-projection) ...
+    用於 特徵分析與總結
+    運算
+        對單一位置的特徵做深層轉換，並不會做跨位置的總結
+            跨位置指的是 不同query的輸出
+            也就是 不同query 之間 的 資訊"不會"互相流通
+
+Attention : 主要在看的區域
+    計算的方法
+        average attention distances
+            An image is worth 16x16 words: Transformers for image recognition at scale. In International Conference on Learning Representations. (2021)
+        average attention maps
+        attention similarities between heads
+            Deepvit: Towards deeper vision transformer. arXiv preprint arXiv:2103.11886.
+        normalized loss landscape 
+            Visualizing the loss landscape of neural nets. (2017)
+
+-- < question > ---------------------------------------------------
+為什麼 CNN 論文中的 attention 是 pixel 級別的
+    因為可以跟原圖對應
+    

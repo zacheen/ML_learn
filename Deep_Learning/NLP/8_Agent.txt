@@ -1,0 +1,16 @@
+
+ReACT 是怎麼呼叫 Tools 的
+        https://www.youtube.com/watch?v=Eug2clsLtFs
+    流程
+        Tools/function 會被打包成 Json 格式
+        這個 Json 格式 會一起跟 Prompt 送入 LLM
+            其實 Prompt 會套用進 System Instructions/System Prompt 中
+            讓 LLM 做 Chain of Thought
+        當 LLM 在產生結果的過程中，會被訓練產生特殊token EX: [END_OF_TURN]
+            由於我們的 Json 裡面會包含 Parameter 的資訊
+            所以 LLM 照理也會產生對應的 Parameter 給 Tool
+        當SDK 偵測到[END_OF_TURN]之後 會停止generation 然後執行 Tool 
+        執行後的結果 會包裝成一個 新的消息角色(Role) 加到剛剛 output 的最後面
+            這樣 LLM 才能分辨哪些是 Observation
+        把整段 傳入 LLM 進行下一個字的預測
+        直到結束

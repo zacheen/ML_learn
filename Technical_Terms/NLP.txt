@@ -1,0 +1,14 @@
+NLP 把 utterances 分成兩個東西去辨識
+    1. intents 使用者的意圖、命令
+        會給很多utterances去訓練，看是屬於哪種意圖
+    2. entities 區別資訊 (通常是名詞)
+        EX: 地點 時間 作用的目標
+        可以從 utterances 中標記 entities
+        通常也會有預設的 data 可以使用
+            像是 email, 金額, 電話 通常都有固定的格式
+
+Language service features fall into two categories
+    Pre-configured features
+        The Language service provides certain features without any model labeling or training
+    Learned features
+        require building and training a model to correctly predict appropriate labels.
