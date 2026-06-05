@@ -1,0 +1,15 @@
+< Diffusion model >
+    與 GAN 一開始是 競爭關係
+        GAN       : 使用對抗 來逼近真實畫面
+        Diffusion : 使用 加噪,去噪 的反向過程來生成數據
+
+Deep Unsupervised Learning using Nonequilibrium Thermodynamics(2015)
+    https://arxiv.org/pdf/1503.03585
+    Diffusion model 雛形
+
+DDPM (Denoising Diffusion Probabilistic Models) (2020)
+    第一次使用 Diffusion model 應用在 image generation
+
+DDIM (Denoising Diffusion Implicit Models) (2020)
+
+

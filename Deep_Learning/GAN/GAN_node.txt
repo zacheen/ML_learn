@@ -1,0 +1,25 @@
+GAN (generative adversarial network)
+目標:
+    make generative model smart
+    其實 discriminative model 的結果不重要
+GAN 的 adversarial 特性, 也可以用來消除 bias
+
+generative model     : 產生結果的 model
+    minimizing the reconstruction error
+    input : noise image
+    loss : min( -ln( [1-D_y'] ) )
+
+discriminative model : 辨識結果的 model
+    maximizing the classification accuracy
+    input : both real image and generated image
+    loss : max(  ln( D_y' ) )
+        == min( -ln( D_y' ) )
+    
+
+Variational autoencoder (VAE) (2013)
+Probalistic models :
+    產生某個機率分布的 model
+    
+Probalistic latent models
+
+
