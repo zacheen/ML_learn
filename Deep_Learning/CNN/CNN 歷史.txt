@@ -211,16 +211,19 @@ Transformer
     maskformer
     mask2former ??
         分割
-
-            
+    
 CBAM (Convolutional Block Attention Module) (Channel and Spatial Attention Module)
-    Channel Attention Module (CAM)
-        給各個 Channel 不同的 weight
-    Spatial Attention Module (SAM)
+    其實裡面沒有計算相互的 attention, 是類似計算了我應該要注意哪個部分才能達到目的
+    先做 Channel Attention Module (CAM)
+        給各個 Channel 不同的 weight 
+        Mc(F) = sig( MLP(AvgPool(F) + MaxPool(F) ) )
+    再做 Spatial Attention Module (SAM)
         給各個 pixel/feature value 不同的 weight
-        步驟
+        Ms(F) = sig( f7*7( [AvgPool(F);MaxPool(F)] ) )
             先"運算" > 對整個 feature-map softmax > 產出就是 Spatial Attention
-                運算 可以是任何運算
+                "運算" 可以是任何運算
+                在 Convolutional Block Attention Module(CBAM) 論文中
+                是計算 MaxPool, AvgPool 之後 concat 再經過一個 7*7 的 conv
             原本的 feature-map 與 Spatial Attention 做 pixel wise 相乘 就是新的 feature-map Output
 
 

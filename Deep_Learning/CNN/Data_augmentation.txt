@@ -1,23 +1,29 @@
 Data_augmentation 資料增強
+< CNN >
+    CutOut : https://arxiv.org/abs/1708.04552
+        把某個部位 block 變成 0, 但 label 還是維持一樣
+    CutMix : https://arxiv.org/abs/1905.04899
+        把某個部位 換成另一個影像的部位, label 根據比例分配 EX: 狗0.6, 貓0.4
+    MixUp : https://arxiv.org/abs/1710.09412
+        把 pixel 數值相加 / 2, label 也變 狗0.5, 貓0.5
 
-CutOut : https://arxiv.org/abs/1708.04552
-    把某個部位 block 變成 0, 但 label 還是維持一樣
-CutMix : https://arxiv.org/abs/1905.04899
-    把某個部位 換成另一個影像的部位, label 根據比例分配 EX: 狗0.6, 貓0.4
-MixUp : https://arxiv.org/abs/1710.09412
-    把 pixel 數值相加 / 2, label 也變 狗0.5, 貓0.5
+    Random Erasing
+        有機率 p 進行裁切，面積,長寬比,填充值 都是隨機
+    Hide and Seek
+        先把圖片切成格子 再隨機挑 多個小格子 去 block
 
-Random Erasing
-    有機率 p 進行裁切，面積,長寬比,填充值 都是隨機
-Hide and Seek
-    先把圖片切成格子 再隨機挑 多個小格子 去 block
+    Mosaic data augmentation (馬賽克數據增強)
+        作法
+            把 經過 其他 Data augmentation 的影像 合併在一起
+        意義
+            一張圖裡面就有四張影響 -> 變相增加 batch 的數量
 
-Mosaic data augmentation (馬賽克數據增強)
-    作法
-        把 經過 其他 Data augmentation 的影像 合併在一起
-    意義
-        一張圖裡面就有四張影響 -> 變相增加 batch 的數量
+    Self-adversarial-training (SAT)
+        在原圖中加入噪音
+            pixel = pixel + 0.007 * random noise
+< NLP >
+    同義詞替換
 
-Self-adversarial-training (SAT)
-    在原圖中加入噪音
-        pixel = pixel + 0.007 * random noise
+< Data points >
+    SMOTE (Synthetic Minority Over-sampling Technique)
+        在 K nearest 點之間 做 線性插值 生成新點
