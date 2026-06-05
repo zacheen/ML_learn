@@ -16,7 +16,9 @@ RNN
             ∂L/∂Wh = mul_t( ∂hi/∂hi-1 ) * ∂hi-1/∂Wh
         當 ∂hi/∂hi-1 很大或很小 會 導致 
             Gradient Vanishing, 當 -1 < Wh < 1
+                Gradient 會變成很小的數字，導致訓練很慢，到不了 local minima
             Gradient Exploding, 當 1 < Wh or -1 > Wh
+                Gradient 會變成很大的數字，step 太大，導致跳過 local minima
     防止 Gradient Vanishing/Exploding 的方法
         Gradient Clipping
             公式 
@@ -60,6 +62,6 @@ LSTM (Long Short-Term Memory) (1997)
 
 GRU (2014)
 
-
+Autoregressive Models (AR model)
 
 
