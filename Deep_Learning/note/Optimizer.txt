@@ -9,23 +9,25 @@ Optimizer - 調整 LR 的方法
             θt+1 ​= θt ​− η∇f(θt​)
                 η 是 learning rate
 
+    < Momentum >
     SGD momentum (SGD with Momentum)
         Momentum 想法是加上"速度累積"
         更新公式
             vt+1 ​= μvt ​− η∇f(θt​)
             θt+1​ = θt ​+ vt+1​
-            合併 : θt+1​ = θt ​+ μvt ​− η∇f(θt​)
+            合併 : θt+1​ = θt "​+ μvt" ​− η∇f(θt​)
                 μ 是 momentum 係數
-                通常 0.9 左右
+                    通常 0.9 左右
         
     SGD Nesterov momentum (SGD with Nesterov momentum) 
     == Nesterov Accelerated Gradient (NAG)
         Nesterov 概念
             看下一步位置的 gradient 來調整現在位置應該要更新多少
         更新公式
-            vt+1 = μvt − η∇f(θt+μvt)
+            vt+1 = μvt − η∇f(θt"+μvt")
             θt+1​ = θt ​+ vt+1​
     
+    < Adaptive - give different learning rate to different weight >
     Adagrad (Adaptive Gradient Algorithm)
         概念
             為每一個參數維度
@@ -33,18 +35,61 @@ Optimizer - 調整 LR 的方法
                 常更新的維度   learning rate 會變小
                 很少更新的維度 learning rate 保持大
         更新公式
-            Gt ​= Gt−1​ + gt^2​ (gt^2 is element-wise square)
-            θt+1 ​= θt ​− η/[Gt^(1/2)​​+ϵ] ⊙ gt​
+            Gt+1 ​= Gt​ + ∇f(θt​)^2​ (∇f(θt​)^2 is element-wise square)
+            θt+1 ​= θt ​− η/[ Gt+1^(1/2) ​​+ϵ] ⊙ ∇f(θt​)​
                 ε 是小常數避免除以 0
-    
-    Adam - base line (但適用各種情況)
-        V 跟 M 都會被之前所有的 gradient 影響
+                當 gt 很大 > Gt 很大 > η/[Gt^(1/2)​​+ϵ] == (LR) 很小
+
+    RMSProp (Adagrad 的直接改良版)
+        讓 新舊Gt 盡量保持在同一個數量級
+            使用 ρ 調整 新舊Gt的比例
         更新公式
-            mt+1 = β1mt ​+ (1−β1)gt
-            vt+1 = β2vt ​+ (1−β2)gt^2
-            θt+1 ​= θt ​− η/(ϵ + √v't+1) * m't+1
+            Gt+1 = "ρG_t + (1-ρ)"*∇f(θt)^2  (∇f(θt)^2 is element-wise square)
+            θt+1 = θt - η/[ Gt+1^(1/2) +ε] ⊙ ∇f(θt)
+    
+    <combine both Adaptive and Momentum>
+    Adam (Adaptive Moment Estimation) - base line (但適用各種情況)
+        m 跟 G 都會被之前所有的 gradient 影響
+        更新公式
+            mt+1 = β1mt ​+ (1−β1)∇f(θt)
+            Gt+1 = β2Gt ​+ (1−β2)∇f(θt)^2
+            Bias correction:
+                m't+1 = mt+1 / (1 - β1^t+1)
+                G't+1 = Gt+1 / (1 - β2^t+1)
+            θt+1 ​= θt ​− m't+1 ⊙ η/[G't+1^(1/2) +ϵ]
+                β1, β2 決定 傾向於新數值 還是 舊數值
+                預設 β1=0.9, β2=0.999
+
+    Adam with L2 regularization
+        gt ​= ∇f(θt​) + λθt​
+            這個 gt 會取代 ∇f(θt​) 變成新的 gradient，因為 L2 regularization
+        問題 :
+            Adam 會根據 Gt 調整每個 parameter 的 effective learning rate
+            所以 weight decay 也會被 adaptive scaling 影響
+            所以通常使用 AdamW 取代
+
+    AdamW (Adam with Weight Decay)
+        Weight Decay : 限制模型參數不要變太大
+            -ηλθt 當 θt 中的 weight 值很大的時候 > 減去一個較大的數字
+            好處 : 
+                降低 overfitting
+                讓模型更穩定
+                提升 generalization
+        更新公式
+            θt+1 ​= θt ​− m't+1 ⊙ η/[G't+1^(1/2) +ϵ] - ηλθt
+                λ 是 weight decay strength
+                如果 λ == 0 就等同 Adam
+        注意 : loss 不要再搭配 L2 norm
+
+    Nadam
+        將 Nesterov 加速梯度 引入 Adam
+        收斂速度更快
+    AdaMax
+        L2 範數 改為 L_inf 範數
+    Radam
+        針對 Adam 訓練初期的不穩定性進一步修正學習率。
 
     Learning Rate Scheduler
         概念
             逐步降低 : LR 
-                LR = LR * 0.9 
+                LR = LR * 0.9
