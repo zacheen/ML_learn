@@ -1,9 +1,12 @@
 < Probability >
     Distribution 其實就是看 每個結果的 Probability
 P(x,y) : x,y 同時發生的機率          (Joint Probability)
+    Probability of x and y
 P(x|y) : 當 y 已經發生, x 發生的機率 (Conditional Probability)
     Probability of x given that y
     P(y) : Prior Distribution
+P(x,y) 與 P(x|y) 關係 (Produce Rule)
+    P(x|y) * P(y) = P(x,y)
 P(x,y | z) : 當 z 已經發生, x,y 同時發生的機率
 P(x;y) : 我已經確定 y (固定 或 100%會發生), x 發生的機率
 
@@ -18,7 +21,7 @@ Sum Rule, Marginalization :
         這個 y 叫做 Nuisance Variable : 多餘變數、干擾變數
 
 Bayes' Rule
-    P(Hypothesis|Evidence) / P(H|E) : the posibility of Hypothesis given Evidence
+    P(Hypothesis|Evidence) or P(H|E) : the posibility of Hypothesis given Evidence
         = P(E|H) * P(H) / P(E) 
         = P(E,H) / P(E)
             P(H) : Prior Distribution   (先驗 : 因為是還沒有任何線索 得出的機率)
@@ -80,6 +83,8 @@ discriminative model VS generative model
                 P(X|Y) is Likelihood, represent if knowing the output is Y what should X looks like
 
 -- < 機率分布 Probability Distribution > ----------------------------------------------------------
+Probability Distribution
+    Distribution 是描述某個 random variable 各個可能值出現機率的分布
     Probability Distribution 的特點是 總合為1
 
 Discrete distribution
@@ -101,7 +106,7 @@ Bernoulli distribution
         P(Y = 1) = p
         P(Y = 0) = 1 − p
     如果我想要用一個式子表示 P(Y)
-        P(Y) = p^y*(1-p)^(1-y)
+        P(Y) = p^y * (1-p)^(1-y)
             P(Y = 1) = p     = p^y*(1-p)^(1-y), y=1 = p^1*(1-p)^(0) = p
             P(Y = 0) = 1 − p = p^y*(1-p)^(1-y), y=0 = p^0*(1-p)^(1) = 1-p
 Binomial distribution : 
